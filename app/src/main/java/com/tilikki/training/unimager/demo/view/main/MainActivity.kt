@@ -33,19 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.viewModel = viewModel
         binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
-        binding.svPhotoSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    search(query)
-                    return true
-                }
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
+        binding.svPhotoSearch.apply {
+            this.setOnQueryTextListener(searchListener(this))
+        }
 
         viewModel.successResponse.observe(this, {
             if (!it.success) {
@@ -55,13 +45,35 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "An error occurred", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                Toast.makeText(this, "Fetch success!", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
+    private fun searchListener(searchView: SearchView) : SearchView.OnQueryTextListener {
+        return object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.w("Unimager", "While search using physical keyboard, " +
+                        "DO NOT PROCEED USING ENTER KEY FROM YOUR KEYBOARD!! " +
+                        "Use virtual keyboard 'enter' key instead!")
+                if (query != null) {
+                    search(query)
+                    searchView.clearFocus()
+                    return true
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        }
+    }
+
     private fun search(query: String) {
         viewModel.searchQuery = query
-        Log.d("GitSearcher", "Searching... ${viewModel.searchQuery}")
+        Log.d("Unimager", "Searching... ${viewModel.searchQuery}")
         viewModel.fetchPhotos(query)
     }
 }

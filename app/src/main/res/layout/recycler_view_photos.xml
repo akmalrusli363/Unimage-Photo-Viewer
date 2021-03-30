@@ -2,10 +2,26 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
     </data>
-    <ImageView
-        android:id="@+id/iv_photo_image"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        tools:src="@tools:sample/avatars" />
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/iv_photo_image"
+            android:src="@drawable/ic_general_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_margin="@dimen/space_small"
+            android:layout_gravity="center"
+            tools:src="@tools:sample/avatars" />
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_medium"
+            android:visibility="gone"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            tools:text="@tools:sample/lorem"/>
+    </LinearLayout>
 </layout>

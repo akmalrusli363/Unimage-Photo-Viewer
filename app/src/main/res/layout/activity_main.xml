@@ -37,8 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            tools:layoutManager="StaggeredGridLayoutManager"
+            app:listData="@{viewModel.photos}"
             tools:listitem="@layout/recycler_view_photos"
-            tools:spanCount="2" />
+            app:spanCount="2" />
     </LinearLayout>
 </layout>

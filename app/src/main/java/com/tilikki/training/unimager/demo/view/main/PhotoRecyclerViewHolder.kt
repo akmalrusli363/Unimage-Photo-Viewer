@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.view.main
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.tilikki.training.unimager.demo.databinding.RecyclerViewPhotosBinding
 import com.tilikki.training.unimager.demo.model.Photo
@@ -11,7 +12,9 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
 
     fun bind(photo: Photo) {
         item = photo
-        ImageLoader.loadImage(item.linkUrl, itemBinding.ivPhotoImage)
+        Log.d("Unimage-Image", photo.toString())
+        ImageLoader.loadImage(item.imageUrl.defaultSize, itemBinding.ivPhotoImage)
         itemBinding.ivPhotoImage.contentDescription = item.description
+        itemBinding.tvDescription.text = item.description
     }
 }

@@ -28,10 +28,11 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
             this.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    _photos.postValue(it)
+                    _photos.postValue(it.results)
+                    Log.d("UnimageFetcher", it.results.toString())
                     setSuccessResponse(true, null)
                 }, {
-                    Log.e("Unimage", it.localizedMessage, it)
+                    Log.e("UnimageFetcher", it.localizedMessage, it)
                     setSuccessResponse(false, it)
                 })
         }

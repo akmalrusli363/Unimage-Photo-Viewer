@@ -1,7 +1,7 @@
 package com.tilikki.training.unimager.demo.network.interfaces
 
-import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.User
+import com.tilikki.training.unimager.demo.repositories.response.PhotoList
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,7 +14,7 @@ interface UnsplashApiInterface {
         @Query("query") query: String,
         @Query("page") page: Int = 1,
         @Query("per_page") per_page: Int = 20
-    ): Observable<List<Photo>>
+    ): Observable<PhotoList>
 
     @GET("/users/{userName}")
     fun getUserProfile(@Path("userName") userName: String): Observable<User>
