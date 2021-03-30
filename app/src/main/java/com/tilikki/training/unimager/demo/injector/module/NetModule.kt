@@ -6,10 +6,7 @@ import androidx.preference.PreferenceManager
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.tilikki.training.unimager.demo.injector.module.Cached
-import com.tilikki.training.unimager.demo.injector.module.Callback
-import com.tilikki.training.unimager.demo.injector.module.NonCached
-import com.tilikki.training.unimager.demo.injector.module.Reactive
+import com.tilikki.training.unimager.demo.network.OAuthInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -46,7 +43,7 @@ class NetModule(private val baseUrl: String) {
     @Cached
     @Singleton
     fun provideCachedOkHttpClient(cache: Cache): OkHttpClient {
-        return OkHttpClient.Builder()
+        return getOAuthOkHttpBuilder()
             .cache(cache)
             .build()
     }
@@ -55,29 +52,36 @@ class NetModule(private val baseUrl: String) {
     @NonCached
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient()
+        return getOAuthOkHttpBuilder()
+            .build()
     }
 
     @Provides
     @Singleton
     @Callback
-    fun provideRetrofit(gson: Gson, @Cached okHttpClient: OkHttpClient) : Retrofit {
-        return Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
+    fun provideRetrofit(gson: Gson, @Cached okHttpClient: OkHttpClient): Retrofit {
+        return getRetrofitBuilder(gson, okHttpClient)
             .build()
     }
 
     @Provides
     @Singleton
     @Reactive
-    fun provideReactiveRetrofit(gson: Gson, @Cached okHttpClient: OkHttpClient) : Retrofit {
+    fun provideReactiveRetrofit(gson: Gson, @Cached okHttpClient: OkHttpClient): Retrofit {
+        return getRetrofitBuilder(gson, okHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+    }
+
+    private fun getOAuthOkHttpBuilder(): OkHttpClient.Builder {
+        return OkHttpClient.Builder()
+            .addInterceptor(OAuthInterceptor())
+    }
+
+    private fun getRetrofitBuilder(gson: Gson, @Cached okHttpClient: OkHttpClient): Retrofit.Builder {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .baseUrl(baseUrl)
             .client(okHttpClient)
-            .build()
     }
 }

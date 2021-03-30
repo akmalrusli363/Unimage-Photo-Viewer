@@ -23,6 +23,7 @@ android {
 
         buildConfigField("String", "CLIENT_ID", apikeyProperties['CLIENT_ID'])
         buildConfigField("String", "CLIENT_SECRET", apikeyProperties['CLIENT_SECRET'])
+        buildConfigField("String", "ACCESS_TOKEN", apikeyProperties['ACCESS_TOKEN'])
     }
     buildFeatures {
         viewBinding true
