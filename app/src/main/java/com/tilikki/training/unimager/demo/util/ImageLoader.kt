@@ -13,6 +13,7 @@ object ImageLoader {
     @DrawableRes val BROKEN_PLACEHOLDER: Int = R.drawable.ic_general_error
 
     fun loadImage(imageUrl: String?, imageView: ImageView) {
+        imageView.layout(0, 0, 0, 0)
         if (!imageUrl.isNullOrBlank()) {
             loadImage(LinkUtility.convertToUri(imageUrl), imageView)
         } else {

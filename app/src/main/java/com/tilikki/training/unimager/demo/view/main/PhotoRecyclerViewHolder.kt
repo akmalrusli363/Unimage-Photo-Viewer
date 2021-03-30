@@ -13,7 +13,7 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
     fun bind(photo: Photo) {
         item = photo
         Log.d("Unimage-Image", photo.toString())
-        ImageLoader.loadImage(item.imageUrl.defaultSize, itemBinding.ivPhotoImage)
+        ImageLoader.loadImage(item.imageUrl.thumbnailSize, itemBinding.ivPhotoImage)
         itemBinding.ivPhotoImage.contentDescription = item.description
         itemBinding.tvDescription.text = item.description
     }
