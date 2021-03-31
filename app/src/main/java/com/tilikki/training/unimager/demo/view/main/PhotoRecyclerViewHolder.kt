@@ -18,6 +18,6 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
         ImageLoader.loadImage(item.imageUrl.thumbnailSize, itemBinding.ivPhotoImage)
         itemBinding.ivPhotoImage.contentDescription = item.description
         itemBinding.tvDescription.text = item.description
-        itemBinding.root.background = ColorDrawable(Color.parseColor(item.color))
+        itemBinding.llPhotoFrame.background = ColorDrawable(Color.parseColor(item.color))
     }
 }

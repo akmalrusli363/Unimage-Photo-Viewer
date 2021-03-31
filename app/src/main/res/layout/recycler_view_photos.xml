@@ -1,27 +1,41 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/space_small"
+        android:foregroundGravity="center"
+        app:cardCornerRadius="@dimen/corner_radius"
+        app:cardElevation="4dp">
 
-        <ImageView
-            android:id="@+id/iv_photo_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/space_small"
-            android:src="@drawable/ic_general_error"
-            tools:src="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/tv_description"
+        <LinearLayout
+            android:id="@+id/ll_photo_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/space_medium"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-            android:visibility="gone"
-            tools:text="@tools:sample/lorem" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_photo_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:foregroundGravity="center"
+                android:src="@drawable/ic_broken_image"
+                tools:src="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/space_medium"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:visibility="gone"
+                tools:text="@tools:sample/lorem" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>

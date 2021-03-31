@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="@dimen/space_medium"
-            android:background="@color/black" />
+            android:background="@android:color/darker_gray" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_photos_grid"
