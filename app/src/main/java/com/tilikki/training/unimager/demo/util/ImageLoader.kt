@@ -3,8 +3,7 @@ package com.tilikki.training.unimager.demo.util
 import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.squareup.picasso.Picasso
 import com.tilikki.training.unimager.demo.R
 import org.jetbrains.annotations.NotNull
 
@@ -26,7 +25,7 @@ object ImageLoader {
     fun loadImage(imageUri: Uri?, imageView: ImageView) {
         imageView.layout(0, 0, 0, 0)
         if (imageUri != null){
-            Glide.with(imageView)
+            Picasso.get()
                 .load(imageUri)
                 .placeholder(LOADING_PLACEHOLDER)
                 .error(BROKEN_PLACEHOLDER)
