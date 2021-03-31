@@ -42,6 +42,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    configurations.all() {
+        resolutionStrategy.force "org.antlr:antlr4-runtime:4.5.3"
+        resolutionStrategy.force "org.antlr:antlr4-tool:4.5.3"
+    }
 }
 
 dependencies {
@@ -79,6 +83,11 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version" // if you use the support libraries
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    // Room dependency
+    def room_version = "2.2.6"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

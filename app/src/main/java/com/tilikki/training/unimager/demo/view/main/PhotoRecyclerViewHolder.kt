@@ -15,7 +15,7 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
     fun bind(photo: Photo) {
         item = photo
         Log.d("Unimage-Image", photo.toString())
-        ImageLoader.loadImage(item.imageUrl.thumbnailSize, itemBinding.ivPhotoImage)
+        ImageLoader.loadImage(item.thumbnailUrl, itemBinding.ivPhotoImage)
         itemBinding.ivPhotoImage.contentDescription = item.description
         itemBinding.tvDescription.text = item.description
         itemBinding.llPhotoFrame.background = ColorDrawable(Color.parseColor(item.color))

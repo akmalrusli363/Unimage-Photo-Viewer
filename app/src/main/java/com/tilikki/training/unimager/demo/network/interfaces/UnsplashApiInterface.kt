@@ -1,6 +1,6 @@
 package com.tilikki.training.unimager.demo.network.interfaces
 
-import com.tilikki.training.unimager.demo.model.User
+import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.repositories.response.PhotoList
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -17,5 +17,5 @@ interface UnsplashApiInterface {
     ): Observable<PhotoList>
 
     @GET("/users/{userName}")
-    fun getUserProfile(@Path("userName") userName: String): Observable<User>
+    fun getUserProfile(@Path("userName") userName: String): Observable<NetworkUser>
 }

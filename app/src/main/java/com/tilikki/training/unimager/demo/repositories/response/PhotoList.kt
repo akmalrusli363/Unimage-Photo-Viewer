@@ -1,7 +1,7 @@
 package com.tilikki.training.unimager.demo.repositories.response
 
 import com.google.gson.annotations.SerializedName
-import com.tilikki.training.unimager.demo.model.Photo
+import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 
 data class PhotoList(
     @SerializedName("total")
@@ -9,5 +9,5 @@ data class PhotoList(
     @SerializedName("total_pages")
     val total_pages: Int,
     @SerializedName("results")
-    val results: List<Photo>
+    val results: List<NetworkPhoto>
 )
