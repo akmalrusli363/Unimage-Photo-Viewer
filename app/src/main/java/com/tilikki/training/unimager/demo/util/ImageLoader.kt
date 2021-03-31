@@ -9,8 +9,11 @@ import com.tilikki.training.unimager.demo.R
 import org.jetbrains.annotations.NotNull
 
 object ImageLoader {
-    @DrawableRes val LOADING_PLACEHOLDER: Int = R.drawable.loading_animation
-    @DrawableRes val BROKEN_PLACEHOLDER: Int = R.drawable.ic_general_error
+    @DrawableRes
+    val LOADING_PLACEHOLDER: Int = R.drawable.avd_loading
+
+    @DrawableRes
+    val BROKEN_PLACEHOLDER: Int = R.drawable.ic_general_error
 
     fun loadImage(imageUrl: String?, imageView: ImageView) {
         if (!imageUrl.isNullOrBlank()) {
