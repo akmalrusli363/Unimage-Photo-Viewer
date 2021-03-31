@@ -13,7 +13,6 @@ object ImageLoader {
     @DrawableRes val BROKEN_PLACEHOLDER: Int = R.drawable.ic_general_error
 
     fun loadImage(imageUrl: String?, imageView: ImageView) {
-        imageView.layout(0, 0, 0, 0)
         if (!imageUrl.isNullOrBlank()) {
             loadImage(LinkUtility.convertToUri(imageUrl), imageView)
         } else {
@@ -22,13 +21,12 @@ object ImageLoader {
     }
 
     fun loadImage(imageUri: Uri?, imageView: ImageView) {
+        imageView.layout(0, 0, 0, 0)
         if (imageUri != null){
             Glide.with(imageView)
                 .load(imageUri)
-                .apply(
-                    RequestOptions()
-                        .placeholder(LOADING_PLACEHOLDER)
-                        .error(BROKEN_PLACEHOLDER))
+                .placeholder(LOADING_PLACEHOLDER)
+                .error(BROKEN_PLACEHOLDER)
                 .into(imageView)
         } else {
             loadResourceImage(LOADING_PLACEHOLDER, imageView)
@@ -36,6 +34,7 @@ object ImageLoader {
     }
 
     fun loadResourceImage(@NotNull @DrawableRes imageRes: Int, imageView: ImageView) {
+        imageView.layout(0, 0, 0, 0)
         imageView.setImageResource(imageRes)
     }
 }

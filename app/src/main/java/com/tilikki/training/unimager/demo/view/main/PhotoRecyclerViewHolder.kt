@@ -1,5 +1,7 @@
 package com.tilikki.training.unimager.demo.view.main
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import com.tilikki.training.unimager.demo.databinding.RecyclerViewPhotosBinding
@@ -16,5 +18,6 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
         ImageLoader.loadImage(item.imageUrl.thumbnailSize, itemBinding.ivPhotoImage)
         itemBinding.ivPhotoImage.contentDescription = item.description
         itemBinding.tvDescription.text = item.description
+        itemBinding.root.background = ColorDrawable(Color.parseColor(item.color))
     }
 }
