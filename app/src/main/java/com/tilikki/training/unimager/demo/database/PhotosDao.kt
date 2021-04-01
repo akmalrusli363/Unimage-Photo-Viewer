@@ -8,7 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface PhotosDao {
-    @Query("select * from entityphoto")
+    @Query("select * from photos")
     fun getPhotos(): LiveData<List<EntityPhoto>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
