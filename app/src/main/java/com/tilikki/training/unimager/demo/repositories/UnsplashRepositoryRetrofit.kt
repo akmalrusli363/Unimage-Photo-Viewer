@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.repositories
 
+import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
@@ -8,7 +9,8 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 class UnsplashRepositoryRetrofit @Inject constructor(
-    private val unsplashApiInterface: UnsplashApiInterface
+    private val unsplashApiInterface: UnsplashApiInterface,
+    private val database: RoomDB
 ) :
     UnsplashRepository {
     override fun getPhotos(query: String): Observable<List<Photo>> {

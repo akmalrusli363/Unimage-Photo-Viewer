@@ -24,7 +24,7 @@ class MyApplication : Application() {
 
         mainActivityComponent = DaggerMainActivityComponent.builder()
             .appComponent(appComponent)
-            .unsplashModule(UnsplashModule())
+            .unsplashModule(UnsplashModule(this))
             .build()
     }
 
