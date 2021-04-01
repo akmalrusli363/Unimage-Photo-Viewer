@@ -1,20 +1,20 @@
 package com.tilikki.training.unimager.demo.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
+import io.reactivex.Observable
 
 @Dao
 @TypeConverters(EntityTypeConverter::class)
 interface PhotosDao {
     @Query("select * from photos")
-    fun getPhotos(): LiveData<List<EntityPhoto>>
+    fun getPhotos(): Observable<List<EntityPhoto>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(photos: List<EntityPhoto>)
 
-    @Query("SELECT * FROM photos WHERE search_query = :query")
-    fun getSearchResult(query: String): LiveData<List<EntityPhoto>>
+    @Query("SELECT * FROM photos WHERE search_query LIKE :query")
+    fun getSearchResult(query: String): Observable<List<EntityPhoto>>
 
-    @Query("DELETE FROM photos WHERE search_query = :query")
+    @Query("DELETE FROM photos WHERE search_query LIKE :query")
     fun deletePhotoResult(query: String)
 }

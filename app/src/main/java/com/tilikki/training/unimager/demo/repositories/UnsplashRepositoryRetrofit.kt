@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.repositories
 
+import android.util.Log
 import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
@@ -20,8 +21,12 @@ class UnsplashRepositoryRetrofit @Inject constructor(
             database.photosDao.let { dao ->
                 dao.deletePhotoResult(query)
                 dao.insertAll(fetchedPhotos)
+                val fetch = dao.getSearchResult(query)
+                Log.d("UnsplashRoomDB", fetch.toString())
+                fetch.map { rxData ->
+                    rxData.asDomainEntityPhotos()
+                }
             }
-            Observable.just(fetchedPhotos.asDomainEntityPhotos())
         }
     }
 
