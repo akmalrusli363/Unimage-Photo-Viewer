@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@Database(entities = [EntityPhoto::class], version = 2)
+@Database(entities = [EntityPhoto::class], version = 1, exportSchema = false)
+@TypeConverters(EntityTypeConverter::class)
 abstract class RoomDB : RoomDatabase() {
     abstract val photosDao: PhotosDao
 

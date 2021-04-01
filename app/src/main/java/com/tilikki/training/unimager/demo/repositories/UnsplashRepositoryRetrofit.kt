@@ -4,6 +4,7 @@ import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
+import com.tilikki.training.unimager.demo.util.asDatabaseEntityPhotos
 import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -15,7 +16,9 @@ class UnsplashRepositoryRetrofit @Inject constructor(
     UnsplashRepository {
     override fun getPhotos(query: String): Observable<List<Photo>> {
         return unsplashApiInterface.getPhotos(query).flatMap {
-            Observable.just(it.results.asDomainEntityPhotos())
+            val fetchedPhotos = it.results.asDatabaseEntityPhotos()
+            database.photosDao.insertAll(fetchedPhotos)
+            Observable.just(fetchedPhotos.asDomainEntityPhotos())
         }
     }
 

@@ -2,10 +2,12 @@ package com.tilikki.training.unimager.demo.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.tilikki.training.unimager.demo.model.Photo
 import java.util.*
 
 @Entity(tableName = "photos")
+@TypeConverters(EntityTypeConverter::class)
 data class EntityPhoto constructor(
     @PrimaryKey
     val id: String,
@@ -13,7 +15,7 @@ data class EntityPhoto constructor(
     val width: Int,
     val height: Int,
     val color: String,
-    val like: Int? = null,
+    val likes: Int? = null,
     val description: String? = null,
     val altDescription: String? = null,
     val thumbnailUrl: String,
@@ -28,7 +30,7 @@ data class EntityPhoto constructor(
             width = width,
             height = height,
             color = color,
-            like = like,
+            likes = likes,
             description = description,
             altDescription = altDescription,
             thumbnailUrl = thumbnailUrl,
