@@ -41,7 +41,7 @@ data class NetworkPhoto(
         val webLink: String
     )
 
-    fun toDatabaseEntityPhoto(): EntityPhoto {
+    fun toDatabaseEntityPhoto(searchQuery: String): EntityPhoto {
         return EntityPhoto(
             id = id,
             createdAt = createdAt,
@@ -54,7 +54,8 @@ data class NetworkPhoto(
             thumbnailUrl = imageUrl.thumbnailSize,
             fullSizeUrl = imageUrl.fullSize,
             detailUrl = linkUrl.apiLink,
-            webLinkUrl = linkUrl.webLink
+            webLinkUrl = linkUrl.webLink,
+            searchQuery = searchQuery
         )
     }
 

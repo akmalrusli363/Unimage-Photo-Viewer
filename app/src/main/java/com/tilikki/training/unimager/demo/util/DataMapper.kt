@@ -11,9 +11,9 @@ fun List<NetworkPhoto>.asDomainEntityPhotos(): List<Photo> {
     }
 }
 
-fun List<NetworkPhoto>.asDatabaseEntityPhotos(): List<EntityPhoto> {
+fun List<NetworkPhoto>.asDatabaseEntityPhotos(searchQuery: String): List<EntityPhoto> {
     return map {
-        it.toDatabaseEntityPhoto()
+        it.toDatabaseEntityPhoto(searchQuery)
     }
 }
 

@@ -16,8 +16,11 @@ class UnsplashRepositoryRetrofit @Inject constructor(
     UnsplashRepository {
     override fun getPhotos(query: String): Observable<List<Photo>> {
         return unsplashApiInterface.getPhotos(query).flatMap {
-            val fetchedPhotos = it.results.asDatabaseEntityPhotos()
-            database.photosDao.insertAll(fetchedPhotos)
+            val fetchedPhotos = it.results.asDatabaseEntityPhotos(query)
+            database.photosDao.let { dao ->
+                dao.deletePhotoResult(query)
+                dao.insertAll(fetchedPhotos)
+            }
             Observable.just(fetchedPhotos.asDomainEntityPhotos())
         }
     }

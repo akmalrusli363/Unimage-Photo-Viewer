@@ -11,4 +11,10 @@ interface PhotosDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(photos: List<EntityPhoto>)
+
+    @Query("SELECT * FROM photos WHERE search_query = :query")
+    fun getSearchResult(query: String): LiveData<List<EntityPhoto>>
+
+    @Query("DELETE FROM photos WHERE search_query = :query")
+    fun deletePhotoResult(query: String)
 }
