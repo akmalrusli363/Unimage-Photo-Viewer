@@ -2,6 +2,7 @@ package com.tilikki.training.unimager.demo.network
 
 import android.util.Log
 import com.tilikki.training.unimager.demo.BuildConfig
+import com.tilikki.training.unimager.demo.util.LogUtility
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -20,7 +21,7 @@ class OAuthInterceptor : Interceptor {
 
     private fun logRemainingTokenRequest(response: Response) {
         val logFormat = "Remaining request: ${response.header("X-Ratelimit-Remaining")} of ${response.header("X-Ratelimit-Limit")}"
-        Log.i("UnimageFetcher", logFormat)
+        Log.i(LogUtility.LOGGER_FETCH_TAG, logFormat)
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.network.FetchResponse
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
+import com.tilikki.training.unimager.demo.util.LogUtility
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -29,10 +30,10 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     _photos.postValue(it)
-                    Log.d("UnimageFetcher", it.toString())
+                    Log.d(LogUtility.LOGGER_FETCH_TAG, it.toString())
                     setSuccessResponse(true, null)
                 }, {
-                    Log.e("UnimageFetcher", it.localizedMessage, it)
+                    Log.e(LogUtility.LOGGER_FETCH_TAG, it.localizedMessage, it)
                     setSuccessResponse(false, it)
                 })
         }

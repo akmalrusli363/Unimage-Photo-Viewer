@@ -5,6 +5,7 @@ import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
+import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.NetworkUtilities
 import com.tilikki.training.unimager.demo.util.asDatabaseEntityPhotos
 import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
@@ -34,7 +35,7 @@ class UnsplashRepositoryRetrofit @Inject constructor(
 
     private fun queryData(query: String): Observable<List<Photo>>? {
         val fetch = database.photosDao.getSearchResult(query)
-        Log.d("UnsplashRoomDB", fetch.toString())
+        Log.d(LogUtility.LOGGER_DATABASE_TAG, fetch.toString())
         return fetch.map { rxData ->
             rxData.asDomainEntityPhotos()
         }

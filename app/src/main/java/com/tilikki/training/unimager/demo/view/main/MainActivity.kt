@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityMainBinding
+import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import javax.inject.Inject
 
@@ -59,9 +60,6 @@ class MainActivity : AppCompatActivity() {
     private fun searchListener(searchView: SearchView) : SearchView.OnQueryTextListener {
         return object: SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.w("Unimager", "While search using physical keyboard, " +
-                        "DO NOT PROCEED USING ENTER KEY FROM YOUR KEYBOARD!! " +
-                        "Use virtual keyboard 'enter' key instead!")
                 if (query != null) {
                     search(query)
                     searchView.clearFocus()
@@ -78,7 +76,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun search(query: String) {
         viewModel.searchQuery = query
-        Log.d("Unimager", "Searching... ${viewModel.searchQuery}")
+        Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... ${viewModel.searchQuery}")
         viewModel.fetchPhotos(query)
     }
 
