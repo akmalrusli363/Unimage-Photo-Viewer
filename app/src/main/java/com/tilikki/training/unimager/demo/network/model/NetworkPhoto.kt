@@ -17,20 +17,20 @@ data class NetworkPhoto(
     @SerializedName("color")
     val color: String,
     @SerializedName("like")
-    val like: Int,
+    val like: Int?,
     @SerializedName("description")
-    val description: String,
+    val description: String?,
     @SerializedName("alt_description")
-    val altDescription: String,
+    val altDescription: String?,
     @SerializedName("urls")
     val imageUrl: PhotoUrl,
-    @SerializedName("link_url")
+    @SerializedName("links")
     val linkUrl: LinkUrl
 ) {
     data class PhotoUrl(
         @SerializedName("full")
         val fullSize: String,
-        @SerializedName("thumbnail")
+        @SerializedName("thumb")
         val thumbnailSize: String
     )
 
@@ -44,7 +44,7 @@ data class NetworkPhoto(
     fun toDatabaseEntityPhoto(): EntityPhoto {
         return EntityPhoto(
             id = id,
-            createdAt = createdAt.time,
+            createdAt = createdAt,
             width = width,
             height = height,
             color = color,
