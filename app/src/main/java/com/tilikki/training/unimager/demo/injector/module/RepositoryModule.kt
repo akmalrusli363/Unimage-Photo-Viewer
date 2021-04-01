@@ -8,5 +8,7 @@ import dagger.Module
 @Module
 abstract class RepositoryModule {
     @Binds
-    abstract fun provideUnsplashRepositoryRetrofit(unsplashRepositoryRetrofit: UnsplashRepositoryRetrofit): UnsplashRepository
+    abstract fun provideUnsplashRepositoryRetrofit(
+        unsplashRepositoryRetrofit: UnsplashRepositoryRetrofit
+    ): UnsplashRepository
 }

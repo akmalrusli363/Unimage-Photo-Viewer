@@ -7,7 +7,9 @@ import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class UnsplashRepositoryRetrofit @Inject constructor(private val unsplashApiInterface: UnsplashApiInterface) :
+class UnsplashRepositoryRetrofit @Inject constructor(
+    private val unsplashApiInterface: UnsplashApiInterface
+) :
     UnsplashRepository {
     override fun getPhotos(query: String): Observable<List<Photo>> {
         return unsplashApiInterface.getPhotos(query).flatMap {
