@@ -16,8 +16,8 @@ data class NetworkPhoto(
     val height: Int,
     @SerializedName("color")
     val color: String,
-    @SerializedName("like")
-    val like: Int?,
+    @SerializedName("likes")
+    val likes: Int?,
     @SerializedName("description")
     val description: String?,
     @SerializedName("alt_description")
@@ -48,7 +48,7 @@ data class NetworkPhoto(
             width = width,
             height = height,
             color = color,
-            like = like,
+            likes = likes,
             description = description,
             altDescription = altDescription,
             thumbnailUrl = imageUrl.thumbnailSize,
@@ -65,7 +65,7 @@ data class NetworkPhoto(
             width = width,
             height = height,
             color = color,
-            like = like,
+            likes = likes,
             description = description,
             altDescription = altDescription,
             thumbnailUrl = imageUrl.thumbnailSize,
