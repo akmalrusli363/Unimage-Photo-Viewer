@@ -13,7 +13,7 @@ interface PhotosDao {
     fun insertAll(photos: List<EntityPhoto>)
 
     @Query("SELECT * FROM photos WHERE search_query LIKE :query")
-    fun getSearchResult(query: String): Observable<List<EntityPhoto>>
+    fun getSearchResult(query: String): List<EntityPhoto>
 
     @Query("DELETE FROM photos WHERE search_query LIKE :query")
     fun deletePhotoResult(query: String)

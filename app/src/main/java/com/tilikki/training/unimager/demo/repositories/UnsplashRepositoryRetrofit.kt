@@ -7,7 +7,6 @@ import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.util.LogUtility
-import com.tilikki.training.unimager.demo.util.NetworkUtilities
 import com.tilikki.training.unimager.demo.util.asDatabaseEntityPhotos
 import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
 import io.reactivex.Observable
@@ -19,27 +18,27 @@ class UnsplashRepositoryRetrofit @Inject constructor(
 ) :
     UnsplashRepository {
     override fun getPhotos(query: String): Observable<List<Photo>> {
-        return if (NetworkUtilities.isInternetAvailable()) {
-            val result = unsplashApiInterface.getPhotos(query)
-            result.flatMap {
-                val fetchedPhotos = it.results.asDatabaseEntityPhotos(query)
+        val result = unsplashApiInterface.getPhotos(query)
+        return result.flatMap {
+            if (it.isSuccessful) {
+                val fetchedPhotos = it.body()?.results?.asDatabaseEntityPhotos(query)
                 database.photosDao.let { dao ->
                     dao.deletePhotoResult(query)
-                    dao.insertAll(fetchedPhotos)
-                    queryData(query)
+                    if (fetchedPhotos != null) {
+                        dao.insertAll(fetchedPhotos)
+                    }
                 }
             }
-        } else {
-            queryData(query) ?: Observable.empty()
+            Observable.just(queryData(query))
+        }.onErrorReturn {
+            queryData(query)
         }
     }
 
-    private fun queryData(query: String): Observable<List<Photo>>? {
+    private fun queryData(query: String): List<Photo> {
         val fetch = database.photosDao.getSearchResult(query)
         Log.d(LogUtility.LOGGER_DATABASE_TAG, fetch.toString())
-        return fetch.map { rxData ->
-            rxData.asDomainEntityPhotos()
-        }
+        return fetch.asDomainEntityPhotos()
     }
 
     override fun getUserProfile(query: String): Observable<NetworkUser> {
