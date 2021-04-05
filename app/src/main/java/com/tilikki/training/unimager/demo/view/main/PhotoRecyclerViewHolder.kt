@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.view.main
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
@@ -8,6 +9,7 @@ import com.tilikki.training.unimager.demo.databinding.RecyclerViewPhotosBinding
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.LogUtility
+import com.tilikki.training.unimager.demo.view.photodetail.PhotoDetailActivity
 
 class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding) :
     RecyclerView.ViewHolder(itemBinding.root) {
@@ -19,5 +21,12 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
         ImageLoader.loadImage(item.thumbnailUrl, itemBinding.ivPhotoImage)
         itemBinding.ivPhotoImage.contentDescription = item.altDescription
         itemBinding.llPhotoFrame.background = ColorDrawable(Color.parseColor(item.color))
+        itemBinding.root.apply {
+            setOnClickListener {
+                val intent = Intent(context, PhotoDetailActivity::class.java)
+                intent.putExtra(PhotoDetailActivity.INTENT_URL, item.apiUrl)
+                context.startActivity(intent)
+            }
+        }
     }
 }

@@ -4,6 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.photodetail.PhotoDetailActivity">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.tilikki.training.unimager.demo.view.photodetail.PhotoDetailViewModel" />
+    </data>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

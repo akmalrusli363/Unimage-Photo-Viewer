@@ -4,6 +4,7 @@ import com.tilikki.training.unimager.demo.injector.module.UnsplashModule
 import com.tilikki.training.unimager.demo.injector.module.ViewModelModule
 import com.tilikki.training.unimager.demo.injector.scope.MainActivityScope
 import com.tilikki.training.unimager.demo.view.main.MainActivity
+import com.tilikki.training.unimager.demo.view.photodetail.PhotoDetailActivity
 import dagger.Component
 
 @MainActivityScope
@@ -13,4 +14,5 @@ import dagger.Component
 )
 interface MainActivityComponent {
     fun inject(activity: MainActivity)
+    fun inject(activity: PhotoDetailActivity)
 }
