@@ -3,6 +3,7 @@ package com.tilikki.training.unimager.demo.network.model
 import com.google.gson.annotations.SerializedName
 import com.tilikki.training.unimager.demo.database.EntityPhoto
 import com.tilikki.training.unimager.demo.model.Photo
+import com.tilikki.training.unimager.demo.model.PhotoDetail
 import java.util.*
 
 data class NetworkPhoto(
@@ -25,7 +26,9 @@ data class NetworkPhoto(
     @SerializedName("urls")
     val imageUrl: PhotoUrl,
     @SerializedName("links")
-    val linkUrl: LinkUrl
+    val linkUrl: LinkUrl,
+    @SerializedName("user")
+    val user: NetworkUser,
 ) {
     data class PhotoUrl(
         @SerializedName("full")
@@ -73,6 +76,24 @@ data class NetworkPhoto(
             imageUrl = imageUrl.fullSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink
+        )
+    }
+
+    fun toDomainEntityPhotoDetail(): PhotoDetail {
+        return PhotoDetail(
+            id = id,
+            createdAt = createdAt,
+            width = width,
+            height = height,
+            color = color,
+            likes = likes,
+            description = description,
+            altDescription = altDescription,
+            thumbnailUrl = imageUrl.thumbnailSize,
+            imageUrl = imageUrl.fullSize,
+            apiUrl = linkUrl.apiLink,
+            htmlUrl = linkUrl.webLink,
+            user = user.toDomainEntityUser()
         )
     }
 }

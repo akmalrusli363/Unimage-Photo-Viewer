@@ -3,6 +3,7 @@ package com.tilikki.training.unimager.demo.repositories
 import android.util.Log
 import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
+import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.util.LogUtility
@@ -43,5 +44,11 @@ class UnsplashRepositoryRetrofit @Inject constructor(
 
     override fun getUserProfile(query: String): Observable<NetworkUser> {
         return unsplashApiInterface.getUserProfile(query)
+    }
+
+    override fun getPhotoDetail(photoId: String): Observable<PhotoDetail> {
+        return unsplashApiInterface.getPhotoDetail(photoId).map {
+            it.toDomainEntityPhotoDetail()
+        }
     }
 }

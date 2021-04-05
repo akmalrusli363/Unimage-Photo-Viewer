@@ -24,7 +24,7 @@ class PhotoRecyclerViewHolder(private val itemBinding: RecyclerViewPhotosBinding
         itemBinding.root.apply {
             setOnClickListener {
                 val intent = Intent(context, PhotoDetailActivity::class.java)
-                intent.putExtra(PhotoDetailActivity.INTENT_URL, item.apiUrl)
+                intent.putExtra(PhotoDetailActivity.INTENT_URL, item.id)
                 context.startActivity(intent)
             }
         }

@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.network.model
 
 import com.google.gson.annotations.SerializedName
+import com.tilikki.training.unimager.demo.model.User
 
 data class NetworkUser(
     @SerializedName("id")
@@ -13,6 +14,8 @@ data class NetworkUser(
     val profileUrl: ProfileLinks,
     @SerializedName("profile_image")
     val profileImage: ProfileImage,
+    @SerializedName("total_photos")
+    val totalPhotos: Int,
 ) {
     data class ProfileImage(
         @SerializedName("medium")
@@ -27,4 +30,17 @@ data class NetworkUser(
         @SerializedName("photos")
         val photosLink: String,
     )
+
+    fun toDomainEntityUser(): User {
+        return User(
+            id = id,
+            username = username,
+            name = name,
+            htmlUrl = profileUrl.htmlLink,
+            apiUrl = profileUrl.apiLink,
+            apiPhotosUrl = profileUrl.photosLink,
+            profileImageUrl = profileImage.imageUrl,
+            totalPhotos = totalPhotos,
+        )
+    }
 }

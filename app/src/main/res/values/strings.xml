@@ -2,8 +2,14 @@
     <string name="app_name">Unimage Photo Viewer</string>
     <string name="explore_photo">Explore photo</string>
     <string name="description">Description</string>
+    <string name="alt_description">Alt Description</string>
+
     <string name="download">Download</string>
     <string name="full_size">Full Size</string>
-    <string name="alt_description">Alt Description</string>
     <string name="exif">EXIF</string>
+
+    <string name="profile_image">Profile image</string>
+    <string name="photo">Photo</string>
+
+    <string name="username_format">%1$s (@%2$s)</string>
 </resources>

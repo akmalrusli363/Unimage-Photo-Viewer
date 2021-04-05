@@ -29,6 +29,7 @@
                 android:adjustViewBounds="true"
                 android:foregroundGravity="center"
                 android:src="@drawable/ic_broken_image"
+                android:contentDescription="@string/photo"
                 tools:src="@tools:sample/avatars" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,9 +40,10 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/tv_likes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/space_large"
+                    android:layout_marginHorizontal="@dimen/space_medium"
                     android:drawablePadding="@dimen/space_small"
                     android:gravity="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
@@ -83,6 +85,7 @@
                     android:layout_height="64dp"
                     android:background="#cfcfcf"
                     android:src="@drawable/ic_person"
+                    android:contentDescription="@string/profile_image"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
