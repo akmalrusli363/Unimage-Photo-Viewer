@@ -30,20 +30,6 @@ data class NetworkPhoto(
     @SerializedName("user")
     val user: NetworkUser,
 ) {
-    data class PhotoUrl(
-        @SerializedName("full")
-        val fullSize: String,
-        @SerializedName("thumb")
-        val thumbnailSize: String
-    )
-
-    data class LinkUrl(
-        @SerializedName("self")
-        val apiLink: String,
-        @SerializedName("html")
-        val webLink: String
-    )
-
     fun toDatabaseEntityPhoto(searchQuery: String): EntityPhoto {
         return EntityPhoto(
             id = id,

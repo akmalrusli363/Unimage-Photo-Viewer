@@ -9,6 +9,8 @@ data class User(
     val apiPhotosUrl: String,
     val profileImageUrl: String,
     val totalPhotos: Int,
+    val following: Int?,
+    val followers: Int?,
 ) {
 
 }

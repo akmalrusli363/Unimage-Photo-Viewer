@@ -21,6 +21,9 @@ interface UnsplashApiInterface {
     @GET("/users/{userName}")
     fun getUserProfile(@Path("userName") userName: String): Observable<NetworkUser>
 
+    @GET("/users/{userName}/photos")
+    fun getUserPhotos(@Path("userName") userName: String): Observable<List<NetworkPhoto>>
+
     @GET("/photos/{photoId}")
     fun getPhotoDetail(@Path("photoId") photoId: String): Observable<NetworkPhoto>
 }

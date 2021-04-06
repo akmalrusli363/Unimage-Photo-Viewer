@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.tilikki.training.unimager.demo.databinding.ActivityPhotoDetailBinding
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.LogUtility
+import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import java.util.*
 import javax.inject.Inject
@@ -58,10 +60,9 @@ class PhotoDetailActivity : AppCompatActivity() {
                 tvUsername.text = it.user.username
                 tvFullName.text = it.user.name
                 clProfileBox.setOnClickListener { _ ->
-                    LogUtility.showToast(
-                        this@PhotoDetailActivity,
-                        "User ID: ${it.user.id} [@${it.user.username}]"
-                    )
+                    val intent = Intent(this@PhotoDetailActivity, ProfileActivity::class.java)
+                    intent.putExtra(ProfileActivity.INTENT_URL, it.user.username)
+                    this@PhotoDetailActivity.startActivity(intent)
                 }
             }
         })
