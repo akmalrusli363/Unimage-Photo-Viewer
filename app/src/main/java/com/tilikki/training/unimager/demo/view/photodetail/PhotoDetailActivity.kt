@@ -44,7 +44,6 @@ class PhotoDetailActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.viewModel = viewModel
         viewModel.attachPhoto(photoId)
 
         viewModel.photo.observe(this, {

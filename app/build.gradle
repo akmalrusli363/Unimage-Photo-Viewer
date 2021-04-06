@@ -26,7 +26,6 @@ android {
         buildConfigField("String", "ACCESS_TOKEN", apikeyProperties['ACCESS_TOKEN'])
     }
     buildFeatures {
-        viewBinding true
         dataBinding true
     }
     buildTypes {

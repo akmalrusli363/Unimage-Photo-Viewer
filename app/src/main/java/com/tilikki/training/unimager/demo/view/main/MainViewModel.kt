@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
     var searchQuery: String = ""
 
     private var _photos: MutableLiveData<List<Photo>> = MutableLiveData()
-    val photos: LiveData<List<Photo>>
+    val photos: LiveData<List<Photo>?>
         get() = _photos
 
     private var _successResponse: MutableLiveData<FetchResponse> = MutableLiveData()

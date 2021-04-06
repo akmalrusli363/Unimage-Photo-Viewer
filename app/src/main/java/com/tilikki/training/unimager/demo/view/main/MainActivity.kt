@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.viewModel = viewModel
         binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
         binding.rvPhotosGrid.layoutManager = getPhotoGridLayoutManager()
         binding.rvPhotosGrid.setHasFixedSize(true)
@@ -54,6 +53,10 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Fetch success!", Toast.LENGTH_SHORT).show()
             }
+        })
+
+        viewModel.photos.observe(this, {
+            (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
         })
     }
 
