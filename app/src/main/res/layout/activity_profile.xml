@@ -37,11 +37,38 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 tools:text="@tools:sample/full_names" />
 
-            <TextView
-                android:id="@+id/tv_user_statistics"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/ll_user_statistics"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="98 photos" />
+                android:gravity="center"
+                android:showDividers="middle">
+
+                <TextView
+                    android:id="@+id/tv_photos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/space_medium"
+                    tools:text="98 photos" />
+
+                <TextView
+                    android:id="@+id/tv_following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/space_medium"
+                    tools:text="42 following" />
+
+                <TextView
+                    android:id="@+id/tv_followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/space_medium"
+                    tools:text="324 followers" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <View

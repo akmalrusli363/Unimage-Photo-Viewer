@@ -4,8 +4,8 @@ import android.util.Log
 import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
+import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
-import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.asDatabaseEntityPhotos
 import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
@@ -41,13 +41,21 @@ class UnsplashRepositoryImpl @Inject constructor(
         return fetch.asDomainEntityPhotos()
     }
 
-    override fun getUserProfile(username: String): Observable<NetworkUser> {
-        return unsplashApiInterface.getUserProfile(username)
-    }
-
     override fun getPhotoDetail(photoId: String): Observable<PhotoDetail> {
         return unsplashApiInterface.getPhotoDetail(photoId).map {
             it.toDomainEntityPhotoDetail()
+        }
+    }
+
+    override fun getUserProfile(username: String): Observable<User> {
+        return unsplashApiInterface.getUserProfile(username).map {
+            it.toDomainEntityUser()
+        }
+    }
+
+    override fun getUserPhotos(username: String): Observable<List<Photo>> {
+        return unsplashApiInterface.getUserPhotos(username).map {
+            it.asDomainEntityPhotos()
         }
     }
 }

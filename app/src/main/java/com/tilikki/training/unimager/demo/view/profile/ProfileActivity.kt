@@ -3,9 +3,12 @@ package com.tilikki.training.unimager.demo.view.profile
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
 import com.tilikki.training.unimager.demo.util.ImageLoader
+import com.tilikki.training.unimager.demo.view.main.PhotoRecyclerViewAdapter
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import javax.inject.Inject
 
@@ -31,6 +34,9 @@ class ProfileActivity : AppCompatActivity() {
 
         binding = ActivityProfileBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
+        binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
+        binding.rvPhotosGrid.layoutManager = getPhotoGridLayoutManager()
+        binding.rvPhotosGrid.setHasFixedSize(true)
         setContentView(binding.root)
 
         viewModel.fetchUserProfile(username!!)
@@ -38,15 +44,25 @@ class ProfileActivity : AppCompatActivity() {
             binding.apply {
                 tvUsername.text = it.username
                 tvFullName.text = it.name
-                tvUserStatistics.text =
-                    "${it.totalPhotos} photos | ${it.following} following | ${it.followers} followers"
+                tvPhotos.text = "${it.totalPhotos} photos"
+                tvFollowers.text = "${it.followers} followers"
+                tvFollowing.text = "${it.following} following"
                 ImageLoader.loadImage(it.profileImageUrl, ivProfileImage)
             }
+        })
+        viewModel.userPhotos.observe(this, {
+            (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
         })
     }
 
     private fun getFromIntent(): String? {
         return intent.getStringExtra(INTENT_URL)
+    }
+
+    private fun getPhotoGridLayoutManager(): RecyclerView.LayoutManager {
+        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+        return layoutManager
     }
 
     companion object {
