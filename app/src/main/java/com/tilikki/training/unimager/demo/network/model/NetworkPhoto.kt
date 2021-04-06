@@ -58,6 +58,7 @@ data class NetworkPhoto(
             fullSizeUrl = imageUrl.fullSize,
             detailUrl = linkUrl.apiLink,
             webLinkUrl = linkUrl.webLink,
+            owner = user.username,
             searchQuery = searchQuery
         )
     }
@@ -75,7 +76,8 @@ data class NetworkPhoto(
             thumbnailUrl = imageUrl.thumbnailSize,
             imageUrl = imageUrl.fullSize,
             apiUrl = linkUrl.apiLink,
-            htmlUrl = linkUrl.webLink
+            htmlUrl = linkUrl.webLink,
+            owner = user.username,
         )
     }
 

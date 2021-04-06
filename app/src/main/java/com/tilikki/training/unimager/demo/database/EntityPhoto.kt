@@ -35,6 +35,8 @@ data class EntityPhoto constructor(
     val detailUrl: String,
     @ColumnInfo(name = "web_link_url")
     val webLinkUrl: String,
+    @ColumnInfo(name = "owner")
+    val owner: String,
     @ColumnInfo(name = "search_query")
     val searchQuery: String?
 ) {
@@ -51,7 +53,8 @@ data class EntityPhoto constructor(
             thumbnailUrl = thumbnailUrl,
             imageUrl = fullSizeUrl,
             apiUrl = detailUrl,
-            htmlUrl = webLinkUrl
+            htmlUrl = webLinkUrl,
+            owner = owner,
         )
     }
 }
