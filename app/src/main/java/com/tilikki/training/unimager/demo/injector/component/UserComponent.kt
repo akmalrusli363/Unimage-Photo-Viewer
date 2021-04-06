@@ -12,7 +12,7 @@ import dagger.Component
     dependencies = [AppComponent::class],
     modules = [UnsplashModule::class, ViewModelModule::class]
 )
-interface MainActivityComponent {
+interface UserComponent {
     fun inject(activity: MainActivity)
     fun inject(activity: PhotoDetailActivity)
 }

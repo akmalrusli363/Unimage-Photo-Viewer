@@ -12,7 +12,7 @@ import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class UnsplashRepositoryRetrofit @Inject constructor(
+class UnsplashRepositoryImpl @Inject constructor(
     private val unsplashApiInterface: UnsplashApiInterface,
     private val database: RoomDB
 ) :
@@ -41,8 +41,8 @@ class UnsplashRepositoryRetrofit @Inject constructor(
         return fetch.asDomainEntityPhotos()
     }
 
-    override fun getUserProfile(query: String): Observable<NetworkUser> {
-        return unsplashApiInterface.getUserProfile(query)
+    override fun getUserProfile(username: String): Observable<NetworkUser> {
+        return unsplashApiInterface.getUserProfile(username)
     }
 
     override fun getPhotoDetail(photoId: String): Observable<PhotoDetail> {

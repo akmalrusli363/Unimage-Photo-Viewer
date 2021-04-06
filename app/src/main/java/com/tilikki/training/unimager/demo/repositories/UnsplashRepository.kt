@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 interface UnsplashRepository {
     fun getPhotos(query: String): Observable<List<Photo>>
-    fun getUserProfile(query: String): Observable<NetworkUser>
+    fun getUserProfile(username: String): Observable<NetworkUser>
     fun getPhotoDetail(photoId: String): Observable<PhotoDetail>
 
     companion object {

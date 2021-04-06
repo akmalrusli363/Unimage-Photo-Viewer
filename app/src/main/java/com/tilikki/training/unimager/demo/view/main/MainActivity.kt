@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).getMainActivityComponent().inject(this)
+        (application as MyApplication).getUserComponent().inject(this)
 
         super.onCreate(savedInstanceState)
 
