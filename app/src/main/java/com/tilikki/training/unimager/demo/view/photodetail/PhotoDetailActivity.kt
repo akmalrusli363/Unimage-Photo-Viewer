@@ -1,6 +1,9 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.tilikki.training.unimager.demo.R
@@ -26,6 +29,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as MyApplication).getMainActivityComponent().inject(this)
         super.onCreate(savedInstanceState)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val photoId = getFromIntent()
         LogUtility.showToast(this, "Image: $photoId")
@@ -46,8 +50,8 @@ class PhotoDetailActivity : AppCompatActivity() {
                 ImageLoader.loadImage(it.imageUrl, ivPhotoImage)
                 ivPhotoImage.contentDescription = it.altDescription
                 tvLikes.text = it.likes.toString()
-                tvDescription.text = it.description
-                tvAltDescription.text = it.altDescription
+                setTextField(llDescription, tvDescription, it.description)
+                setTextField(llAltDescription, tvAltDescription, it.altDescription)
 
                 ImageLoader.loadImage(it.user.profileImageUrl, ivProfileImage)
                 ivProfileImage.contentDescription = getDisplayFullName(it.user)
@@ -72,6 +76,19 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     private fun getFromIntent(): String? {
         return intent.getStringExtra(INTENT_URL)
+    }
+
+    private fun setTextField(viewGroup: ViewGroup, textView: TextView, value: String?) {
+        setGroupVisibility(viewGroup, !value.isNullOrEmpty())
+        textView.text = value
+    }
+
+    private fun setGroupVisibility(view: ViewGroup, value: Boolean) {
+        view.visibility = if (value) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 
     companion object {

@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UnimagePhotoViewer">
-        <activity android:name=".view.photodetail.PhotoDetailActivity"></activity>
+        <activity
+            android:name=".view.photodetail.PhotoDetailActivity"
+            android:parentActivityName=".view.main.MainActivity" />
         <activity android:name=".view.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
