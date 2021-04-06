@@ -1,10 +1,12 @@
 package com.tilikki.training.unimager.demo.view.profile
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
 import com.tilikki.training.unimager.demo.util.ImageLoader
@@ -26,6 +28,7 @@ class ProfileActivity : AppCompatActivity() {
         (application as MyApplication).getUserComponent().inject(this)
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = "User Profile"
 
         val username = getFromIntent()
         if (username == null) {
@@ -44,11 +47,12 @@ class ProfileActivity : AppCompatActivity() {
             binding.apply {
                 tvUsername.text = it.username
                 tvFullName.text = it.name
-                tvPhotos.text = "${it.totalPhotos} photos"
-                tvFollowers.text = "${it.followers} followers"
-                tvFollowing.text = "${it.following} following"
+                tvPhotos.text = getString(R.string.total_photos_format, it.totalPhotos)
+                tvFollowers.text = getString(R.string.followers_format, it.followers)
+                tvFollowing.text = getString(R.string.following_format, it.following)
                 ImageLoader.loadImage(it.profileImageUrl, ivProfileImage)
             }
+            this@ProfileActivity.title = "${it.name} Profile"
         })
         viewModel.userPhotos.observe(this, {
             (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
@@ -63,6 +67,14 @@ class ProfileActivity : AppCompatActivity() {
         val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         return layoutManager
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> onBackPressed()
+            else -> super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     companion object {

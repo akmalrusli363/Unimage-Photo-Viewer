@@ -8,4 +8,12 @@
         <item name="android:padding">@dimen/space_small</item>
         <item name="android:orientation">vertical</item>
     </style>
+
+    <style name="RecyclerViewBigPanel">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingStart">@dimen/space_medium</item>
+        <item name="android:paddingEnd">@dimen/space_medium</item>
+        <item name="android:paddingTop">@dimen/space_medium</item>
+    </style>
 </resources>

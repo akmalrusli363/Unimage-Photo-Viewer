@@ -3,7 +3,6 @@ package com.tilikki.training.unimager.demo.view.main
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -45,13 +44,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.successResponse.observe(this, {
             if (!it.success) {
                 if (it.error != null) {
-                    Toast.makeText(this, it.error.localizedMessage, Toast.LENGTH_SHORT)
-                        .show()
+                    LogUtility.showToast(this, it.error.localizedMessage ?: "An error occurred")
                 } else {
-                    Toast.makeText(this, "An error occurred", Toast.LENGTH_SHORT).show()
+                    LogUtility.showToast(this, "An error occurred")
                 }
             } else {
-                Toast.makeText(this, "Fetch success!", Toast.LENGTH_SHORT).show()
+                LogUtility.showToast(this, "Fetch success!")
             }
         })
 

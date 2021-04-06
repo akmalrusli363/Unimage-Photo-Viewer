@@ -29,9 +29,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_photos_grid"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/space_medium"
+            style="@style/RecyclerViewBigPanel"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/recycler_view_photos" />

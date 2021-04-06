@@ -9,6 +9,7 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/ll_photo_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -20,9 +21,9 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/space_small"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/photo"
                 android:foregroundGravity="center"
                 android:src="@drawable/ic_broken_image"
-                android:contentDescription="@string/photo"
                 tools:src="@tools:sample/avatars" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -77,8 +78,8 @@
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:background="#cfcfcf"
-                    android:src="@drawable/ic_person"
                     android:contentDescription="@string/profile_image"
+                    android:src="@drawable/ic_person"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -4,86 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".view.profile.ProfileActivity">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/ll_profile_box"
-            style="@style/FieldBox"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/iv_profile_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_margin="@dimen/space_medium"
-                android:background="#cfcfcf"
-                android:contentDescription="@string/profile_image"
-                android:src="@drawable/ic_person" />
-
-            <TextView
-                android:id="@+id/tv_full_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                tools:text="@tools:sample/full_names" />
-
-            <TextView
-                android:id="@+id/tv_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                tools:text="@tools:sample/full_names" />
-
-            <LinearLayout
-                android:id="@+id/ll_user_statistics"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:showDividers="middle">
-
-                <TextView
-                    android:id="@+id/tv_photos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/space_medium"
-                    tools:text="98 photos" />
-
-                <TextView
-                    android:id="@+id/tv_following"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/space_medium"
-                    tools:text="42 following" />
-
-                <TextView
-                    android:id="@+id/tv_followers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="@dimen/space_medium"
-                    tools:text="324 followers" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="@dimen/space_medium"
-            android:background="@android:color/darker_gray" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_photos_grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/space_medium"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            app:spanCount="2"
-            tools:listitem="@layout/recycler_view_photos" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_profile_box"
+                style="@style/FieldBox"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_profile_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_margin="@dimen/space_medium"
+                    android:background="#cfcfcf"
+                    android:contentDescription="@string/profile_image"
+                    android:src="@drawable/ic_person" />
+
+                <TextView
+                    android:id="@+id/tv_full_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    tools:text="@tools:sample/full_names" />
+
+                <LinearLayout
+                    android:id="@+id/ll_user_statistics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:showDividers="middle">
+
+                    <TextView
+                        android:id="@+id/tv_photos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/space_medium"
+                        tools:text="98 photos" />
+
+                    <TextView
+                        android:id="@+id/tv_following"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/space_medium"
+                        tools:text="42 following" />
+
+                    <TextView
+                        android:id="@+id/tv_followers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/space_medium"
+                        tools:text="324 followers" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/space_medium"
+                android:background="@android:color/darker_gray" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_photos_grid"
+                style="@style/RecyclerViewBigPanel"
+                app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/recycler_view_photos" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>
