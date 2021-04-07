@@ -5,8 +5,6 @@ import android.util.Log
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityMainBinding
 import com.tilikki.training.unimager.demo.util.LogUtility
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
-        binding.rvPhotosGrid.layoutManager = getPhotoGridLayoutManager()
+        binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
         binding.rvPhotosGrid.setHasFixedSize(true)
 
         binding.svPhotoSearch.apply {
@@ -79,11 +77,5 @@ class MainActivity : AppCompatActivity() {
         viewModel.searchQuery = query
         Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... ${viewModel.searchQuery}")
         viewModel.fetchPhotos(query)
-    }
-
-    private fun getPhotoGridLayoutManager(): RecyclerView.LayoutManager {
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-        return layoutManager
     }
 }

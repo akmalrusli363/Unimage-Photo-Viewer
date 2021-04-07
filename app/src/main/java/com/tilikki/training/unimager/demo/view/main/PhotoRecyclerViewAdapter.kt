@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tilikki.training.unimager.demo.databinding.RecyclerViewPhotosBinding
 import com.tilikki.training.unimager.demo.model.Photo
 
@@ -22,13 +24,22 @@ class PhotoRecyclerViewAdapter : ListAdapter<Photo, PhotoRecyclerViewHolder>(Dif
         holder.bind(item)
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Photo>() {
+    object DiffCallback : DiffUtil.ItemCallback<Photo>() {
         override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
             return oldItem === newItem
         }
 
         override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
             return oldItem.id == newItem.id
+        }
+    }
+
+    companion object {
+        fun getPhotoGridLayoutManager(): RecyclerView.LayoutManager {
+            val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            layoutManager.gapStrategy =
+                StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+            return layoutManager
         }
     }
 }

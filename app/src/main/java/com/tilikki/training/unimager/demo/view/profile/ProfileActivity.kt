@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
@@ -38,7 +36,7 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
         binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
-        binding.rvPhotosGrid.layoutManager = getPhotoGridLayoutManager()
+        binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
         binding.rvPhotosGrid.setHasFixedSize(true)
         setContentView(binding.root)
 
@@ -61,12 +59,6 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun getFromIntent(): String? {
         return intent.getStringExtra(INTENT_URL)
-    }
-
-    private fun getPhotoGridLayoutManager(): RecyclerView.LayoutManager {
-        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-        return layoutManager
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
