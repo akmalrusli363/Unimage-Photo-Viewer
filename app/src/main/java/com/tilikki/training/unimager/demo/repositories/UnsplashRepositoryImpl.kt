@@ -1,6 +1,8 @@
 package com.tilikki.training.unimager.demo.repositories
 
 import android.util.Log
+import com.tilikki.training.unimager.demo.database.EntityPhoto
+import com.tilikki.training.unimager.demo.database.EntityUser
 import com.tilikki.training.unimager.demo.database.RoomDB
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
@@ -33,13 +35,13 @@ class UnsplashRepositoryImpl @Inject constructor(
                     }
                 }
             }
-            Observable.just(queryData(query))
+            Observable.just(queryPhotosFromDB(query))
         }.onErrorReturn {
-            queryData(query)
+            queryPhotosFromDB(query)
         }
     }
 
-    private fun queryData(query: String): List<Photo> {
+    private fun queryPhotosFromDB(query: String): List<Photo> {
         val fetch = database.photosDao.getPhotoSearchResult(query)
         Log.d(LogUtility.LOGGER_DATABASE_TAG, fetch.toString())
         return fetch.getPhotos().asDomainEntityPhotos()
@@ -50,20 +52,38 @@ class UnsplashRepositoryImpl @Inject constructor(
             it.toDomainEntityPhotoDetail()
         }.onErrorReturn {
             val dbRes = database.photosDao.getPhotoDetailById(photoId)
-            Log.e("owo", dbRes.toString())
+            Log.e(LogUtility.LOGGER_DATABASE_TAG, dbRes.toString())
             dbRes.getPhotoDetail()
         }
     }
 
     override fun getUserProfile(username: String): Observable<User> {
         return unsplashApiInterface.getUserProfile(username).map {
-            it.toDomainEntityUser()
+            database.userDao.insertUser(it.toDatabaseEntityUser())
+            getUserFromDB(username).toDomainEntityUser()
+        }.onErrorReturn {
+            val res = getUserFromDB(username)
+            Log.d(LogUtility.LOGGER_DATABASE_TAG, res.toString())
+            res.toDomainEntityUser()
         }
+    }
+
+    private fun getUserFromDB(username: String): EntityUser {
+        return database.userDao.getUserByUsername(username)
     }
 
     override fun getUserPhotos(username: String): Observable<List<Photo>> {
         return unsplashApiInterface.getUserPhotos(username).map {
-            it.asDomainEntityPhotos()
+            database.photosDao.insertAll(it.asDatabaseEntityPhotos())
+            getUserPhotosFromDB(username).asDomainEntityPhotos()
+        }.onErrorReturn {
+            val res = getUserPhotosFromDB(username)
+            Log.d(LogUtility.LOGGER_DATABASE_TAG, res.toString())
+            res.asDomainEntityPhotos()
         }
+    }
+
+    private fun getUserPhotosFromDB(username: String): List<EntityPhoto> {
+        return database.userDao.getUserPhotosByUsername(username).photos
     }
 }
