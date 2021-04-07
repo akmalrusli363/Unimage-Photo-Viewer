@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 
-@Database(entities = [EntityPhoto::class], version = 1, exportSchema = false)
-@TypeConverters(EntityTypeConverter::class)
+@Database(
+    entities = [EntityPhoto::class, EntityUser::class, SearchQuery::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class RoomDB : RoomDatabase() {
     abstract val photosDao: PhotosDao
+    abstract val userDao: UserDao
 
     companion object {
         private lateinit var INSTANCE: RoomDB
@@ -20,7 +23,7 @@ abstract class RoomDB : RoomDatabase() {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         RoomDB::class.java,
-                        "photos"
+                        "unimager-db"
                     ).build()
                 }
             }

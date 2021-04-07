@@ -1,6 +1,8 @@
 package com.tilikki.training.unimager.demo.util
 
 import com.tilikki.training.unimager.demo.database.EntityPhoto
+import com.tilikki.training.unimager.demo.database.PhotoSearches
+import com.tilikki.training.unimager.demo.database.SearchQuery
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 
@@ -11,9 +13,15 @@ fun List<NetworkPhoto>.asDomainEntityPhotos(): List<Photo> {
     }
 }
 
-fun List<NetworkPhoto>.asDatabaseEntityPhotos(searchQuery: String): List<EntityPhoto> {
+fun List<NetworkPhoto>.asDatabaseEntityPhotos(): List<EntityPhoto> {
     return map {
-        it.toDatabaseEntityPhoto(searchQuery)
+        it.toDatabaseEntityPhoto()
+    }
+}
+
+fun List<NetworkPhoto>.mapToSearchResults(searchQuery: String): List<SearchQuery> {
+    return map {
+        it.bindSearchQuery(searchQuery)
     }
 }
 
@@ -21,5 +29,11 @@ fun List<NetworkPhoto>.asDatabaseEntityPhotos(searchQuery: String): List<EntityP
 fun List<EntityPhoto>.asDomainEntityPhotos(): List<Photo> {
     return map {
         it.toDomainEntityPhoto()
+    }
+}
+
+fun List<PhotoSearches>.getPhotos(): List<EntityPhoto> {
+    return map {
+        it.photo
     }
 }

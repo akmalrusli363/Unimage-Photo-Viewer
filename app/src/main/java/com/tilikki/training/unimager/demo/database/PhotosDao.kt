@@ -12,9 +12,12 @@ interface PhotosDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(photos: List<EntityPhoto>)
 
-    @Query("SELECT * FROM photos WHERE search_query LIKE :query")
-    fun getSearchResult(query: String): List<EntityPhoto>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSearchResults(searchResults: List<SearchQuery>)
 
-    @Query("DELETE FROM photos WHERE search_query LIKE :query")
-    fun deletePhotoResult(query: String)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertPhoto(photo: EntityPhoto)
+
+    @Query("SELECT * FROM photos JOIN searches ON photos.id = searches.photo_id WHERE search_query LIKE :query")
+    fun getPhotoSearchResult(query: String): List<PhotoSearches>
 }

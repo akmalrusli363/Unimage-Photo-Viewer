@@ -2,6 +2,7 @@ package com.tilikki.training.unimager.demo.network.model
 
 import com.google.gson.annotations.SerializedName
 import com.tilikki.training.unimager.demo.database.EntityPhoto
+import com.tilikki.training.unimager.demo.database.SearchQuery
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import java.util.*
@@ -30,7 +31,11 @@ data class NetworkPhoto(
     @SerializedName("user")
     val user: NetworkUser,
 ) {
-    fun toDatabaseEntityPhoto(searchQuery: String): EntityPhoto {
+    fun bindSearchQuery(searchQuery: String): SearchQuery {
+        return SearchQuery(photoId = id, searchQuery = searchQuery)
+    }
+
+    fun toDatabaseEntityPhoto(): EntityPhoto {
         return EntityPhoto(
             id = id,
             createdAt = createdAt,
@@ -45,7 +50,6 @@ data class NetworkPhoto(
             detailUrl = linkUrl.apiLink,
             webLinkUrl = linkUrl.webLink,
             owner = user.username,
-            searchQuery = searchQuery
         )
     }
 

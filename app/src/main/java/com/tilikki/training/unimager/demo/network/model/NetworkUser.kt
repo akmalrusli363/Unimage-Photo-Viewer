@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.network.model
 
 import com.google.gson.annotations.SerializedName
+import com.tilikki.training.unimager.demo.database.EntityUser
 import com.tilikki.training.unimager.demo.model.User
 
 data class NetworkUser(
@@ -37,6 +38,21 @@ data class NetworkUser(
 
     fun toDomainEntityUser(): User {
         return User(
+            id = id,
+            username = username,
+            name = name,
+            htmlUrl = profileUrl.htmlLink,
+            apiUrl = profileUrl.apiLink,
+            apiPhotosUrl = profileUrl.photosLink,
+            profileImageUrl = profileImage.imageUrl,
+            totalPhotos = totalPhotos,
+            following = following,
+            followers = followers,
+        )
+    }
+
+    fun toDatabaseEntityUser(): EntityUser {
+        return EntityUser(
             id = id,
             username = username,
             name = name,

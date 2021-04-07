@@ -18,7 +18,7 @@ data class Photo(
     val htmlUrl: String,
     val owner: String,
 ) {
-    fun toDatabaseEntityPhoto(query: String): EntityPhoto {
+    fun toDatabaseEntityPhoto(): EntityPhoto {
         return EntityPhoto(
             id = id,
             createdAt = createdAt,
@@ -33,7 +33,6 @@ data class Photo(
             detailUrl = apiUrl,
             webLinkUrl = htmlUrl,
             owner = owner,
-            searchQuery = query
         )
     }
 }
