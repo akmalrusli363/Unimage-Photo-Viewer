@@ -46,10 +46,10 @@ data class NetworkPhoto(
             description = description,
             altDescription = altDescription,
             thumbnailUrl = imageUrl.thumbnailSize,
-            fullSizeUrl = imageUrl.fullSize,
+            fullSizeUrl = imageUrl.regularSize,
             detailUrl = linkUrl.apiLink,
             webLinkUrl = linkUrl.webLink,
-            owner = user.username,
+            owner = user.id,
         )
     }
 
@@ -64,7 +64,7 @@ data class NetworkPhoto(
             description = description,
             altDescription = altDescription,
             thumbnailUrl = imageUrl.thumbnailSize,
-            imageUrl = imageUrl.fullSize,
+            imageUrl = imageUrl.regularSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink,
             owner = user.username,
@@ -82,7 +82,7 @@ data class NetworkPhoto(
             description = description,
             altDescription = altDescription,
             thumbnailUrl = imageUrl.thumbnailSize,
-            imageUrl = imageUrl.fullSize,
+            imageUrl = imageUrl.regularSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink,
             user = user.toDomainEntityUser()

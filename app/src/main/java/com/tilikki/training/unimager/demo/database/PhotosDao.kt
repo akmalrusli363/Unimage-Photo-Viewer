@@ -20,4 +20,11 @@ interface PhotosDao {
 
     @Query("SELECT * FROM photos JOIN searches ON photos.id = searches.photo_id WHERE search_query LIKE :query")
     fun getPhotoSearchResult(query: String): List<PhotoSearches>
+
+    @Query("SELECT * FROM photos WHERE id LIKE :photoId")
+    fun getPhotoById(photoId: String): EntityPhoto
+
+    @Transaction
+    @Query("SELECT * FROM photos JOIN users ON photos.owner_id = users.id WHERE photos.id LIKE :photoId")
+    fun getPhotoDetailById(photoId: String): UserPhotoRelationship
 }

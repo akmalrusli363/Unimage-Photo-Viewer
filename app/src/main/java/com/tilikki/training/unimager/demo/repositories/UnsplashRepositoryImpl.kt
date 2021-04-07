@@ -48,6 +48,10 @@ class UnsplashRepositoryImpl @Inject constructor(
     override fun getPhotoDetail(photoId: String): Observable<PhotoDetail> {
         return unsplashApiInterface.getPhotoDetail(photoId).map {
             it.toDomainEntityPhotoDetail()
+        }.onErrorReturn {
+            val dbRes = database.photosDao.getPhotoDetailById(photoId)
+            Log.e("owo", dbRes.toString())
+            dbRes.getPhotoDetail()
         }
     }
 

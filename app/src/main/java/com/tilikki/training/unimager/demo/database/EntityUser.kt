@@ -3,6 +3,7 @@ package com.tilikki.training.unimager.demo.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.tilikki.training.unimager.demo.model.User
 
 @Entity(tableName = "users")
 data class EntityUser(
@@ -27,4 +28,19 @@ data class EntityUser(
     val following: Int?,
     @ColumnInfo(name = "followers")
     val followers: Int?,
-)
+) {
+    fun toDomainEntityUser(): User {
+        return User(
+            id = id,
+            username = username,
+            name = name,
+            htmlUrl = htmlUrl,
+            apiUrl = apiUrl,
+            apiPhotosUrl = apiPhotosUrl,
+            profileImageUrl = profileImageUrl,
+            totalPhotos = totalPhotos,
+            following = following,
+            followers = followers,
+        )
+    }
+}
