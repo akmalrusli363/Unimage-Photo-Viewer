@@ -39,16 +39,14 @@ class MainActivity : AppCompatActivity() {
             this.setOnQueryTextListener(searchListener(this))
         }
 
-        viewModel.successResponse.observe(this, {
-            if (!it.success) {
-                if (it.error != null) {
-                    LogUtility.showToast(this, it.error.localizedMessage ?: "An error occurred")
-                } else {
-                    LogUtility.showToast(this, "An error occurred")
-                }
-            } else {
+        viewModel.successResponse.observe(this, { response ->
+            response.observeResponseStatus({
                 LogUtility.showToast(this, "Fetch success!")
-            }
+            }, {
+                LogUtility.showToast(this, it?.localizedMessage ?: "An error occurred")
+            }, {
+                LogUtility.showToast(this, "An error occurred")
+            })
         })
 
         viewModel.photos.observe(this, {
@@ -56,8 +54,8 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun searchListener(searchView: SearchView) : SearchView.OnQueryTextListener {
-        return object: SearchView.OnQueryTextListener {
+    private fun searchListener(searchView: SearchView): SearchView.OnQueryTextListener {
+        return object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     search(query)
