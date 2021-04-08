@@ -47,9 +47,11 @@ class PhotoDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         viewModel.attachPhoto(photoId)
-
         viewModel.photo.observe(this, {
             bindPhotoDetails(it)
+        })
+        viewModel.isFetching.observe(this, {
+            ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
         })
     }
 
@@ -65,7 +67,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             ivProfileImage.contentDescription = getDisplayFullName(photo.user)
             tvUsername.text = photo.user.username
             tvFullName.text = photo.user.name
-            clProfileBox.setOnClickListener { _ ->
+            clProfileBox.setOnClickListener {
                 val intent = Intent(this@PhotoDetailActivity, ProfileActivity::class.java)
                 intent.putExtra(ProfileActivity.INTENT_URL, photo.user.username)
                 this@PhotoDetailActivity.startActivity(intent)

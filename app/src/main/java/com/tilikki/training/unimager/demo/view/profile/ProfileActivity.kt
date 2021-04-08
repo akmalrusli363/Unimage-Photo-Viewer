@@ -9,6 +9,7 @@ import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
+import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.util.value
 import com.tilikki.training.unimager.demo.view.main.PhotoRecyclerViewAdapter
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
@@ -48,6 +49,9 @@ class ProfileActivity : AppCompatActivity() {
         })
         viewModel.userPhotos.observe(this, {
             (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
+        })
+        viewModel.isFetching.observe(this, {
+            ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
         })
     }
 

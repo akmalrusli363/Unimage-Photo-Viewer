@@ -29,8 +29,13 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
     val successResponse: LiveData<FetchResponse>
         get() = _successResponse
 
+    private var _isFetching: MutableLiveData<Boolean> = MutableLiveData()
+    val isFetching: LiveData<Boolean>
+        get() = _isFetching
+
     fun fetchUserProfile(username: String) {
         getObservableUserProfileAndPhotos(username).run {
+            _isFetching.postValue(true)
             this.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -38,9 +43,11 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
                     _userPhotos.postValue(it.second)
                     Log.d(LogUtility.LOGGER_FETCH_TAG, it.toString())
                     setSuccessResponse(true, null)
+                    _isFetching.postValue(false)
                 }, {
                     Log.e(LogUtility.LOGGER_FETCH_TAG, it.localizedMessage, it)
                     setSuccessResponse(false, it)
+                    _isFetching.postValue(false)
                 })
         }
     }
