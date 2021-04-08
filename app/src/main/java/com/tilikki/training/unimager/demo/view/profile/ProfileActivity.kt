@@ -55,12 +55,21 @@ class ProfileActivity : AppCompatActivity() {
         binding.apply {
             tvUsername.text = user.username
             tvFullName.text = user.name
-            tvPhotos.text =
-                resources.getQuantityString(R.plurals.total_photos_format, user.totalPhotos)
-            tvFollowers.text =
-                resources.getQuantityString(R.plurals.followers_format, user.followers.value())
-            tvFollowing.text =
-                resources.getQuantityString(R.plurals.following_format, user.following.value())
+            tvPhotos.text = ViewUtility.displayPluralText(
+                resources,
+                R.plurals.total_photos_format,
+                user.totalPhotos,
+            )
+            tvFollowers.text = ViewUtility.displayPluralText(
+                resources,
+                R.plurals.followers_format,
+                user.followers.value(),
+            )
+            tvFollowing.text = ViewUtility.displayPluralText(
+                resources,
+                R.plurals.following_format,
+                user.following.value()
+            )
             ImageLoader.loadImage(user.profileImageUrl, ivProfileImage)
         }
         this@ProfileActivity.title = "${user.name} Profile"

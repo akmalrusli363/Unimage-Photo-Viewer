@@ -18,15 +18,15 @@
     <string name="search_and_explore_photos"><![CDATA[Search & explore photos]]></string>
 
     <plurals name="total_photos_format">
-        <item quantity="one">%d photo</item>
-        <item quantity="other">%d photos</item>
+        <item quantity="one">%1$d photo</item>
+        <item quantity="other">%1$d photos</item>
     </plurals>
     <plurals name="following_format">
-        <item quantity="one">%d following</item>
-        <item quantity="other">%d following</item>
+        <item quantity="one">%1$d following</item>
+        <item quantity="other">%1$d following</item>
     </plurals>
     <plurals name="followers_format">
-        <item quantity="one">%d follower</item>
-        <item quantity="other">%d followers</item>
+        <item quantity="one">%1$d follower</item>
+        <item quantity="other">%1$d followers</item>
     </plurals>
 </resources>
