@@ -29,6 +29,8 @@ data class EntityPhoto constructor(
     val altDescription: String? = null,
     @ColumnInfo(name = "thumbnail_url")
     val thumbnailUrl: String,
+    @ColumnInfo(name = "preview_url")
+    val previewUrl: String,
     @ColumnInfo(name = "full_size_url")
     val fullSizeUrl: String,
     @ColumnInfo(name = "detail_url")
@@ -49,7 +51,8 @@ data class EntityPhoto constructor(
             description = description,
             altDescription = altDescription,
             thumbnailUrl = thumbnailUrl,
-            imageUrl = fullSizeUrl,
+            previewUrl = previewUrl,
+            fullSizeUrl = fullSizeUrl,
             apiUrl = detailUrl,
             htmlUrl = webLinkUrl,
             owner = owner,

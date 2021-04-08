@@ -4,8 +4,9 @@
     <string name="description">Description</string>
     <string name="alt_description">Alt Description</string>
 
-    <string name="download">Download</string>
+    <string name="view_in_web">View in Web</string>
     <string name="full_size">Full Size</string>
+    <string name="download">Download</string>
     <string name="exif">EXIF</string>
 
     <string name="profile_image">Profile image</string>

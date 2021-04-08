@@ -53,21 +53,22 @@
                         tools:text="1333" />
 
                     <Button
+                        android:id="@+id/btn_download"
                         android:layout_width="wrap_content"
                         android:layout_height="60sp"
                         android:layout_marginHorizontal="@dimen/space_small"
                         android:text="@string/download"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/btn_full_size"
+                        app:layout_constraintEnd_toStartOf="@id/btn_browse"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <Button
-                        android:id="@+id/btn_full_size"
+                        android:id="@+id/btn_browse"
                         android:layout_width="wrap_content"
                         android:layout_height="60sp"
                         android:layout_marginHorizontal="@dimen/space_small"
-                        android:text="@string/full_size"
+                        android:text="@string/view_in_web"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

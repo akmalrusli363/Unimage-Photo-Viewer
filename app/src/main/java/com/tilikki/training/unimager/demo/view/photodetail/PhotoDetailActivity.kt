@@ -1,6 +1,8 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -57,7 +59,7 @@ class PhotoDetailActivity : AppCompatActivity() {
 
     private fun bindPhotoDetails(photo: PhotoDetail) {
         binding.apply {
-            ImageLoader.loadImage(photo.imageUrl, ivPhotoImage)
+            ImageLoader.loadImage(photo.previewUrl, ivPhotoImage)
             ivPhotoImage.contentDescription = photo.altDescription
             tvLikes.text = photo.likes.toString()
             setTextField(llDescription, tvDescription, photo.description)
@@ -71,6 +73,14 @@ class PhotoDetailActivity : AppCompatActivity() {
                 val intent = Intent(this@PhotoDetailActivity, ProfileActivity::class.java)
                 intent.putExtra(ProfileActivity.INTENT_URL, photo.user.username)
                 this@PhotoDetailActivity.startActivity(intent)
+            }
+
+            btnDownload.setOnClickListener {
+                visitLink(this@PhotoDetailActivity, Uri.parse(photo.fullSizeUrl))
+            }
+
+            btnBrowse.setOnClickListener {
+                visitLink(this@PhotoDetailActivity, Uri.parse(photo.htmlUrl))
             }
         }
     }
@@ -88,6 +98,12 @@ class PhotoDetailActivity : AppCompatActivity() {
     private fun setTextField(viewGroup: ViewGroup, textView: TextView, value: String?) {
         ViewUtility.setVisibility(viewGroup, !value.isNullOrEmpty())
         textView.text = value
+    }
+
+    private fun visitLink(context: Context, uri: Uri) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = uri
+        context.startActivity(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
