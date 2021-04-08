@@ -52,11 +52,13 @@
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="1333" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_download"
                         android:layout_width="wrap_content"
                         android:layout_height="60sp"
                         android:layout_marginHorizontal="@dimen/space_small"
+                        android:contentDescription="@string/download"
+                        android:src="@drawable/ic_download"
                         android:text="@string/download"
                         android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
