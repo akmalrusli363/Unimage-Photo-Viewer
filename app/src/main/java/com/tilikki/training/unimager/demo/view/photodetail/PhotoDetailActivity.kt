@@ -3,7 +3,6 @@ package com.tilikki.training.unimager.demo.view.photodetail
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +14,7 @@ import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.LogUtility
+import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import java.util.*
@@ -84,16 +84,8 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun setTextField(viewGroup: ViewGroup, textView: TextView, value: String?) {
-        setVisibility(viewGroup, !value.isNullOrEmpty())
+        ViewUtility.setVisibility(viewGroup, !value.isNullOrEmpty())
         textView.text = value
-    }
-
-    private fun setVisibility(view: View, value: Boolean) {
-        view.visibility = if (value) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

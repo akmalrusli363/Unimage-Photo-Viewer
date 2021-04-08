@@ -7,16 +7,13 @@ data class FetchResponse(
     fun observeResponseStatus(
         onSuccess: () -> Unit,
         onError: (throwable: Throwable?) -> Unit,
-        onUnhandledError: () -> Unit = { onError(null) }
+        finally: () -> Unit? = {}
     ) {
         if (!this.success) {
-            if (this.error != null) {
-                onError(this.error)
-            } else {
-                onUnhandledError()
-            }
+            onError(this.error)
         } else {
             onSuccess()
         }
+        finally()
     }
 }

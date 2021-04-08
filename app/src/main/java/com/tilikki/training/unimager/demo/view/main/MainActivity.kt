@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityMainBinding
 import com.tilikki.training.unimager.demo.util.LogUtility
+import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import javax.inject.Inject
 
@@ -42,16 +43,24 @@ class MainActivity : AppCompatActivity() {
         viewModel.successResponse.observe(this, { response ->
             response.observeResponseStatus({
                 LogUtility.showToast(this, "Fetch success!")
+                toggleDataState(success = true)
             }, {
                 LogUtility.showToast(this, it?.localizedMessage ?: "An error occurred")
-            }, {
-                LogUtility.showToast(this, "An error occurred")
+                toggleDataState(success = false)
             })
         })
 
         viewModel.photos.observe(this, {
             (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
         })
+
+        viewModel.isFetching.observe(this, {
+            ViewUtility.setVisibility(binding.pbLoading, it)
+        })
+    }
+
+    private fun toggleDataState(success: Boolean) {
+        ViewUtility.toggleVisibilityPairs(binding.rvPhotosGrid, binding.llError, success)
     }
 
     private fun searchListener(searchView: SearchView): SearchView.OnQueryTextListener {

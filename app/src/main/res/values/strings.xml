@@ -13,6 +13,10 @@
 
     <string name="username_format">%1$s (@%2$s)</string>
 
+    <string name="error_occurred">An error occurred!</string>
+    <string name="no_photos">No photos</string>
+    <string name="search_and_explore_photos"><![CDATA[Search & explore photos]]></string>
+
     <plurals name="total_photos_format">
         <item quantity="one">%d photo</item>
         <item quantity="other">%d photos</item>
