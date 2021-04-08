@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
+import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
+import com.tilikki.training.unimager.demo.util.value
 import com.tilikki.training.unimager.demo.view.main.PhotoRecyclerViewAdapter
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import javax.inject.Inject
@@ -42,19 +44,26 @@ class ProfileActivity : AppCompatActivity() {
 
         viewModel.fetchUserProfile(username!!)
         viewModel.userProfile.observe(this, {
-            binding.apply {
-                tvUsername.text = it.username
-                tvFullName.text = it.name
-                tvPhotos.text = getString(R.string.total_photos_format, it.totalPhotos)
-                tvFollowers.text = getString(R.string.followers_format, it.followers)
-                tvFollowing.text = getString(R.string.following_format, it.following)
-                ImageLoader.loadImage(it.profileImageUrl, ivProfileImage)
-            }
-            this@ProfileActivity.title = "${it.name} Profile"
+            bindUserProfile(it)
         })
         viewModel.userPhotos.observe(this, {
             (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
         })
+    }
+
+    private fun bindUserProfile(user: User) {
+        binding.apply {
+            tvUsername.text = user.username
+            tvFullName.text = user.name
+            tvPhotos.text =
+                resources.getQuantityString(R.plurals.total_photos_format, user.totalPhotos)
+            tvFollowers.text =
+                resources.getQuantityString(R.plurals.followers_format, user.followers.value())
+            tvFollowing.text =
+                resources.getQuantityString(R.plurals.following_format, user.following.value())
+            ImageLoader.loadImage(user.profileImageUrl, ivProfileImage)
+        }
+        this@ProfileActivity.title = "${user.name} Profile"
     }
 
     private fun getFromIntent(): String? {
