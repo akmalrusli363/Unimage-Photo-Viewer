@@ -72,6 +72,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             clProfileBox.setOnClickListener {
                 val intent = Intent(this@PhotoDetailActivity, ProfileActivity::class.java)
                 intent.putExtra(ProfileActivity.INTENT_URL, photo.user.username)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 this@PhotoDetailActivity.startActivity(intent)
             }
 
