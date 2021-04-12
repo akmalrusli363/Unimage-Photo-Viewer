@@ -158,7 +158,8 @@
 
                 <LinearLayout
                     android:id="@+id/ll_exif"
-                    style="@style/FieldBox">
+                    style="@style/FieldBox"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_label_exif"

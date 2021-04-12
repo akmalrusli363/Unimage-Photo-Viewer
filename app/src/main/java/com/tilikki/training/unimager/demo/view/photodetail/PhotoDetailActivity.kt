@@ -15,7 +15,6 @@ import com.tilikki.training.unimager.demo.databinding.ActivityPhotoDetailBinding
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
-import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
@@ -38,7 +37,6 @@ class PhotoDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val photoId = getFromIntent()
-        LogUtility.showToast(this, "Image: $photoId")
         if (photoId == null) {
             finish()
         }
