@@ -62,6 +62,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             tvLikes.text = photo.likes.toString()
             setTextField(llDescription, tvDescription, photo.description)
             setTextField(llAltDescription, tvAltDescription, photo.altDescription)
+            setTextField(llResolution, tvResolution, getImageResolution(photo))
 
             ImageLoader.loadImage(photo.user.profileImageUrl, ivProfileImage)
             ivProfileImage.contentDescription = getDisplayFullName(photo.user)
@@ -85,8 +86,14 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun getDisplayFullName(user: User): String {
-        return String.format(
-            Locale.ROOT, getString(R.string.username_format), user.name, user.username
+        return getString(
+            R.string.username_format, user.name, user.username
+        )
+    }
+
+    private fun getImageResolution(photo: PhotoDetail): String {
+        return getString(
+            R.string.image_size_full_format, photo.width, photo.height, photo.getOrientation()
         )
     }
 

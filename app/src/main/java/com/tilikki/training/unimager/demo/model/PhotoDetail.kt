@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.model
 
+import com.tilikki.training.unimager.demo.model.util.Resolution
 import java.util.*
 
 data class PhotoDetail(
@@ -17,4 +18,12 @@ data class PhotoDetail(
     val apiUrl: String,
     val htmlUrl: String,
     val user: User,
-)
+) {
+    fun getResolution(): Resolution {
+        return Resolution(width, height)
+    }
+
+    fun getOrientation(): String {
+        return getResolution().getOrientation()
+    }
+}

@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.model
 
 import com.tilikki.training.unimager.demo.database.EntityPhoto
+import com.tilikki.training.unimager.demo.model.util.Resolution
 import java.util.*
 
 data class Photo(
@@ -19,6 +20,10 @@ data class Photo(
     val htmlUrl: String,
     val owner: String,
 ) {
+    fun getResolution(): Resolution {
+        return Resolution(width, height)
+    }
+
     fun toDatabaseEntityPhoto(): EntityPhoto {
         return EntityPhoto(
             id = id,
