@@ -19,7 +19,7 @@ class UnsplashRepositoryImpl @Inject constructor(
     UnsplashRepository {
     override fun getPhotos(query: String): Observable<List<Photo>> {
         val result = unsplashApiInterface.getPhotos(query)
-        return result.flatMap { response ->
+        return result.map { response ->
             if (response.isSuccessful) {
                 val bodyResult = response.body()?.results
                 if (bodyResult != null) {
@@ -33,9 +33,10 @@ class UnsplashRepositoryImpl @Inject constructor(
                             dao.insertUser(it.user.toDatabaseEntityUser())
                         }
                     }
+                    return@map bodyResult.asDomainEntityPhotos()
                 }
             }
-            Observable.just(queryPhotosFromDB(query))
+            return@map queryPhotosFromDB(query)
         }.onErrorReturn {
             queryPhotosFromDB(query)
         }
@@ -60,7 +61,7 @@ class UnsplashRepositoryImpl @Inject constructor(
     override fun getUserProfile(username: String): Observable<User> {
         return unsplashApiInterface.getUserProfile(username).map {
             database.userDao.insertUser(it.toDatabaseEntityUser())
-            getUserFromDB(username).toDomainEntityUser()
+            it.toDomainEntityUser()
         }.onErrorReturn {
             val res = getUserFromDB(username)
             Log.d(LogUtility.LOGGER_DATABASE_TAG, res.toString())
@@ -75,7 +76,7 @@ class UnsplashRepositoryImpl @Inject constructor(
     override fun getUserPhotos(username: String): Observable<List<Photo>> {
         return unsplashApiInterface.getUserPhotos(username).map {
             database.photosDao.insertAll(it.asDatabaseEntityPhotos())
-            getUserPhotosFromDB(username).asDomainEntityPhotos()
+            it.asDomainEntityPhotos()
         }.onErrorReturn {
             val res = getUserPhotosFromDB(username)
             Log.d(LogUtility.LOGGER_DATABASE_TAG, res.toString())
