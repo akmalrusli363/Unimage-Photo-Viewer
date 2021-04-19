@@ -8,6 +8,7 @@ import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
+import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 import com.tilikki.training.unimager.demo.util.*
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -24,21 +25,27 @@ class UnsplashRepositoryImpl @Inject constructor(
                 val bodyResult = response.body()?.results
                 if (bodyResult != null) {
                     val fetchedPhotos = bodyResult.asDatabaseEntityPhotos()
-                    database.photosDao.let { dao ->
-                        dao.insertAll(fetchedPhotos)
-                        dao.insertSearchResults(bodyResult.mapToSearchResults(query))
-                    }
-                    database.userDao.let { dao ->
-                        bodyResult.map {
-                            dao.insertUser(it.user.toDatabaseEntityUser())
-                        }
-                    }
+                    putFetchedPhotosIntoDB(fetchedPhotos, bodyResult, query)
                     return@map bodyResult.asDomainEntityPhotos()
                 }
             }
             return@map queryPhotosFromDB(query)
         }.onErrorReturn {
             queryPhotosFromDB(query)
+        }
+    }
+
+    private fun putFetchedPhotosIntoDB(
+        fetchedPhotos: List<EntityPhoto>,
+        bodyResult: List<NetworkPhoto>,
+        query: String
+    ) {
+        database.run {
+            photosDao.insertAll(fetchedPhotos)
+            photosDao.insertSearchResults(bodyResult.mapToSearchResults(query))
+            bodyResult.map {
+                userDao.insertUser(it.user.toDatabaseEntityUser())
+            }
         }
     }
 
