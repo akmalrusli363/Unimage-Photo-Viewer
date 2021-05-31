@@ -1,17 +1,14 @@
 package com.tilikki.training.unimager.demo.injector.module
 
 import android.app.Application
+import android.content.Context
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
 
 @Module
-class AppModule constructor(private var myApplication: Application) {
+abstract class AppModule {
 
-    @Provides
-    @Singleton
-    fun provideApplication(): Application {
-        return myApplication
-    }
+    @Binds
+    abstract fun provideContext(application: Application): Context
 
 }

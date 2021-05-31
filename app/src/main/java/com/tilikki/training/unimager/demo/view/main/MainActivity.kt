@@ -4,26 +4,21 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityMainBinding
 import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.ViewUtility
-import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-    }
+    @Inject
+    lateinit var viewModel: MainViewModel
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).getUserComponent().inject(this)
+        AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
 

@@ -14,6 +14,7 @@ interface PhotosDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhoto(photo: EntityPhoto)
 
+    @Transaction
     @Query("SELECT * FROM photos JOIN searches ON photos.id = searches.photo_id WHERE search_query LIKE :query")
     fun getPhotoSearchResult(query: String): List<PhotoSearches>
 

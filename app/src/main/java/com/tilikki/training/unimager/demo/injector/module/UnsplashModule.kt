@@ -8,12 +8,7 @@ import dagger.Provides
 import retrofit2.Retrofit
 
 @Module(includes = [RepositoryModule::class])
-class UnsplashModule constructor(private var myApplication: Application) {
-    @Provides
-    fun provideApplication(): Application {
-        return myApplication
-    }
-
+class UnsplashModule {
     @Provides
     fun provideDatabase(application: Application): RoomDB {
         return RoomDB.getDatabase(application)
