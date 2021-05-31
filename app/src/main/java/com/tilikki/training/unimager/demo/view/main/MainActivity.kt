@@ -3,14 +3,15 @@ package com.tilikki.training.unimager.demo.view.main
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
 import com.tilikki.training.unimager.demo.databinding.ActivityMainBinding
 import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.ViewUtility
+import com.tilikki.training.unimager.demo.view.photogrid.PhotoGridFragment
 import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var viewModel: MainViewModel
@@ -27,10 +28,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
-        binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
-        binding.rvPhotosGrid.setHasFixedSize(true)
-
         binding.svPhotoSearch.apply {
             this.setOnQueryTextListener(searchListener(this))
         }
@@ -46,7 +43,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.photos.observe(this, {
-            (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
+                .commit()
         })
 
         viewModel.isFetching.observe(this, {
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleDataState(success: Boolean) {
-        ViewUtility.toggleVisibilityPairs(binding.rvPhotosGrid, binding.llError, success)
+        ViewUtility.toggleVisibilityPairs(binding.fragmentPhotosGrid, binding.llError, success)
     }
 
     private fun searchListener(searchView: SearchView): SearchView.OnQueryTextListener {

@@ -2,18 +2,18 @@ package com.tilikki.training.unimager.demo.view.profile
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.util.value
-import com.tilikki.training.unimager.demo.view.main.PhotoRecyclerViewAdapter
+import com.tilikki.training.unimager.demo.view.photogrid.PhotoGridFragment
 import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var viewModel: ProfileViewModel
 
@@ -33,9 +33,7 @@ class ProfileActivity : AppCompatActivity() {
 
         binding = ActivityProfileBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
-        binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
-        binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
-        binding.rvPhotosGrid.setHasFixedSize(true)
+
         setContentView(binding.root)
 
         viewModel.fetchUserProfile(username!!)
@@ -43,7 +41,9 @@ class ProfileActivity : AppCompatActivity() {
             bindUserProfile(it)
         })
         viewModel.userPhotos.observe(this, {
-            (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
+                .commit()
         })
         viewModel.isFetching.observe(this, {
             ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)

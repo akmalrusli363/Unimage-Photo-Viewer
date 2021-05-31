@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.databinding.ActivityPhotoDetailBinding
 import com.tilikki.training.unimager.demo.model.PhotoDetail
@@ -16,10 +15,11 @@ import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import java.util.*
 import javax.inject.Inject
 
-class PhotoDetailActivity : AppCompatActivity() {
+class PhotoDetailActivity : DaggerAppCompatActivity() {
     @Inject
     lateinit var viewModel: PhotoDetailViewModel
 
