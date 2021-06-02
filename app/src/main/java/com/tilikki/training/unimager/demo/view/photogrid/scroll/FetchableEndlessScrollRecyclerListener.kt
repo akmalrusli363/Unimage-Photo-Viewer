@@ -12,6 +12,6 @@ class FetchableEndlessScrollRecyclerListener(
     override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
         Log.d("deekk", "currennt page: ${pageMetadata.page}")
         pageMetadata.page = page + 1
-        pageMetadata.onEndOfDataAction.invoke()
+        pageMetadata.onEndOfDataAction()
     }
 }

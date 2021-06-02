@@ -31,9 +31,11 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
                 _photos.postValue(it)
             }
         )
-        _pages.postValue(PageMetadata(1, onEndOfDataAction = {
-            addMorePhotos(searchQuery)
-        }))
+        _pages.postValue(object : PageMetadata(1) {
+            override fun onEndOfDataAction() {
+                addMorePhotos(searchQuery)
+            }
+        })
     }
 
     private fun addMorePhotos(query: String) {
