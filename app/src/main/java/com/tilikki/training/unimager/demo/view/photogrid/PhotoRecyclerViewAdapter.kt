@@ -1,4 +1,4 @@
-package com.tilikki.training.unimager.demo.view.main
+package com.tilikki.training.unimager.demo.view.photogrid
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -18,8 +18,8 @@ class UnsplashRepositoryImpl @Inject constructor(
     private val database: RoomDB
 ) :
     UnsplashRepository {
-    override fun getPhotos(query: String): Observable<List<Photo>> {
-        val result = unsplashApiInterface.getPhotos(query)
+    override fun getPhotos(query: String, page: Int): Observable<List<Photo>> {
+        val result = unsplashApiInterface.getPhotos(query, page)
         return result.map { response ->
             if (response.isSuccessful) {
                 val bodyResult = response.body()?.results

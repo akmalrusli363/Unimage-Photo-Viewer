@@ -1,4 +1,4 @@
-package com.tilikki.training.unimager.demo.view.main
+package com.tilikki.training.unimager.demo.view.photogrid
 
 import android.content.Intent
 import android.graphics.Color

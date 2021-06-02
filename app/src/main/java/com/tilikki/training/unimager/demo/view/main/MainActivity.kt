@@ -43,9 +43,18 @@ class MainActivity : DaggerAppCompatActivity() {
         })
 
         viewModel.photos.observe(this, {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
-                .commit()
+            var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
+                    as PhotoGridFragment?
+            if (frag != null && viewModel.updateFragment.value == false) {
+                Log.d("deee", "update fragment")
+                frag.setPhotoList(it)
+            } else {
+                Log.d("deee", "replace fragment")
+                frag = PhotoGridFragment.newInstance(it, viewModel.pages.value)
+                supportFragmentManager.beginTransaction()
+                    .replace(binding.fragmentPhotosGrid.id, frag)
+                    .commit()
+            }
         })
 
         viewModel.isFetching.observe(this, {

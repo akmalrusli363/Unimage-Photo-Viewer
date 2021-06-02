@@ -15,7 +15,7 @@ interface UnsplashApiInterface {
     fun getPhotos(
         @Query("query") query: String,
         @Query("page") page: Int = 1,
-        @Query("per_page") per_page: Int = 50
+        @Query("per_page") per_page: Int = 30
     ): Observable<Response<PhotoList>>
 
     @GET("/users/{userName}")
