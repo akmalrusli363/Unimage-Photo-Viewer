@@ -25,7 +25,7 @@ class PhotoGridFragment : DaggerFragment() {
             val photoList = it.getParcelableArray(PHOTO_LIST)?.map { parcel ->
                 parcel as Photo
             }
-            pageMetadata = it.getSerializable(PAGE_METADATA) as PageMetadata
+            pageMetadata = it.getParcelable(PAGE_METADATA) ?: defaultPageMetadata
             viewModel.postPhotos(photoList)
         }
     }
@@ -58,16 +58,17 @@ class PhotoGridFragment : DaggerFragment() {
     companion object {
         const val PHOTO_LIST = "PHOTO_LIST"
         const val PAGE_METADATA = "PAGE_METADATA"
+        private val defaultPageMetadata = PageMetadata(0)
 
         @JvmStatic
         fun newInstance(
             photoList: List<Photo>?,
-            pageMetadata: PageMetadata? = PageMetadata(0)
+            pageMetadata: PageMetadata? = defaultPageMetadata
         ): PhotoGridFragment {
             return PhotoGridFragment().apply {
                 arguments = Bundle().apply {
                     putParcelableArray(PHOTO_LIST, photoList?.toTypedArray())
-                    putSerializable(PAGE_METADATA, pageMetadata)
+                    putParcelable(PAGE_METADATA, pageMetadata ?: defaultPageMetadata)
                 }
             }
         }
