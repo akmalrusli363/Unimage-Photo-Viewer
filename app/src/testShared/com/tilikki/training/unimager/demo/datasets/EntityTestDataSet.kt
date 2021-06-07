@@ -33,7 +33,7 @@ object EntityTestDataSet {
                 fullSizeUrl = WEB_URL + "full/$photoId.jpg",
                 apiUrl = API_URL + "img/$photoId",
                 htmlUrl = WEB_URL + "img/$photoId",
-                owner = "owner",
+                owner = DEMO_USER_ID,
             )
         }
     }

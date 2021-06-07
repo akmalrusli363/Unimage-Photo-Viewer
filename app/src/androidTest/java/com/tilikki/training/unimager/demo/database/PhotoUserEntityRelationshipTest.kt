@@ -42,7 +42,7 @@ class PhotoUserEntityRelationshipTest {
 
         val retrievedPhotoDetail = photosDao.getPhotoDetailById(DEMO_PHOTO_ID)
         Assert.assertEquals(photo, retrievedPhotoDetail.photos.first().toDomainEntityPhoto())
-        Assert.assertEquals(user, retrievedPhotoDetail.user)
+        Assert.assertEquals(user, retrievedPhotoDetail.user.toDomainEntityUser())
     }
 
     @Test

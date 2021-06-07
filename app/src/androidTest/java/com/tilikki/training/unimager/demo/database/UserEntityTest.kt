@@ -34,7 +34,7 @@ class UserEntityTest {
         val user = EntityTestDataSet.generateSampleUserData()
         userDao.insertUser(user.toDatabaseEntityUser())
         val retrievedUser = userDao.getUserById("owner")
-        Assert.assertEquals(user, retrievedUser)
+        Assert.assertEquals(user, retrievedUser.toDomainEntityUser())
     }
 
     @Test
@@ -42,6 +42,6 @@ class UserEntityTest {
         val user = EntityTestDataSet.generateSampleUserData()
         userDao.insertUser(user.toDatabaseEntityUser())
         val retrievedUser = userDao.getUserByUsername("username")
-        Assert.assertEquals(user, retrievedUser)
+        Assert.assertEquals(user, retrievedUser.toDomainEntityUser())
     }
 }
