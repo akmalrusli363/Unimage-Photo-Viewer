@@ -73,4 +73,40 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertNull(profileViewModel.userProfile.value)
         Assert.assertNull(profileViewModel.userPhotos.value)
     }
+
+    @Test
+    fun fetchUserProfile_fetchError() {
+        val user = TestDataConstants.DEMO_USERNAME
+        val error = NullPointerException()
+        Mockito.`when`(unsplashRepository.getUserProfile(user))
+            .thenReturn(Observable.error(error))
+        Mockito.`when`(unsplashRepository.getUserPhotos(user))
+            .thenReturn(Observable.error(error))
+
+        profileViewModel.fetchUserProfile(user)
+        Mockito.verify(unsplashRepository).getUserProfile(user)
+
+        Assert.assertFalse(profileViewModel.successResponse.value!!.success)
+        Assert.assertEquals(error, profileViewModel.successResponse.value!!.error)
+        Assert.assertNull(profileViewModel.userProfile.value)
+        Assert.assertNull(profileViewModel.userPhotos.value)
+    }
+
+    @Test
+    fun fetchUserProfile_fetchEmptyPhotos() {
+        val user = TestDataConstants.DEMO_USERNAME
+        val userProfile = EntityTestDataSet.generateSampleUserData()
+        val userPhoto = emptyList<Photo>()
+        Mockito.`when`(unsplashRepository.getUserProfile(user))
+            .thenReturn(Observable.just(userProfile))
+        Mockito.`when`(unsplashRepository.getUserPhotos(user))
+            .thenReturn(Observable.just(userPhoto))
+
+        profileViewModel.fetchUserProfile(user)
+        Mockito.verify(unsplashRepository).getUserProfile(user)
+
+        Assert.assertTrue(profileViewModel.successResponse.value!!.success)
+        Assert.assertEquals(userProfile, profileViewModel.userProfile.value)
+        Assert.assertEquals(userPhoto, profileViewModel.userPhotos.value)
+    }
 }

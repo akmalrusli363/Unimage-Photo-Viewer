@@ -57,4 +57,17 @@ class MainViewModelTest : GenericViewModelTest() {
         Assert.assertEquals(error, mainViewModel.successResponse.value!!.error)
         Assert.assertNull(mainViewModel.photos.value)
     }
+
+    @Test
+    fun fetchPhotos_fetchEmpty() {
+        val searchQuery = "search"
+        val photoList = listOf<Photo>()
+        Mockito.`when`(unsplashRepository.getPhotos(searchQuery))
+            .thenReturn(Observable.just(photoList))
+
+        mainViewModel.fetchPhotos(searchQuery)
+
+        Assert.assertTrue(mainViewModel.successResponse.value!!.success)
+        Assert.assertEquals(photoList, mainViewModel.photos.value)
+    }
 }
