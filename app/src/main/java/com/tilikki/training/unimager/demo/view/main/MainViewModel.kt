@@ -1,10 +1,12 @@
 package com.tilikki.training.unimager.demo.view.main
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tilikki.training.unimager.demo.model.PageMetadata
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
+import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.view.base.BaseViewModel
 import javax.inject.Inject
 
@@ -24,10 +26,13 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
     val updateFragment: LiveData<Boolean>
         get() = _updateFragment
 
+    private var lastFetchedData: Int = -1
+
     fun fetchPhotos(query: String) {
         _updateFragment.postValue(true)
         fetchData(unsplashRepository.getPhotos(query),
             {
+                lastFetchedData = it.size
                 _photos.postValue(it)
             }
         )
@@ -41,11 +46,19 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
     private fun addMorePhotos(query: String) {
         val page = (_pages.value?.page ?: 1)
         _updateFragment.postValue(false)
-        fetchData(unsplashRepository.getPhotos(query, page),
+        if (lastFetchedData < PageMetadata.MAX_ITEMS_PER_PAGE) {
+            Log.i(LogUtility.LOGGER_FETCH_TAG, "End of data!")
+            return
+        }
+        fetchData(
+            unsplashRepository.getPhotos(query, page),
             {
                 val addedPhotos = (_photos.value ?: emptyList())
                     .toMutableList().apply {
-                        addAll(it)
+                        if (!containsAll(it)) {
+                            lastFetchedData = it.size
+                            addAll(it)
+                        }
                     }
                 _photos.postValue(addedPhotos)
             }

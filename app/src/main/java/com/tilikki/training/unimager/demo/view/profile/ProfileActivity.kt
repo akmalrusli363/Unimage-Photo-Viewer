@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.view.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
@@ -41,12 +42,21 @@ class ProfileActivity : DaggerAppCompatActivity() {
             bindUserProfile(it)
         })
         viewModel.userPhotos.observe(this, {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
-                .commit()
+            var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
+                    as PhotoGridFragment?
+            if (frag != null && viewModel.updateFragment.value == false) {
+                Log.d("deee", "update fragment")
+                frag.setPhotoList(it)
+            } else {
+                frag = PhotoGridFragment.newInstance(it, viewModel.pages.value)
+                supportFragmentManager.beginTransaction()
+                    .replace(binding.fragmentPhotosGrid.id, frag)
+                    .commit()
+            }
         })
         viewModel.isFetching.observe(this, {
-            ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
+            if (viewModel.updateFragment.value == true)
+                ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
         })
     }
 

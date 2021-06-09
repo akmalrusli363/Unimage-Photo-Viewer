@@ -18,13 +18,18 @@ open class PageMetadata(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<PageMetadata> {
-        override fun createFromParcel(parcel: Parcel): PageMetadata {
-            return PageMetadata(parcel)
-        }
+    companion object {
+        const val MAX_ITEMS_PER_PAGE = 30
 
-        override fun newArray(size: Int): Array<PageMetadata?> {
-            return arrayOfNulls(size)
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<PageMetadata> {
+            override fun createFromParcel(parcel: Parcel): PageMetadata {
+                return PageMetadata(parcel)
+            }
+
+            override fun newArray(size: Int): Array<PageMetadata?> {
+                return arrayOfNulls(size)
+            }
         }
     }
 }

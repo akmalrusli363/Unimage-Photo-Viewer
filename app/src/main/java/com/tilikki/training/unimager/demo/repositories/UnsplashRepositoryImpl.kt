@@ -80,7 +80,7 @@ class UnsplashRepositoryImpl @Inject constructor(
         return database.userDao.getUserByUsername(username)
     }
 
-    override fun getUserPhotos(username: String): Observable<List<Photo>> {
+    override fun getUserPhotos(username: String, page: Int): Observable<List<Photo>> {
         return unsplashApiInterface.getUserPhotos(username).map {
             database.photosDao.insertAll(it.asDatabaseEntityPhotos())
             it.asDomainEntityPhotos()

@@ -18,6 +18,7 @@ class PhotoGridFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentPhotoGridBinding
     private lateinit var pageMetadata: PageMetadata
+    private var scrollListener: FetchableEndlessScrollRecyclerListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +40,12 @@ class PhotoGridFragment : DaggerFragment() {
         binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
         binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
         binding.rvPhotosGrid.setHasFixedSize(true)
-        binding.rvPhotosGrid.addOnScrollListener(
-            FetchableEndlessScrollRecyclerListener(
-                binding.rvPhotosGrid.layoutManager as StaggeredGridLayoutManager, pageMetadata
-            )
-        )
+
+        scrollListener = FetchableEndlessScrollRecyclerListener(
+            binding.rvPhotosGrid.layoutManager as StaggeredGridLayoutManager, pageMetadata
+        ).also {
+            binding.rvPhotosGrid.addOnScrollListener(it)
+        }
 
         viewModel.photos.observe(viewLifecycleOwner, {
             (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
@@ -53,6 +55,7 @@ class PhotoGridFragment : DaggerFragment() {
 
     fun setPhotoList(photoList: List<Photo>?) {
         viewModel.postPhotos(photoList)
+        scrollListener?.resetState()
     }
 
     companion object {
