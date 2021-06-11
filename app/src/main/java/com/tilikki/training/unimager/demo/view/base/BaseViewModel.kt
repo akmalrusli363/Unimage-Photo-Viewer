@@ -20,7 +20,7 @@ abstract class BaseViewModel : ViewModel() {
     val isFetching: LiveData<Boolean>
         get() = _isFetching
 
-    protected fun <T> fetchData(
+    protected open fun <T> fetchData(
         observable: Observable<T>,
         onSuccess: (T) -> Unit,
         onFail: (Throwable) -> Unit = {}

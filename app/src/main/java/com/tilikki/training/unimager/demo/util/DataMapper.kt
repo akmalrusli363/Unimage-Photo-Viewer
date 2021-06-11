@@ -13,12 +13,14 @@ fun List<NetworkPhoto>.asDomainEntityPhotos(): List<Photo> {
     }
 }
 
+@JvmName("fromNetworkPhotoAsDatabaseEntityPhotos")
 fun List<NetworkPhoto>.asDatabaseEntityPhotos(): List<EntityPhoto> {
     return map {
         it.toDatabaseEntityPhoto()
     }
 }
 
+@JvmName("fromNetworkPhotoMapToSearchResults")
 fun List<NetworkPhoto>.mapToSearchResults(searchQuery: String): List<SearchQuery> {
     return map {
         it.bindSearchQuery(searchQuery)
@@ -32,6 +34,7 @@ fun List<EntityPhoto>.asDomainEntityPhotos(): List<Photo> {
     }
 }
 
+@JvmName("fromPhotoSearchesGetPhotos")
 fun List<PhotoSearches>.getPhotos(): List<EntityPhoto> {
     return map {
         it.photo
