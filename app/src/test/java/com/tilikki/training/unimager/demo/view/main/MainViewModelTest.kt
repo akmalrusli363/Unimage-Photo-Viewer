@@ -70,4 +70,135 @@ class MainViewModelTest : GenericViewModelTest() {
         Assert.assertTrue(mainViewModel.successResponse.value!!.success)
         Assert.assertEquals(photoList, mainViewModel.photos.value)
     }
+
+    @Test
+    fun fetchPhotos_addMorePage_success() {
+        val photoList = generateSamplePhotoDataList(60)
+        val partedPhotoList = photoList.chunked(30)
+        runAndValidateAddedPhotoListPage(partedPhotoList, photoList)
+    }
+
+    @Test
+    fun fetchPhotos_addMorePage_mixedResult() {
+        val photoList = generateSamplePhotoDataList(45)
+        val partedPhotoList = photoList.chunked(15)
+        val mergedPhotoListPart = mutableListOf<List<Photo>>().apply {
+            add(partedPhotoList[0] + partedPhotoList[1])
+            add(partedPhotoList[1] + partedPhotoList[2])
+        }
+        runAndValidateAddedPhotoListPage(mergedPhotoListPart, photoList)
+    }
+
+    @Test
+    fun fetchPhotos_addMorePage_addedComprehensive() {
+        val photoList = generateSamplePhotoDataList(45)
+        val partedPhotoList = photoList.chunked(15)
+        val mergedPhotoListPart = mutableListOf<List<Photo>>().apply {
+            add(partedPhotoList[0] + partedPhotoList[1])
+            add(photoList)
+        }
+        runAndValidateAddedPhotoListPage(mergedPhotoListPart, photoList)
+    }
+
+    @Test
+    fun fetchPhotos_addMorePage_tooFewData() {
+        val photoList = generateSamplePhotoDataList(35)
+        val partedPhotoList = photoList.chunked(20)
+        runAndValidateAddedPhotoListPage(partedPhotoList, photoList, false)
+    }
+
+    @Test
+    fun fetchPhotos_addMorePage_tooManyData() {
+        val photoList = generateSamplePhotoDataList(60)
+        val partedPhotoList = photoList.chunked(35)
+        runAndValidateAddedPhotoListPage(partedPhotoList, photoList, false)
+    }
+
+    @Test
+    fun fetchPhotos_addMorePage_noData() {
+        val searchQuery = "search"
+        val error = NullPointerException()
+        Mockito.`when`(unsplashRepository.getPhotos(searchQuery))
+            .thenReturn(Observable.error(error))
+
+        mainViewModel.fetchPhotos(searchQuery)
+        Mockito.verify(unsplashRepository).getPhotos(searchQuery)
+        validateError(1, error)
+
+        mainViewModel.addMorePhotos(searchQuery)
+        Mockito.verify(unsplashRepository, Mockito.never()).getPhotos(searchQuery, 2)
+    }
+
+    @Test
+    fun fetchPhotos_addMorePage_successMultiPage() {
+        val searchQuery = "search"
+        val photoList = generateSamplePhotoDataList(130)
+        val partedPhotoList = photoList.chunked(30)
+        partedPhotoList.forEachIndexed { index, list ->
+            Mockito.`when`(unsplashRepository.getPhotos(searchQuery, index + 1))
+                .thenReturn(Observable.just(list))
+        }
+
+        mainViewModel.fetchPhotos(searchQuery)
+        Mockito.verify(unsplashRepository).getPhotos(searchQuery)
+        validateResponse(1, partedPhotoList[0])
+
+        for (index in 2..5) {
+            mainViewModel.addMorePhotos(searchQuery)
+            Mockito.verify(unsplashRepository).getPhotos(searchQuery, index)
+        }
+        validateResponse(5, photoList)
+    }
+
+    private fun runAndValidateAddedPhotoListPage(
+        photoListSet: List<List<Photo>>,
+        photoList: List<Photo>,
+        mustBeAdded: Boolean = true
+    ) {
+        val searchQuery = "search"
+        val verificationMode = if (mustBeAdded) Mockito.times(1) else Mockito.never()
+        val expectedFinalValue = if (mustBeAdded) photoList else photoListSet[0]
+        setupSearchPaginationMock(searchQuery, photoListSet)
+
+        mainViewModel.fetchPhotos(searchQuery)
+        Mockito.verify(unsplashRepository).getPhotos(searchQuery)
+        validateResponse(1, photoListSet[0])
+
+        mainViewModel.addMorePhotos(searchQuery)
+        Mockito.verify(unsplashRepository, verificationMode).getPhotos(searchQuery, 2)
+        if (mustBeAdded) {
+            validateResponse(2, expectedFinalValue)
+        }
+    }
+
+    private fun setupSearchPaginationMock(searchQuery: String, photoListSet: List<List<Photo>>) {
+        Mockito.`when`(unsplashRepository.getPhotos(searchQuery))
+            .thenReturn(Observable.just(photoListSet[0]))
+        Mockito.`when`(unsplashRepository.getPhotos(searchQuery, 2))
+            .thenReturn(Observable.just(photoListSet[1]))
+    }
+
+    private fun validateResponse(
+        expectedPage: Int,
+        expectedPhotoList: List<Photo>
+    ) {
+        Assert.assertTrue(mainViewModel.successResponse.value!!.success)
+        Assert.assertEquals(expectedPage, mainViewModel.pages.value!!.page)
+        Assert.assertEquals(expectedPhotoList.size, mainViewModel.photos.value!!.size)
+        Assert.assertEquals(expectedPhotoList, mainViewModel.photos.value)
+    }
+
+    private fun validateError(
+        expectedPage: Int,
+        expectedError: Exception
+    ) {
+        Assert.assertFalse(mainViewModel.successResponse.value!!.success)
+        Assert.assertEquals(expectedError, mainViewModel.successResponse.value!!.error)
+        Assert.assertEquals(expectedPage, mainViewModel.pages.value!!.page)
+        Assert.assertNull(mainViewModel.photos.value)
+    }
+
+    private fun generateSamplePhotoDataList(numOfData: Int): List<Photo> {
+        return EntityTestDataSet.generateSamplePhotoDataList("demo", numOfData)
+    }
 }
