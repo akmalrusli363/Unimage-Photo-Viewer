@@ -7,6 +7,7 @@ import com.tilikki.training.unimager.demo.model.PageMetadata
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
+import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.view.base.BaseViewModel
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -57,6 +58,7 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
                 getUserProfile(username),
                 getUserPhotos(username),
                 { profile, photo ->
+                    lastFetchedData = photo.size
                     Pair(profile, photo)
                 }
             )
@@ -66,6 +68,10 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
     private fun addMorePhotos(username: String) {
         val page = (_pages.value?.page ?: 1)
         _updateFragment.postValue(false)
+        if (lastFetchedData != PageMetadata.MAX_ITEMS_PER_PAGE) {
+            Log.i(LogUtility.LOGGER_FETCH_TAG, "End of data!")
+            return
+        }
         fetchData(unsplashRepository.getUserPhotos(username, page),
             {
                 val addedPhotos = (_userPhotos.value ?: emptyList())
