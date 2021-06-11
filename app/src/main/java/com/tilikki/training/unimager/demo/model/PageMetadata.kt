@@ -10,6 +10,10 @@ open class PageMetadata(
 
     open fun onEndOfDataAction() {}
 
+    fun addPage() {
+        page += 1
+    }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(page)
     }

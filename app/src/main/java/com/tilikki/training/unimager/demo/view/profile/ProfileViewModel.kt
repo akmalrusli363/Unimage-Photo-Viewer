@@ -66,13 +66,13 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
     }
 
     fun addMorePhotos(username: String) {
-        val page = (_pages.value?.page ?: 1)
+        getPage().addPage()
         _updateFragment.postValue(false)
         if (lastFetchedData != PageMetadata.MAX_ITEMS_PER_PAGE) {
             Log.i(LogUtility.LOGGER_FETCH_TAG, "End of data!")
             return
         }
-        fetchData(unsplashRepository.getUserPhotos(username, page),
+        fetchData(unsplashRepository.getUserPhotos(username, getPage().page),
             {
                 val addedPhotos = (_userPhotos.value ?: emptyList())
                     .toMutableList().apply {
@@ -82,5 +82,9 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
                 _userPhotos.postValue(addedPhotos.distinct())
             }
         )
+    }
+
+    private fun getPage(): PageMetadata {
+        return _pages.value!!
     }
 }
