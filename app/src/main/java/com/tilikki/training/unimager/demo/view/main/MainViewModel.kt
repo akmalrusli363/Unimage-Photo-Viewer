@@ -43,24 +43,21 @@ class MainViewModel @Inject constructor(private val unsplashRepository: Unsplash
         })
     }
 
-    private fun addMorePhotos(query: String) {
+    fun addMorePhotos(query: String) {
         val page = (_pages.value?.page ?: 1)
         _updateFragment.postValue(false)
-        if (lastFetchedData < PageMetadata.MAX_ITEMS_PER_PAGE) {
+        if (lastFetchedData != PageMetadata.MAX_ITEMS_PER_PAGE) {
             Log.i(LogUtility.LOGGER_FETCH_TAG, "End of data!")
             return
         }
-        fetchData(
-            unsplashRepository.getPhotos(query, page),
+        fetchData(unsplashRepository.getPhotos(query, page),
             {
                 val addedPhotos = (_photos.value ?: emptyList())
                     .toMutableList().apply {
-                        if (!containsAll(it)) {
-                            lastFetchedData = it.size
-                            addAll(it)
-                        }
+                        lastFetchedData = it.size
+                        addAll(it)
                     }
-                _photos.postValue(addedPhotos)
+                _photos.postValue(addedPhotos.distinct())
             }
         )
     }

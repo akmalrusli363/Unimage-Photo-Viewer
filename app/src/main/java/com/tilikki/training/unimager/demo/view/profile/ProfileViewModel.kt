@@ -65,7 +65,7 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
         }
     }
 
-    private fun addMorePhotos(username: String) {
+    fun addMorePhotos(username: String) {
         val page = (_pages.value?.page ?: 1)
         _updateFragment.postValue(false)
         if (lastFetchedData != PageMetadata.MAX_ITEMS_PER_PAGE) {
@@ -76,14 +76,10 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
             {
                 val addedPhotos = (_userPhotos.value ?: emptyList())
                     .toMutableList().apply {
-                        if (!containsAll(it)) {
-                            lastFetchedData = it.size
-                            addAll(it)
-                        } else {
-                            Log.e("uwu", "already!")
-                        }
+                        lastFetchedData = it.size
+                        addAll(it)
                     }
-                _userPhotos.postValue(addedPhotos)
+                _userPhotos.postValue(addedPhotos.distinct())
             }
         )
     }
