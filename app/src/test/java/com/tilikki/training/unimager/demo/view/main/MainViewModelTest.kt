@@ -23,6 +23,7 @@ class MainViewModelTest : GenericViewModelTest() {
     private lateinit var fetchStatusObserver: Observer<FetchResponse>
 
     private val mainViewModel = MainViewModel(unsplashRepository)
+    private val searchQuery = "search"
 
     @Before
     override fun setup() {
@@ -60,7 +61,6 @@ class MainViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchPhotos_fetchEmpty() {
-        val searchQuery = "search"
         val photoList = listOf<Photo>()
         Mockito.`when`(unsplashRepository.getPhotos(searchQuery))
             .thenReturn(Observable.just(photoList))
@@ -116,7 +116,6 @@ class MainViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchPhotos_addMorePage_noData() {
-        val searchQuery = "search"
         val error = NullPointerException()
         Mockito.`when`(unsplashRepository.getPhotos(searchQuery))
             .thenReturn(Observable.error(error))
@@ -131,7 +130,6 @@ class MainViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchPhotos_addMorePage_successMultiPage() {
-        val searchQuery = "search"
         val photoList = generateSamplePhotoDataList(130)
         val partedPhotoList = photoList.chunked(30)
         partedPhotoList.forEachIndexed { index, list ->
@@ -141,13 +139,13 @@ class MainViewModelTest : GenericViewModelTest() {
 
         mainViewModel.fetchPhotos(searchQuery)
         Mockito.verify(unsplashRepository).getPhotos(searchQuery)
-        validateResponse(1, partedPhotoList[0])
+        validateResponse(1, partedPhotoList[0], true)
 
         for (index in 2..5) {
             mainViewModel.addMorePhotos(searchQuery)
             Mockito.verify(unsplashRepository).getPhotos(searchQuery, index)
         }
-        validateResponse(5, photoList)
+        validateResponse(5, photoList, false)
     }
 
     private fun runAndValidateAddedPhotoListPage(
@@ -155,23 +153,21 @@ class MainViewModelTest : GenericViewModelTest() {
         photoList: List<Photo>,
         mustBeAdded: Boolean = true
     ) {
-        val searchQuery = "search"
         val verificationMode = if (mustBeAdded) Mockito.times(1) else Mockito.never()
-        val expectedFinalValue = if (mustBeAdded) photoList else photoListSet[0]
-        setupSearchPaginationMock(searchQuery, photoListSet)
+        setupSearchPaginationMock(photoListSet)
 
         mainViewModel.fetchPhotos(searchQuery)
         Mockito.verify(unsplashRepository).getPhotos(searchQuery)
-        validateResponse(1, photoListSet[0])
+        validateResponse(1, photoListSet[0], true)
 
         mainViewModel.addMorePhotos(searchQuery)
         Mockito.verify(unsplashRepository, verificationMode).getPhotos(searchQuery, 2)
         if (mustBeAdded) {
-            validateResponse(2, expectedFinalValue)
+            validateResponse(2, photoList, false)
         }
     }
 
-    private fun setupSearchPaginationMock(searchQuery: String, photoListSet: List<List<Photo>>) {
+    private fun setupSearchPaginationMock(photoListSet: List<List<Photo>>) {
         Mockito.`when`(unsplashRepository.getPhotos(searchQuery))
             .thenReturn(Observable.just(photoListSet[0]))
         Mockito.`when`(unsplashRepository.getPhotos(searchQuery, 2))
@@ -180,9 +176,11 @@ class MainViewModelTest : GenericViewModelTest() {
 
     private fun validateResponse(
         expectedPage: Int,
-        expectedPhotoList: List<Photo>
+        expectedPhotoList: List<Photo>,
+        newData: Boolean
     ) {
         Assert.assertTrue(mainViewModel.successResponse.value!!.success)
+        Assert.assertEquals(newData, mainViewModel.updateFragment.value)
         Assert.assertEquals(expectedPage, mainViewModel.pages.value!!.page)
         Assert.assertEquals(expectedPhotoList.size, mainViewModel.photos.value!!.size)
         Assert.assertEquals(expectedPhotoList, mainViewModel.photos.value)

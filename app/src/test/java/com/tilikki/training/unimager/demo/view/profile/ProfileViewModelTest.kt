@@ -28,6 +28,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
     private lateinit var fetchStatusObserver: Observer<FetchResponse>
 
     private val profileViewModel = ProfileViewModel(unsplashRepository)
+    private val user = TestDataConstants.DEMO_USERNAME
 
     @Before
     override fun setup() {
@@ -38,7 +39,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_fetchSuccess() {
-        val user = TestDataConstants.DEMO_USERNAME
         val userProfile = EntityTestDataSet.generateSampleUserData()
         val userPhoto = EntityTestDataSet.generateSamplePhotoDataList()
         Mockito.`when`(unsplashRepository.getUserProfile(user))
@@ -57,7 +57,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_fetchPartialError() {
-        val user = TestDataConstants.DEMO_USERNAME
         val userProfile = EntityTestDataSet.generateSampleUserData()
         val error = NullPointerException()
         Mockito.`when`(unsplashRepository.getUserProfile(user))
@@ -76,7 +75,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_fetchError() {
-        val user = TestDataConstants.DEMO_USERNAME
         val error = NullPointerException()
         Mockito.`when`(unsplashRepository.getUserProfile(user))
             .thenReturn(Observable.error(error))
@@ -94,7 +92,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_fetchEmptyPhotos() {
-        val user = TestDataConstants.DEMO_USERNAME
         val userProfile = EntityTestDataSet.generateSampleUserData()
         val userPhoto = emptyList<Photo>()
         Mockito.`when`(unsplashRepository.getUserProfile(user))
@@ -155,7 +152,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_addMorePage_noUserPhotoData() {
-        val user = TestDataConstants.DEMO_USERNAME
         val userProfile = EntityTestDataSet.generateSampleUserData()
         val error = NullPointerException()
         Mockito.`when`(unsplashRepository.getUserProfile(user))
@@ -178,7 +174,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_addMorePage_fetchError() {
-        val user = TestDataConstants.DEMO_USERNAME
         val error = NullPointerException()
         Mockito.`when`(unsplashRepository.getUserProfile(user))
             .thenReturn(Observable.error(error))
@@ -200,7 +195,6 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Test
     fun fetchUserProfile_addMorePage_successMultiPage() {
-        val user = TestDataConstants.DEMO_USERNAME
         val userProfile = EntityTestDataSet.generateSampleUserData()
         val photoList = generateSamplePhotoDataList(130)
         val partedPhotoList = photoList.chunked(30)
@@ -218,13 +212,13 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
         Assert.assertTrue(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(userProfile, profileViewModel.userProfile.value)
-        validateResponse(1, partedPhotoList[0])
+        validateResponse(1, partedPhotoList[0], true)
 
         for (index in 2..5) {
             profileViewModel.addMorePhotos(user)
             Mockito.verify(unsplashRepository).getUserPhotos(user, index)
         }
-        validateResponse(5, photoList)
+        validateResponse(5, photoList, false)
     }
 
     private fun runAndValidateAddedPhotoListPage(
@@ -232,11 +226,9 @@ class ProfileViewModelTest : GenericViewModelTest() {
         photoList: List<Photo>,
         mustBeAdded: Boolean = true
     ) {
-        val user = TestDataConstants.DEMO_USERNAME
         val userProfile = EntityTestDataSet.generateSampleUserData()
         val verificationMode = if (mustBeAdded) Mockito.times(1) else Mockito.never()
-        val expectedFinalValue = if (mustBeAdded) photoList else photoListSet[0]
-        setupUserPhotoPaginationMock(user, userProfile, photoListSet)
+        setupUserPhotoPaginationMock(userProfile, photoListSet)
 
         profileViewModel.fetchUserProfile(user)
         Mockito.verify(unsplashRepository).getUserProfile(user)
@@ -244,17 +236,16 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
         Assert.assertTrue(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(userProfile, profileViewModel.userProfile.value)
-        validateResponse(1, photoListSet[0])
+        validateResponse(1, photoListSet[0], true)
 
         profileViewModel.addMorePhotos(user)
         Mockito.verify(unsplashRepository, verificationMode).getUserPhotos(user, 2)
         if (mustBeAdded) {
-            validateResponse(2, expectedFinalValue)
+            validateResponse(2, photoList, false)
         }
     }
 
     private fun setupUserPhotoPaginationMock(
-        user: String,
         userProfile: User,
         photoListSet: List<List<Photo>>
     ) {
@@ -268,9 +259,11 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     private fun validateResponse(
         expectedPage: Int,
-        expectedPhotoList: List<Photo>
+        expectedPhotoList: List<Photo>,
+        newData: Boolean
     ) {
         Assert.assertTrue(profileViewModel.successResponse.value!!.success)
+        Assert.assertEquals(newData, profileViewModel.updateFragment.value)
         Assert.assertEquals(expectedPage, profileViewModel.pages.value!!.page)
         Assert.assertEquals(expectedPhotoList.size, profileViewModel.userPhotos.value!!.size)
         Assert.assertEquals(expectedPhotoList, profileViewModel.userPhotos.value)
