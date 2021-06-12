@@ -46,10 +46,10 @@ class MainActivity : DaggerAppCompatActivity() {
             var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
                     as PhotoGridFragment?
             if (frag != null && viewModel.updateFragment.value == false) {
-                Log.d("deee", "update fragment")
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "update fragment")
                 frag.setPhotoList(it)
             } else {
-                Log.d("deee", "replace fragment")
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "replace fragment")
                 frag = PhotoGridFragment.newInstance(it, viewModel.pages.value)
                 supportFragmentManager.beginTransaction()
                     .replace(binding.fragmentPhotosGrid.id, frag)

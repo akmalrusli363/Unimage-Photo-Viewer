@@ -46,7 +46,6 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
         )
         _pages.postValue(object : PageMetadata(1) {
             override fun onEndOfDataAction() {
-                Log.w("osdfko", "continue...")
                 addMorePhotos(username)
             }
         })
