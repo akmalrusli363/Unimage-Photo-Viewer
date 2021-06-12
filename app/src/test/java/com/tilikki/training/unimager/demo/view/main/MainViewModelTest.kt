@@ -27,7 +27,7 @@ class MainViewModelTest : GenericViewModelTest() {
 
     @Before
     override fun setup() {
-        mainViewModel.photos.observeForever(photoObserver)
+        mainViewModel.photoList.observeForever(photoObserver)
         mainViewModel.successResponse.observeForever(fetchStatusObserver)
     }
 
@@ -42,7 +42,7 @@ class MainViewModelTest : GenericViewModelTest() {
         Mockito.verify(unsplashRepository).getPhotos(searchQuery)
 
         Assert.assertTrue(mainViewModel.successResponse.value!!.success)
-        Assert.assertEquals(photoList, mainViewModel.photos.value)
+        Assert.assertEquals(photoList, mainViewModel.photoList.value)
     }
 
     @Test
@@ -56,7 +56,7 @@ class MainViewModelTest : GenericViewModelTest() {
 
         Assert.assertFalse(mainViewModel.successResponse.value!!.success)
         Assert.assertEquals(error, mainViewModel.successResponse.value!!.error)
-        Assert.assertNull(mainViewModel.photos.value)
+        Assert.assertNull(mainViewModel.photoList.value)
     }
 
     @Test
@@ -68,7 +68,7 @@ class MainViewModelTest : GenericViewModelTest() {
         mainViewModel.fetchPhotos(searchQuery)
 
         Assert.assertTrue(mainViewModel.successResponse.value!!.success)
-        Assert.assertEquals(photoList, mainViewModel.photos.value)
+        Assert.assertEquals(photoList, mainViewModel.photoList.value)
     }
 
     @Test
@@ -124,7 +124,7 @@ class MainViewModelTest : GenericViewModelTest() {
         Mockito.verify(unsplashRepository).getPhotos(searchQuery)
         validateError(1, error)
 
-        mainViewModel.addMorePhotos(searchQuery)
+        mainViewModel.addMorePhotos()
         Mockito.verify(unsplashRepository, Mockito.never()).getPhotos(searchQuery, 2)
     }
 
@@ -142,7 +142,7 @@ class MainViewModelTest : GenericViewModelTest() {
         validateResponse(1, partedPhotoList[0], true)
 
         for (index in 2..5) {
-            mainViewModel.addMorePhotos(searchQuery)
+            mainViewModel.addMorePhotos()
             Mockito.verify(unsplashRepository).getPhotos(searchQuery, index)
         }
         validateResponse(5, photoList, false)
@@ -160,7 +160,7 @@ class MainViewModelTest : GenericViewModelTest() {
         Mockito.verify(unsplashRepository).getPhotos(searchQuery)
         validateResponse(1, photoListSet[0], true)
 
-        mainViewModel.addMorePhotos(searchQuery)
+        mainViewModel.addMorePhotos()
         Mockito.verify(unsplashRepository, verificationMode).getPhotos(searchQuery, 2)
         if (mustBeAdded) {
             validateResponse(2, photoList, false)
@@ -182,8 +182,8 @@ class MainViewModelTest : GenericViewModelTest() {
         Assert.assertTrue(mainViewModel.successResponse.value!!.success)
         Assert.assertEquals(newData, mainViewModel.updateFragment.value)
         Assert.assertEquals(expectedPage, mainViewModel.pages.value!!.page)
-        Assert.assertEquals(expectedPhotoList.size, mainViewModel.photos.value!!.size)
-        Assert.assertEquals(expectedPhotoList, mainViewModel.photos.value)
+        Assert.assertEquals(expectedPhotoList.size, mainViewModel.photoList.value!!.size)
+        Assert.assertEquals(expectedPhotoList, mainViewModel.photoList.value)
     }
 
     private fun validateError(
@@ -193,7 +193,7 @@ class MainViewModelTest : GenericViewModelTest() {
         Assert.assertFalse(mainViewModel.successResponse.value!!.success)
         Assert.assertEquals(expectedError, mainViewModel.successResponse.value!!.error)
         Assert.assertEquals(expectedPage, mainViewModel.pages.value!!.page)
-        Assert.assertNull(mainViewModel.photos.value)
+        Assert.assertNull(mainViewModel.photoList.value)
     }
 
     private fun generateSamplePhotoDataList(numOfData: Int): List<Photo> {

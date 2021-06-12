@@ -32,7 +32,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
     @Before
     override fun setup() {
-        profileViewModel.userPhotos.observeForever(photoObserver)
+        profileViewModel.photoList.observeForever(photoObserver)
         profileViewModel.userProfile.observeForever(userObserver)
         profileViewModel.successResponse.observeForever(fetchStatusObserver)
     }
@@ -52,7 +52,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
         Assert.assertTrue(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(userProfile, profileViewModel.userProfile.value)
-        Assert.assertEquals(userPhoto, profileViewModel.userPhotos.value)
+        Assert.assertEquals(userPhoto, profileViewModel.photoList.value)
     }
 
     @Test
@@ -70,7 +70,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertFalse(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(error, profileViewModel.successResponse.value!!.error)
         Assert.assertNull(profileViewModel.userProfile.value)
-        Assert.assertNull(profileViewModel.userPhotos.value)
+        Assert.assertNull(profileViewModel.photoList.value)
     }
 
     @Test
@@ -87,7 +87,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertFalse(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(error, profileViewModel.successResponse.value!!.error)
         Assert.assertNull(profileViewModel.userProfile.value)
-        Assert.assertNull(profileViewModel.userPhotos.value)
+        Assert.assertNull(profileViewModel.photoList.value)
     }
 
     @Test
@@ -104,7 +104,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
 
         Assert.assertTrue(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(userProfile, profileViewModel.userProfile.value)
-        Assert.assertEquals(userPhoto, profileViewModel.userPhotos.value)
+        Assert.assertEquals(userPhoto, profileViewModel.photoList.value)
     }
 
     @Test
@@ -167,7 +167,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertNull(profileViewModel.userProfile.value)
         validateError(1, error)
 
-        profileViewModel.addMorePhotos(user)
+        profileViewModel.addMorePhotos()
         Mockito.verify(unsplashRepository, Mockito.never()).getUserPhotos(user, 2)
         validateError(2, error)
     }
@@ -188,7 +188,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertNull(profileViewModel.userProfile.value)
         validateError(1, error)
 
-        profileViewModel.addMorePhotos(user)
+        profileViewModel.addMorePhotos()
         Mockito.verify(unsplashRepository, Mockito.never()).getUserPhotos(user, 2)
         validateError(2, error)
     }
@@ -215,7 +215,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         validateResponse(1, partedPhotoList[0], true)
 
         for (index in 2..5) {
-            profileViewModel.addMorePhotos(user)
+            profileViewModel.addMorePhotos()
             Mockito.verify(unsplashRepository).getUserPhotos(user, index)
         }
         validateResponse(5, photoList, false)
@@ -238,7 +238,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertEquals(userProfile, profileViewModel.userProfile.value)
         validateResponse(1, photoListSet[0], true)
 
-        profileViewModel.addMorePhotos(user)
+        profileViewModel.addMorePhotos()
         Mockito.verify(unsplashRepository, verificationMode).getUserPhotos(user, 2)
         if (mustBeAdded) {
             validateResponse(2, photoList, false)
@@ -265,8 +265,8 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertTrue(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(newData, profileViewModel.updateFragment.value)
         Assert.assertEquals(expectedPage, profileViewModel.pages.value!!.page)
-        Assert.assertEquals(expectedPhotoList.size, profileViewModel.userPhotos.value!!.size)
-        Assert.assertEquals(expectedPhotoList, profileViewModel.userPhotos.value)
+        Assert.assertEquals(expectedPhotoList.size, profileViewModel.photoList.value!!.size)
+        Assert.assertEquals(expectedPhotoList, profileViewModel.photoList.value)
     }
 
     private fun validateError(
@@ -276,7 +276,7 @@ class ProfileViewModelTest : GenericViewModelTest() {
         Assert.assertFalse(profileViewModel.successResponse.value!!.success)
         Assert.assertEquals(expectedError, profileViewModel.successResponse.value!!.error)
         Assert.assertEquals(expectedPage, profileViewModel.pages.value!!.page)
-        Assert.assertNull(profileViewModel.userPhotos.value)
+        Assert.assertNull(profileViewModel.photoList.value)
     }
 
     private fun generateSamplePhotoDataList(numOfData: Int): List<Photo> {

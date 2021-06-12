@@ -42,7 +42,7 @@ class ProfileActivity : DaggerAppCompatActivity() {
         viewModel.userProfile.observe(this, {
             bindUserProfile(it)
         })
-        viewModel.userPhotos.observe(this, {
+        viewModel.photoList.observe(this, {
             var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
                     as PhotoGridFragment?
             if (frag != null && viewModel.updateFragment.value == false) {

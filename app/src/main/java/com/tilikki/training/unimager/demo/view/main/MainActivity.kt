@@ -42,7 +42,7 @@ class MainActivity : DaggerAppCompatActivity() {
             })
         })
 
-        viewModel.photos.observe(this, {
+        viewModel.photoList.observe(this, {
             var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
                     as PhotoGridFragment?
             if (frag != null && viewModel.updateFragment.value == false) {
@@ -84,8 +84,7 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun search(query: String) {
-        viewModel.searchQuery = query
-        Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... ${viewModel.searchQuery}")
+        Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... $query")
         viewModel.fetchPhotos(query)
     }
 }
