@@ -18,6 +18,7 @@ class PhotoGridFragment : DaggerFragment() {
 
     private lateinit var binding: FragmentPhotoGridBinding
     private lateinit var pageMetadata: PageMetadata
+    private var nestedScroll: Boolean = false
     private var scrollListener: FetchableEndlessScrollRecyclerListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,7 @@ class PhotoGridFragment : DaggerFragment() {
                 parcel as Photo
             }
             pageMetadata = it.getParcelable(PAGE_METADATA) ?: defaultPageMetadata
+            nestedScroll = it.getBoolean(NESTED_SCROLL)
             viewModel.postPhotos(photoList)
         }
     }
@@ -41,10 +43,12 @@ class PhotoGridFragment : DaggerFragment() {
         binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
         binding.rvPhotosGrid.setHasFixedSize(true)
 
-        scrollListener = FetchableEndlessScrollRecyclerListener(
-            binding.rvPhotosGrid.layoutManager as StaggeredGridLayoutManager, pageMetadata
-        ).also {
-            binding.rvPhotosGrid.addOnScrollListener(it)
+        if (!nestedScroll) {
+            scrollListener = FetchableEndlessScrollRecyclerListener(
+                binding.rvPhotosGrid.layoutManager as StaggeredGridLayoutManager, pageMetadata
+            ).also {
+                binding.rvPhotosGrid.addOnScrollListener(it)
+            }
         }
 
         viewModel.photos.observe(viewLifecycleOwner, {
@@ -61,17 +65,20 @@ class PhotoGridFragment : DaggerFragment() {
     companion object {
         const val PHOTO_LIST = "PHOTO_LIST"
         const val PAGE_METADATA = "PAGE_METADATA"
+        const val NESTED_SCROLL = "NESTED_SCROLL"
         private val defaultPageMetadata = PageMetadata(0)
 
         @JvmStatic
         fun newInstance(
             photoList: List<Photo>?,
-            pageMetadata: PageMetadata? = defaultPageMetadata
+            pageMetadata: PageMetadata? = defaultPageMetadata,
+            nestedScroll: Boolean = false
         ): PhotoGridFragment {
             return PhotoGridFragment().apply {
                 arguments = Bundle().apply {
                     putParcelableArray(PHOTO_LIST, photoList?.toTypedArray())
                     putParcelable(PAGE_METADATA, pageMetadata ?: defaultPageMetadata)
+                    putBoolean(NESTED_SCROLL, nestedScroll)
                 }
             }
         }

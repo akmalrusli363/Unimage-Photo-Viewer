@@ -11,6 +11,7 @@ import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.util.value
 import com.tilikki.training.unimager.demo.view.photogrid.PhotoGridFragment
+import com.tilikki.training.unimager.demo.view.photogrid.scroll.EndlessNestedScrollListener
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -50,7 +51,7 @@ class ProfileActivity : DaggerAppCompatActivity() {
                 frag.setPhotoList(it)
             } else {
                 Log.d(LogUtility.LOGGER_FETCH_TAG, "replace fragment")
-                frag = PhotoGridFragment.newInstance(it, viewModel.pages.value)
+                frag = PhotoGridFragment.newInstance(it, viewModel.pages.value, true)
                 supportFragmentManager.beginTransaction()
                     .replace(binding.fragmentPhotosGrid.id, frag)
                     .commit()
@@ -59,6 +60,9 @@ class ProfileActivity : DaggerAppCompatActivity() {
         viewModel.isFetching.observe(this, {
             if (viewModel.updateFragment.value == true)
                 ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
+        })
+        viewModel.pages.observe(this, {
+            binding.nsvPage.setOnScrollChangeListener(EndlessNestedScrollListener(it))
         })
     }
 
