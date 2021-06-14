@@ -8,6 +8,7 @@
     <string name="full_size">Full Size</string>
     <string name="download">Download</string>
 
+    <string name="published_date">Published Date</string>
     <string name="image_resolution">Image Resolution</string>
     <string name="exif">EXIF</string>
 

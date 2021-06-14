@@ -16,6 +16,7 @@ import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.ViewUtility
+import com.tilikki.training.unimager.demo.util.formatAsString
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
 import java.util.*
@@ -63,6 +64,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             setTextField(llDescription, tvDescription, photo.description)
             setTextField(llAltDescription, tvAltDescription, photo.altDescription)
             setTextField(llResolution, tvResolution, getImageResolution(photo))
+            setTextField(clPublishedDate, tvPublishedDate, photo.createdAt.formatAsString())
 
             ImageLoader.loadImage(photo.user.profileImageUrl, ivProfileImage)
             ivProfileImage.contentDescription = getDisplayFullName(photo.user)

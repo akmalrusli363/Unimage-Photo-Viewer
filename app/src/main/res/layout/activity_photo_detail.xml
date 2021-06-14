@@ -116,6 +116,37 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_published_date"
+                    style="@style/FieldBox">
+
+                    <TextView
+                        android:id="@+id/tv_label_published_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/space_small"
+                        android:text="@string/published_date"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tv_published_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/space_small"
+                        android:textAlignment="textEnd"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintStart_toEndOf="@id/tv_label_published_date"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@tools:sample/date/ddmmyy" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <LinearLayout
                     android:id="@+id/ll_description"
                     style="@style/FieldBox">
