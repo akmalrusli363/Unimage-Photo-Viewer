@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.network.interfaces
 
+import com.tilikki.training.unimager.demo.model.PageMetadata
 import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.repositories.response.PhotoList
@@ -15,14 +16,18 @@ interface UnsplashApiInterface {
     fun getPhotos(
         @Query("query") query: String,
         @Query("page") page: Int = 1,
-        @Query("per_page") per_page: Int = 50
+        @Query("per_page") per_page: Int = PageMetadata.MAX_ITEMS_PER_PAGE
     ): Observable<Response<PhotoList>>
 
     @GET("/users/{userName}")
     fun getUserProfile(@Path("userName") userName: String): Observable<NetworkUser>
 
     @GET("/users/{userName}/photos")
-    fun getUserPhotos(@Path("userName") userName: String): Observable<List<NetworkPhoto>>
+    fun getUserPhotos(
+        @Path("userName") userName: String,
+        @Query("page") page: Int = 1,
+        @Query("per_page") per_page: Int = PageMetadata.MAX_ITEMS_PER_PAGE
+    ): Observable<List<NetworkPhoto>>
 
     @GET("/photos/{photoId}")
     fun getPhotoDetail(@Path("photoId") photoId: String): Observable<NetworkPhoto>

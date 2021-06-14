@@ -42,10 +42,19 @@ class MainActivity : DaggerAppCompatActivity() {
             })
         })
 
-        viewModel.photos.observe(this, {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
-                .commit()
+        viewModel.photoList.observe(this, {
+            var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
+                    as PhotoGridFragment?
+            if (frag != null && viewModel.updateFragment.value == false) {
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "update fragment")
+                frag.setPhotoList(it)
+            } else {
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "replace fragment")
+                frag = PhotoGridFragment.newInstance(it, viewModel.pages.value)
+                supportFragmentManager.beginTransaction()
+                    .replace(binding.fragmentPhotosGrid.id, frag)
+                    .commit()
+            }
         })
 
         viewModel.isFetching.observe(this, {
@@ -75,8 +84,7 @@ class MainActivity : DaggerAppCompatActivity() {
     }
 
     private fun search(query: String) {
-        viewModel.searchQuery = query
-        Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... ${viewModel.searchQuery}")
+        Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... $query")
         viewModel.fetchPhotos(query)
     }
 }

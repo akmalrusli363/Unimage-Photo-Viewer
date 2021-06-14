@@ -1,25 +1,24 @@
 package com.tilikki.training.unimager.demo.view.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
-import com.tilikki.training.unimager.demo.view.base.BaseViewModel
+import com.tilikki.training.unimager.demo.view.base.BasePhotoGridViewModel
+import io.reactivex.Observable
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(private val unsplashRepository: UnsplashRepository) :
-    BaseViewModel() {
-    var searchQuery: String = ""
+    BasePhotoGridViewModel() {
 
-    private var _photos: MutableLiveData<List<Photo>> = MutableLiveData()
-    val photos: LiveData<List<Photo>?>
-        get() = _photos
+    private var searchQuery: String = ""
 
     fun fetchPhotos(query: String) {
-        fetchData(unsplashRepository.getPhotos(query),
-            {
-                _photos.postValue(it)
-            }
-        )
+        searchQuery = query
+        fetchDataFromRepository(unsplashRepository.getPhotos(searchQuery)) {
+            postPhotoList(it)
+        }
+    }
+
+    override fun fetchMorePhotos(): Observable<List<Photo>> {
+        return unsplashRepository.getPhotos(searchQuery, getPage())
     }
 }

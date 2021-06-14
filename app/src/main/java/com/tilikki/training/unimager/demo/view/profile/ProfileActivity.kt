@@ -1,11 +1,13 @@
 package com.tilikki.training.unimager.demo.view.profile
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.databinding.ActivityProfileBinding
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
+import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.util.value
 import com.tilikki.training.unimager.demo.view.photogrid.PhotoGridFragment
@@ -40,13 +42,23 @@ class ProfileActivity : DaggerAppCompatActivity() {
         viewModel.userProfile.observe(this, {
             bindUserProfile(it)
         })
-        viewModel.userPhotos.observe(this, {
-            supportFragmentManager.beginTransaction()
-                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
-                .commit()
+        viewModel.photoList.observe(this, {
+            var frag = supportFragmentManager.findFragmentById(binding.fragmentPhotosGrid.id)
+                    as PhotoGridFragment?
+            if (frag != null && viewModel.updateFragment.value == false) {
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "update fragment")
+                frag.setPhotoList(it)
+            } else {
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "replace fragment")
+                frag = PhotoGridFragment.newInstance(it, viewModel.pages.value)
+                supportFragmentManager.beginTransaction()
+                    .replace(binding.fragmentPhotosGrid.id, frag)
+                    .commit()
+            }
         })
         viewModel.isFetching.observe(this, {
-            ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
+            if (viewModel.updateFragment.value == true)
+                ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
         })
     }
 
