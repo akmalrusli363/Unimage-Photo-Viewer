@@ -23,6 +23,13 @@
     <string name="no_photos">No photos</string>
     <string name="search_and_explore_photos"><![CDATA[Search & explore photos]]></string>
 
+    <string name="exif_brand">Brand</string>
+    <string name="exif_model">Model</string>
+    <string name="exif_exposure_time">Exposure Time</string>
+    <string name="exif_aperture">Aperture</string>
+    <string name="exif_focal_length">Focal Length</string>
+    <string name="exif_iso">ISO</string>
+
     <plurals name="total_photos_format">
         <item quantity="one">%1$d photo</item>
         <item quantity="other">%1$d photos</item>

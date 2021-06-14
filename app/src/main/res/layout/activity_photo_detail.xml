@@ -122,22 +122,15 @@
 
                     <TextView
                         android:id="@+id/tv_label_published_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space_small"
+                        style="@style/PropertyLabel.General"
                         android:text="@string/published_date"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tv_published_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space_small"
-                        android:textAlignment="textEnd"
+                        style="@style/PropertyValue"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1"
@@ -153,11 +146,8 @@
 
                     <TextView
                         android:id="@+id/tv_label_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space_small"
-                        android:text="@string/description"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                        style="@style/PropertyLabel"
+                        android:text="@string/description" />
 
                     <TextView
                         android:id="@+id/tv_description"
@@ -173,11 +163,8 @@
 
                     <TextView
                         android:id="@+id/tv_label_alt_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space_small"
-                        android:text="@string/alt_description"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                        style="@style/PropertyLabel"
+                        android:text="@string/alt_description" />
 
                     <TextView
                         android:id="@+id/tv_alt_description"
@@ -193,11 +180,8 @@
 
                     <TextView
                         android:id="@+id/tv_label_resolution"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space_small"
-                        android:text="@string/image_resolution"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                        style="@style/PropertyLabel"
+                        android:text="@string/image_resolution" />
 
                     <TextView
                         android:id="@+id/tv_resolution"
@@ -207,19 +191,9 @@
                         tools:text="@string/image_size_full_format" />
                 </LinearLayout>
 
-                <LinearLayout
+                <include
                     android:id="@+id/ll_exif"
-                    style="@style/FieldBox"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/tv_label_exif"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/space_small"
-                        android:text="@string/exif"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
-                </LinearLayout>
+                    layout="@layout/layout_exif_detail" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 

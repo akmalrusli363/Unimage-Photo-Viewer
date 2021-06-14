@@ -2,6 +2,7 @@ package com.tilikki.training.unimager.demo.util
 
 import android.content.res.Resources
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.PluralsRes
 
 object ViewUtility {
@@ -11,6 +12,12 @@ object ViewUtility {
         } else {
             View.GONE
         }
+    }
+
+    fun setProperty(label: TextView, valueView: TextView, value: Any?) {
+        setVisibility(label, value != null)
+        setVisibility(valueView, value != null)
+        valueView.text = value.toString()
     }
 
     fun toggleVisibilityPairs(trueView: View, falseView: View, value: Boolean) {

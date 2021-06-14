@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityPhotoDetailBinding
+import com.tilikki.training.unimager.demo.model.ExifDetail
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
@@ -57,7 +58,7 @@ class PhotoDetailActivity : AppCompatActivity() {
     }
 
     private fun bindPhotoDetails(photo: PhotoDetail) {
-        binding.apply {
+        binding.run {
             ImageLoader.loadImage(photo.previewUrl, ivPhotoImage)
             ivPhotoImage.contentDescription = photo.altDescription
             tvLikes.text = photo.likes.toString()
@@ -65,6 +66,7 @@ class PhotoDetailActivity : AppCompatActivity() {
             setTextField(llAltDescription, tvAltDescription, photo.altDescription)
             setTextField(llResolution, tvResolution, getImageResolution(photo))
             setTextField(clPublishedDate, tvPublishedDate, photo.createdAt.formatAsString())
+            setExifInformation(photo.exif)
 
             ImageLoader.loadImage(photo.user.profileImageUrl, ivProfileImage)
             ivProfileImage.contentDescription = getDisplayFullName(photo.user)
@@ -112,6 +114,24 @@ class PhotoDetailActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = uri
         context.startActivity(intent)
+    }
+
+    private fun setExifInformation(exifDetail: ExifDetail?) {
+        binding.llExif.run {
+            ViewUtility.setVisibility(this.root, !(exifDetail == null || exifDetail.isEmpty()))
+            exifDetail?.let {
+                ViewUtility.setProperty(tvLabelExifAperture, tvExifAperture, it.aperture)
+                ViewUtility.setProperty(tvLabelExifBrand, tvExifBrand, it.brand)
+                ViewUtility.setProperty(tvLabelExifModel, tvExifModel, it.model)
+                ViewUtility.setProperty(
+                    tvLabelExifExposureTime,
+                    tvExifExposureTime,
+                    it.exposureTime
+                )
+                ViewUtility.setProperty(tvLabelExifIso, tvExifIso, it.iso)
+                ViewUtility.setProperty(tvLabelExifFocal, tvExifFocal, it.focalLength)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

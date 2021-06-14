@@ -16,4 +16,27 @@
         <item name="android:paddingEnd">@dimen/space_medium</item>
         <item name="android:paddingTop">@dimen/space_medium</item>
     </style>
+
+    <style name="PropertyLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/space_small</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6
+        </item>
+    </style>
+
+    <style name="PropertyLabel.General">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PropertyLabel.Detail">
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
+    </style>
+
+    <style name="PropertyValue">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/space_small</item>
+        <item name="android:textAlignment">textEnd</item>
+    </style>
 </resources>
