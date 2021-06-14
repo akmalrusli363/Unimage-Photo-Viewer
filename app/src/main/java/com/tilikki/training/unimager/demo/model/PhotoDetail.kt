@@ -18,6 +18,7 @@ data class PhotoDetail(
     val apiUrl: String,
     val htmlUrl: String,
     val user: User,
+    val exif: ExifDetail?,
 ) {
     fun getResolution(): Resolution {
         return Resolution(width, height)

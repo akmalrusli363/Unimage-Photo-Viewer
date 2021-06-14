@@ -30,6 +30,8 @@ data class NetworkPhoto(
     val linkUrl: LinkUrl,
     @SerializedName("user")
     val user: NetworkUser,
+    @SerializedName("exif")
+    val exif: Exif?,
 ) {
     fun bindSearchQuery(searchQuery: String): SearchQuery {
         return SearchQuery(photoId = id, searchQuery = searchQuery)
@@ -88,7 +90,8 @@ data class NetworkPhoto(
             fullSizeUrl = imageUrl.fullSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink,
-            user = user.toDomainEntityUser()
+            user = user.toDomainEntityUser(),
+            exif = exif?.asDomainEntityExif(),
         )
     }
 }
