@@ -86,9 +86,18 @@ API Parameters:
 
 This activity consists of a photo picture, like count, view in browser button, full view, user profile, and descriptions in general.
 
-While user access the profile of the photo owner, they'll redirected to Profile Activity which displays user's biodata and photo collections. Also, the user can download the photo through *download icon* which redirects user to show full size of photo, or view more information or related images through *"view in web"* button.
+While user access the profile of the photo owner, they'll redirected to Profile Activity which displays user's bio data and photo collections. Also, the user can download the photo through *download icon* which redirects user to show full size of photo, or view more information or related images through *"view in web"* button.
 
 Because this activity only provides basic information of the photo, user need to be access on browser using *"view in web"* button to choose photo size to download, like, share, or view EXIF information of that photo.
+
+
+#### EXIF
+
+The feature was added in new version of Unimage App which displays EXIF information (eg. camera brand/model, focal length, exposure time, aperture, ISO) for the photo. This field is hidden if no fields were present for that photo.
+
+![EXIF Property](img/unimage-photo-exif.png)
+![With EXIF](img/unimage-photo-info-1.gif)
+![Without EXIF](img/unimage-photo-info-2.gif)
 
 
 ### Profile (ProfileActivity)
@@ -103,7 +112,7 @@ API Parameters:
 ![](img/unimage-profile.gif)
 ![](img/unimage-access-profile.gif)
 
-The profile activity consists of user biodata consists of username, full name, and user statistics. Also, this activity provides user photos through secondary link `/photos` which provides set of images through `RecyclerView` photo grid using `StaggeredGridLayoutManager` (display photo grid according to their dimension and orientation).
+The profile activity consists of user bio data consists of username, full name, and user statistics. Also, this activity provides user photos through secondary link `/photos` which provides set of images through `RecyclerView` photo grid using `StaggeredGridLayoutManager` (display photo grid according to their dimension and orientation).
 
 Same as photo search activity, user can access their photo which redirects to photo detail. Even with same user, the activity shown through user photo are redirects back to user profile if the owner of the photo are equal to previous photos.
 
@@ -131,7 +140,73 @@ When online, the profile data fetched together with user photos where the photos
 
 ### Offline Demo
 
-![Offline Demo for Unimager App](img/unimage-offline.gif)
+![Offline Demo for Unimage App](img/unimage-offline.gif)
+
+
+
+## Scenario: Endless Scrolling/Pagination
+
+**Pagination** is a important thing that must be included in photo exploration application, which provide user with unlimited range of photos. For reference, in Unsplash, has a pagination system which every search result provides at least 10 to 30 photos per-page.
+
+For example, while using **_Postman_** for exploring photos from Unsplash with 20 photos per-page with query "dandelion", it will show result for 1611 photos collected in 81 pages with following result in JSON below:
+
+```json
+{
+  "total": 1611,
+  "total_pages": 81,
+  "results": [
+    {
+      "id": "YNM4KStg78I",
+      "created_at": "2018-08-11T07:00:04-04:00",
+      "updated_at": "2021-06-15T00:22:08-04:00",
+      "promoted_at": null,
+      "width": 4452,
+      "height": 2968,
+      "color": "#262640",
+      "blur_hash": "L67eI*?aDjM{~p%LM{NGe?oMt7f*",
+      "description": "Dandelions are everywhere in Finland in Spring!",
+      "alt_description": "shallow focus of white dandelion",
+      "urls": {
+        "raw": "https://images.unsplash.com/photo-1533985062386-ef0837f31bc0?ixid=MnwyMTg3ODd8MHwxfHNlYXJjaHwxfHxkYW5kZWxpb258ZW58MHx8fHwxNjIzNzQ0OTIx&ixlib=rb-1.2.1",
+        "full": "https://images.unsplash.com/photo-1533985062386-ef0837f31bc0?crop=entropy&cs=srgb&fm=jpg&ixid=MnwyMTg3ODd8MHwxfHNlYXJjaHwxfHxkYW5kZWxpb258ZW58MHx8fHwxNjIzNzQ0OTIx&ixlib=rb-1.2.1&q=85",
+        "regular": "https://images.unsplash.com/photo-1533985062386-ef0837f31bc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMTg3ODd8MHwxfHNlYXJjaHwxfHxkYW5kZWxpb258ZW58MHx8fHwxNjIzNzQ0OTIx&ixlib=rb-1.2.1&q=80&w=1080",
+        "small": "https://images.unsplash.com/photo-1533985062386-ef0837f31bc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMTg3ODd8MHwxfHNlYXJjaHwxfHxkYW5kZWxpb258ZW58MHx8fHwxNjIzNzQ0OTIx&ixlib=rb-1.2.1&q=80&w=400",
+        "thumb": "https://images.unsplash.com/photo-1533985062386-ef0837f31bc0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMTg3ODd8MHwxfHNlYXJjaHwxfHxkYW5kZWxpb258ZW58MHx8fHwxNjIzNzQ0OTIx&ixlib=rb-1.2.1&q=80&w=200"
+      },
+      "links": {
+        "self": "https://api.unsplash.com/photos/YNM4KStg78I",
+        "html": "https://unsplash.com/photos/YNM4KStg78I",
+        "download": "https://unsplash.com/photos/YNM4KStg78I/download",
+        "download_location": "https://api.unsplash.com/photos/YNM4KStg78I/download?ixid=MnwyMTg3ODd8MHwxfHNlYXJjaHwxfHxkYW5kZWxpb258ZW58MHx8fHwxNjIzNzQ0OTIx"
+      },
+      "categories": [],
+      "likes": 477,
+      "liked_by_user": false,
+      "current_user_collections": [],
+      "sponsorship": null,
+      "user": {
+        // user
+      },
+      "tags": [
+        // tags
+      ]
+    },
+    // and 19 more photos...
+  ]
+}
+```
+
+In order to have pagination for photo grid, this application (within photo search and user photos) has pagination system that handles `RecyclerView` scrolling which able to fetch more data using same search query, but with added page for more results *(see [CodePath Endless Scrolling with RecyclerView](https://guides.codepath.com/android/endless-scrolling-with-adapterviews-and-recyclerview))*.
+Because `RecyclerView` has a problem regarding to fetching more data while nesting with `NestedScrollView`, the scroll handler are handed to `NestedScrollView` instead of being handled by RecyclerView due of 'bug' *(but actually intended)* of `NestedScrollView` handles whole `RecyclerView` heights *(the code referred from [RecyclerView ScrollListener inside NestedScrollView](https://stackoverflow.com/questions/39894792/recyclerview-scrolllistener-inside-nestedscrollview))*.
+
+For implementation, basic endless scrolling *(from CodePath)* is implemented at photo search activity for general search, which is not nested and able to fetch more data with other parts are remained non-scrolled.
+At other side, nested endless scrolling implemented at profile view activity, which is nested and also buggy while using CodePath solution for endless scrolling.
+
+
+### Demonstration
+
+![Photo search endless scroll](img/unimage-endless-scroll-search.gif)
+![User photo endless scroll](img/unimage-endless-scroll-profile.gif)
 
 
 
@@ -141,15 +216,18 @@ This project's referred API could be used to customize your own project & featur
 
 Also this project need to be improved as follows:
 
-- [ ] **Android Injector**, as a alternative to complex *Dagger* dependency injection.
+- [x] **Android Injector**, as a alternative to complex *Dagger* dependency injection.
 - [ ] **Fragment** for displaying about this project, displays full photo size, pagination, or filter photo results.
-- [ ] **Unit testing**, especially for UI and API fetches, to improve testability and stability of the application.
+  - [x] Photo grid fragment, placed in photo search & user profile
+  - [ ] Full photo size view
+  - [ ] About app *(may displayed in dialog)*
+- [x] **Unit testing**, especially for UI and API fetches, to improve testability and stability of the application.
 
 Sometimes, the project may able to add more additional/optional features such as:
 
 - [ ] **BlurHash**: Converts plain/loading placeholder as blurred photo preview placeholder while loading photos using photo's blur hash. For this project, Unsplash has provided it's BlurHash in JSON metadata to use blurred preview while render it's photo.
   - For these project, you can refer to their GitHub project [woltapp/blurhash](https://github.com/woltapp/blurhash) for their documentation & demos.
-- [ ] **Pagination** is useful for fetching lot of photos with limit of photos-per-page.
+- [x] **Pagination** is useful for fetching lot of photos with limit of photos-per-page.
 - [ ] **Direct download**, which able users to download photo without redirect to browser.
 - [ ] **Search filter & order**, to filter and classify search result by color and orientation, or sort their result by date or relevancy.
 - [ ] Separated user search for search user from main screen.
@@ -174,6 +252,18 @@ NOTE: These additional/optional features are based on my suggestion. Feel free t
 - AndroidX Room (`androidx.room`)
   - Room Runtime
   - Room RxJava2 Adapter
+
+### Testing
+
+- JUnit (`junit:junit`) 
+- Mockito (`org.mockito:mockito-core`)
+- Mockito Kotlin (`org.mockito.kotlin:mockito-kotlin`)
+- AndroidX Arch Core (`androidx.arch.core:core-testing`)
+- AndroidX Test (`androidx.test:core`)
+
+#### Android Test
+
+- AndroidX Test + JUnit (`androidx.test.ext:junit`)
 
 ### External Libraries
 
