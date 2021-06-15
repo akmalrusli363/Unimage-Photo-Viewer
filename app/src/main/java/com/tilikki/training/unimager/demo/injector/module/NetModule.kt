@@ -7,7 +7,6 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.tilikki.training.unimager.demo.network.OAuthInterceptor
-import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -19,9 +18,6 @@ import javax.inject.Singleton
 
 @Module
 class NetModule {
-    //    @Inject
-    val baseUrl: String = UnsplashRepository.BASE_URL
-
     @Provides
     @Singleton
     fun providesSharedPreferences(application: Application): SharedPreferences {
@@ -63,16 +59,24 @@ class NetModule {
     @Provides
     @Singleton
     @Callback
-    fun provideRetrofit(gson: Gson, @Cached okHttpClient: OkHttpClient): Retrofit {
-        return getRetrofitBuilder(gson, okHttpClient)
+    fun provideRetrofit(
+        baseUrl: String,
+        gson: Gson,
+        @Cached okHttpClient: OkHttpClient
+    ): Retrofit {
+        return getRetrofitBuilder(baseUrl, gson, okHttpClient)
             .build()
     }
 
     @Provides
     @Singleton
     @Reactive
-    fun provideReactiveRetrofit(gson: Gson, @Cached okHttpClient: OkHttpClient): Retrofit {
-        return getRetrofitBuilder(gson, okHttpClient)
+    fun provideReactiveRetrofit(
+        baseUrl: String,
+        gson: Gson,
+        @Cached okHttpClient: OkHttpClient
+    ): Retrofit {
+        return getRetrofitBuilder(baseUrl, gson, okHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
@@ -82,7 +86,11 @@ class NetModule {
             .addInterceptor(OAuthInterceptor())
     }
 
-    private fun getRetrofitBuilder(gson: Gson, @Cached okHttpClient: OkHttpClient): Retrofit.Builder {
+    private fun getRetrofitBuilder(
+        baseUrl: String,
+        gson: Gson,
+        @Cached okHttpClient: OkHttpClient
+    ): Retrofit.Builder {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl(baseUrl)

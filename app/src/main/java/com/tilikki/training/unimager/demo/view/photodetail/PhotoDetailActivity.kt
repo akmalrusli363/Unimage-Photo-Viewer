@@ -20,6 +20,10 @@ import java.util.*
 import javax.inject.Inject
 
 class PhotoDetailActivity : DaggerAppCompatActivity() {
+    companion object {
+        const val INTENT_URL: String = "com.tilikki.training.unimager.demo.PhotoId"
+    }
+
     @Inject
     lateinit var viewModel: PhotoDetailViewModel
 
@@ -106,9 +110,5 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    companion object {
-        const val INTENT_URL: String = "com.tilikki.training.unimager.demo.PhotoId"
     }
 }

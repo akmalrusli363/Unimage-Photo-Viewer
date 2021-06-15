@@ -14,12 +14,15 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, AppModule::class, NetModule::class, ActivityBuilder::class])
+@Component(modules = [AndroidInjectionModule::class, NetModule::class, ActivityBuilder::class])
 interface AppComponent : AndroidInjector<DaggerApplication> {
     @Component.Builder
     interface Builder {
         @BindsInstance
         fun application(application: Application): Builder
+
+        @BindsInstance
+        fun baseUrl(baseUrl: String): Builder
         fun build(): AppComponent
     }
 
