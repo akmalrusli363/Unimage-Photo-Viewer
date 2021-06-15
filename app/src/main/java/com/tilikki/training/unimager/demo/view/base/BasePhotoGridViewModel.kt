@@ -30,11 +30,16 @@ abstract class BasePhotoGridViewModel : BaseViewModel() {
     fun addMorePhotos() {
         _pages.value!!.addPage()
         _updateFragment.postValue(false)
+        if (successResponse.value?.success == false) {
+            Log.i(LogUtility.LOGGER_FETCH_TAG, "End of data!")
+            return
+        }
         if (lastFetchedData != PageMetadata.MAX_ITEMS_PER_PAGE) {
             Log.i(LogUtility.LOGGER_FETCH_TAG, "End of data!")
             return
         }
-        fetchData(fetchMorePhotos(),
+        fetchData(
+            fetchMorePhotos(),
             {
                 val addedPhotos = (_photoList.value ?: emptyList())
                     .toMutableList().apply {

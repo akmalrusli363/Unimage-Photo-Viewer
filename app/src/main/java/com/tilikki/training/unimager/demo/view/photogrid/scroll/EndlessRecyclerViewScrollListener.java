@@ -19,13 +19,11 @@ import org.jetbrains.annotations.NotNull;
  * @author Nathan Esquenazi (@nesquena)
  */
 public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnScrollListener {
-    private final int startingPageIndex = 0;
     private final RecyclerView.LayoutManager mLayoutManager;
     /**
      * The minimum amount of items to have below your current scroll position before loading more.
      */
     private int visibleThreshold = 2;
-    private int currentPage = 0;
     private int previousTotalItemCount = 0;
     private boolean loading = true;
 
@@ -64,8 +62,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         }
 
         if (!loading && reachedEndOfVisibleThreshold(totalItemCount, lastVisibleItemPosition)) {
-            currentPage++;
-            onLoadMore(currentPage, totalItemCount, view);
+            onLoadMore(totalItemCount, view);
             loading = true;
         }
     }
@@ -75,7 +72,6 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     }
 
     private void invalidateList(int totalItemCount) {
-        this.currentPage = this.startingPageIndex;
         this.previousTotalItemCount = totalItemCount;
         if (totalItemCount == 0) {
             this.loading = true;
@@ -99,7 +95,6 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
      * Call this method whenever performing new searches
      */
     public void resetState() {
-        this.currentPage = this.startingPageIndex;
         this.previousTotalItemCount = 0;
         this.loading = true;
     }
@@ -107,10 +102,9 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     /**
      * Defines the process for actually loading more data based on page
      *
-     * @param page            next page to fetch
      * @param totalItemsCount current item count
      * @param view            the recyclerView to invoke
      */
-    public abstract void onLoadMore(int page, int totalItemsCount, RecyclerView view);
+    public abstract void onLoadMore(int totalItemsCount, RecyclerView view);
 
 }

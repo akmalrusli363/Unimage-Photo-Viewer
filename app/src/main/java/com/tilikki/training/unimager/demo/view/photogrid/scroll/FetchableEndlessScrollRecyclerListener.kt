@@ -8,8 +8,7 @@ class FetchableEndlessScrollRecyclerListener(
     layoutManager: StaggeredGridLayoutManager?,
     private val pageMetadata: PageMetadata
 ) : EndlessRecyclerViewScrollListener(layoutManager) {
-    override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
-        pageMetadata.page = page
+    override fun onLoadMore(totalItemsCount: Int, view: RecyclerView?) {
         pageMetadata.onEndOfDataAction()
     }
 }
