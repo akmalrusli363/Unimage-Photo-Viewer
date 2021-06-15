@@ -7,16 +7,28 @@
     <string name="view_in_web">View in Web</string>
     <string name="full_size">Full Size</string>
     <string name="download">Download</string>
+
+    <string name="published_date">Published Date</string>
+    <string name="image_resolution">Image Resolution</string>
     <string name="exif">EXIF</string>
 
     <string name="profile_image">Profile image</string>
     <string name="photo">Photo</string>
 
     <string name="username_format">%1$s (@%2$s)</string>
+    <string name="image_size_format">%1$d x %2$d pixels</string>
+    <string name="image_size_full_format">%1$d x %2$d pixels (%3$s)</string>
 
     <string name="error_occurred">An error occurred!</string>
     <string name="no_photos">No photos</string>
     <string name="search_and_explore_photos"><![CDATA[Search & explore photos]]></string>
+
+    <string name="exif_brand">Brand</string>
+    <string name="exif_model">Model</string>
+    <string name="exif_exposure_time">Exposure Time</string>
+    <string name="exif_aperture">Aperture</string>
+    <string name="exif_focal_length">Focal Length</string>
+    <string name="exif_iso">ISO</string>
 
     <plurals name="total_photos_format">
         <item quantity="one">%1$d photo</item>

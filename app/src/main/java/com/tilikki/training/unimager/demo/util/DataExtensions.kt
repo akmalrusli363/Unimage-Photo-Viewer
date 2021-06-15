@@ -1,5 +1,7 @@
 package com.tilikki.training.unimager.demo.util
 
+import java.text.DateFormat
+import java.util.*
 import kotlin.math.absoluteValue
 
 fun Int?.toString(): String {
@@ -20,4 +22,9 @@ fun Int?.unsignedValue(): Int {
         this < 0 -> this.absoluteValue
         else -> this
     }
+}
+
+fun Date.formatAsString(): String {
+    val dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT)
+    return dateFormatter.format(this)
 }

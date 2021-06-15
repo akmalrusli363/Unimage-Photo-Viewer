@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout style="@style/FieldBox">
+
+        <TextView
+            android:id="@+id/tv_label_exif"
+            style="@style/PropertyLabel"
+            android:text="@string/exif" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_exif_properties"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/space_small">
+
+            <TextView
+                android:id="@+id/tv_label_exif_brand"
+                style="@style/PropertyLabel.Detail"
+                android:text="@string/exif_brand"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_exif_brand"
+                style="@style/PropertyValue"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_exif_brand"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/barrier_exif_params"
+                tools:text="soni" />
+
+            <TextView
+                android:id="@+id/tv_label_exif_model"
+                style="@style/PropertyLabel.Detail"
+                android:text="@string/exif_model"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_exif_brand" />
+
+            <TextView
+                android:id="@+id/tv_exif_model"
+                style="@style/PropertyValue"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_exif_model"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/barrier_exif_params"
+                tools:text="soni s99" />
+
+            <TextView
+                android:id="@+id/tv_label_exif_exposure_time"
+                style="@style/PropertyLabel.Detail"
+                android:text="@string/exif_exposure_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_exif_model" />
+
+            <TextView
+                android:id="@+id/tv_exif_exposure_time"
+                style="@style/PropertyValue"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_exif_exposure_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/barrier_exif_params"
+                tools:text="1/10000" />
+
+            <TextView
+                android:id="@+id/tv_label_exif_aperture"
+                style="@style/PropertyLabel.Detail"
+                android:text="@string/exif_aperture"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_exif_exposure_time" />
+
+            <TextView
+                android:id="@+id/tv_exif_aperture"
+                style="@style/PropertyValue"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_exif_aperture"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/barrier_exif_params"
+                tools:text="f1.9" />
+
+            <TextView
+                android:id="@+id/tv_label_exif_focal"
+                style="@style/PropertyLabel.Detail"
+                android:text="@string/exif_focal_length"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_exif_aperture" />
+
+            <TextView
+                android:id="@+id/tv_exif_focal"
+                style="@style/PropertyValue"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_exif_focal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/barrier_exif_params"
+                tools:text="69 mm" />
+
+            <TextView
+                android:id="@+id/tv_label_exif_iso"
+                style="@style/PropertyLabel.Detail"
+                android:text="@string/exif_iso"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_label_exif_focal" />
+
+            <TextView
+                android:id="@+id/tv_exif_iso"
+                style="@style/PropertyValue"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_exif_iso"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/barrier_exif_params"
+                tools:text="6900" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_exif_params"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="right"
+                app:constraint_referenced_ids="tv_label_exif_exposure_time,tv_label_exif_model,tv_label_exif_exposure_time,tv_label_exif_brand" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</layout>

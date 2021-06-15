@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.databinding.ActivityPhotoDetailBinding
+import com.tilikki.training.unimager.demo.model.ExifDetail
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.ViewUtility
+import com.tilikki.training.unimager.demo.util.formatAsString
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
@@ -55,12 +57,15 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
     }
 
     private fun bindPhotoDetails(photo: PhotoDetail) {
-        binding.apply {
+        binding.run {
             ImageLoader.loadImage(photo.previewUrl, ivPhotoImage)
             ivPhotoImage.contentDescription = photo.altDescription
             tvLikes.text = photo.likes.toString()
             setTextField(llDescription, tvDescription, photo.description)
             setTextField(llAltDescription, tvAltDescription, photo.altDescription)
+            setTextField(llResolution, tvResolution, getImageResolution(photo))
+            setTextField(clPublishedDate, tvPublishedDate, photo.createdAt.formatAsString())
+            setExifInformation(photo.exif)
 
             ImageLoader.loadImage(photo.user.profileImageUrl, ivProfileImage)
             ivProfileImage.contentDescription = getDisplayFullName(photo.user)
@@ -84,8 +89,14 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
     }
 
     private fun getDisplayFullName(user: User): String {
-        return String.format(
-            Locale.ROOT, getString(R.string.username_format), user.name, user.username
+        return getString(
+            R.string.username_format, user.name, user.username
+        )
+    }
+
+    private fun getImageResolution(photo: PhotoDetail): String {
+        return getString(
+            R.string.image_size_full_format, photo.width, photo.height, photo.getOrientation()
         )
     }
 
@@ -102,6 +113,24 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = uri
         context.startActivity(intent)
+    }
+
+    private fun setExifInformation(exifDetail: ExifDetail?) {
+        binding.llExif.run {
+            ViewUtility.setVisibility(this.root, !(exifDetail == null || exifDetail.isEmpty()))
+            exifDetail?.let {
+                ViewUtility.setProperty(tvLabelExifAperture, tvExifAperture, it.aperture)
+                ViewUtility.setProperty(tvLabelExifBrand, tvExifBrand, it.brand)
+                ViewUtility.setProperty(tvLabelExifModel, tvExifModel, it.model)
+                ViewUtility.setProperty(
+                    tvLabelExifExposureTime,
+                    tvExifExposureTime,
+                    it.exposureTime
+                )
+                ViewUtility.setProperty(tvLabelExifIso, tvExifIso, it.iso)
+                ViewUtility.setProperty(tvLabelExifFocal, tvExifFocal, it.focalLength)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

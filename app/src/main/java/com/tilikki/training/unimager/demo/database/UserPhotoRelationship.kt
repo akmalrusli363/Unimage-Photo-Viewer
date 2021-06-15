@@ -30,6 +30,7 @@ data class UserPhotoRelationship(
             apiUrl = photo.detailUrl,
             htmlUrl = photo.webLinkUrl,
             user = user.toDomainEntityUser(),
+            exif = null,
         )
     }
 }

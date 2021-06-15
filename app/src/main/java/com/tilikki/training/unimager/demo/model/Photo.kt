@@ -3,6 +3,7 @@ package com.tilikki.training.unimager.demo.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.tilikki.training.unimager.demo.database.EntityPhoto
+import com.tilikki.training.unimager.demo.model.util.Resolution
 import java.util.*
 
 data class Photo(
@@ -37,6 +38,10 @@ data class Photo(
         htmlUrl = parcel.readString().toString(),
         owner = parcel.readString().toString()
     )
+
+    fun getResolution(): Resolution {
+        return Resolution(width, height)
+    }
 
     fun toDatabaseEntityPhoto(): EntityPhoto {
         return EntityPhoto(
