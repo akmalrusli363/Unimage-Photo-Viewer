@@ -185,13 +185,13 @@ For example, while using **_Postman_** for exploring photos from Unsplash with 2
       "current_user_collections": [],
       "sponsorship": null,
       "user": {
-        // user
+        "_comment": "user"
       },
       "tags": [
-        // tags
+        "// tags in photo"
       ]
     },
-    // and 19 more photos...
+    "_comment": "and 19 more photos..."
   ]
 }
 ```
