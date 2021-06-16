@@ -4,15 +4,15 @@
 
 **Unimage Photo Viewer** is a personal project which provides photos from **Unsplash** using Unsplash API ([The documentation](https://unsplash.com/documentation)). The Unsplash API itself have many common API endpoints such as:
 
--   Search image
--   Show user profile
--   List user photos
--   Get a photo
--   Get a photo's statistics
--   Get random photos
--   Search for user
--   Search for collections
--   and many more...
+- Search image
+- Show user profile
+- List user photos
+- Get a photo
+- Get a photo's statistics
+- Get random photos
+- Search for user
+- Search for collections
+- and many more...
 
 To be noted, the Unsplash API uses ***OAuth 2.0 Authentication** (Bearer)* where the user can obtain the **OAuth's access token** by taking the app's **Access Key**, **Secret Key**, and **Redirect URI** from Unsplash Developer App's page. You also need to be registered on Unsplash to create your application first before proceeding OAuth access authentication on your HTTP Client.
 
@@ -48,7 +48,7 @@ Then, you're able to compile the project with your bundled **OAuth access token*
 
 This application has mainly 3 activities: photo search, photo detail, and user's profile. Each activities has it's own ViewModel and access to libraries using **Dagger**'s dependency injection.
 
-For main Unsplash API URL, the link of [`https://api.unsplash.com`](https://api.unsplash.com/)  is the main API's URL that refers to each endpoint. Please refer to [the documentation](https://unsplash.com/documentation) for detailed documentation.
+For main Unsplash API URL, the link of [`https://api.unsplash.com`](https://api.unsplash.com/) is the main API's URL that refers to each endpoint. Please refer to [the documentation](https://unsplash.com/documentation) for detailed documentation.
 
 
 ### Photo Search (MainActivity)
@@ -106,7 +106,7 @@ API URL Endpoint: `https://api.unsplash.com/users/{userName}`
 
 API Parameters: 
 
--  `{userName}` : Username to search
+- `{userName}` : Username to search
 
 ![](img/unimage-profile.png)
 ![](img/unimage-profile.gif)
