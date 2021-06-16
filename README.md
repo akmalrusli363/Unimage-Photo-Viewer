@@ -91,6 +91,15 @@ While user access the profile of the photo owner, they'll redirected to Profile 
 Because this activity only provides basic information of the photo, user need to be access on browser using *"view in web"* button to choose photo size to download, like, share, or view EXIF information of that photo.
 
 
+#### EXIF
+
+The feature was added in new version of Unimage App which displays EXIF information (eg. camera brand/model, focal length, exposure time, aperture, ISO) for the photo. This field is hidden if no fields were present for that photo.
+
+![EXIF Property](img/unimage-photo-exif.png)
+![With EXIF](img/unimage-photo-info-1.gif)
+![Without EXIF](img/unimage-photo-info-2.gif)
+
+
 ### Profile (ProfileActivity)
 
 API URL Endpoint: `https://api.unsplash.com/users/{userName}`
