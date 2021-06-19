@@ -71,7 +71,7 @@ data class NetworkPhoto(
             fullSizeUrl = imageUrl.fullSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink,
-            owner = user.username,
+            owner = user.id,
         )
     }
 

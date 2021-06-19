@@ -47,11 +47,10 @@
                 app:drawableTopCompat="@drawable/ic_general_error" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_photos_grid"
-            style="@style/RecyclerViewBigPanel"
-            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-            app:spanCount="2"
-            tools:listitem="@layout/recycler_view_photos" />
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_photos_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_photo_grid" />
     </LinearLayout>
 </layout>

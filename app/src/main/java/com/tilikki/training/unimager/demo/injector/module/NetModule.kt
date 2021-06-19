@@ -7,6 +7,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.tilikki.training.unimager.demo.network.OAuthInterceptor
+import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -17,7 +18,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetModule(private val baseUrl: String) {
+class NetModule {
+    //    @Inject
+    val baseUrl: String = UnsplashRepository.BASE_URL
+
     @Provides
     @Singleton
     fun providesSharedPreferences(application: Application): SharedPreferences {

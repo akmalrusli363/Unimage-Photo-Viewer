@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.tilikki.training.unimager.demo.R
-import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityPhotoDetailBinding
 import com.tilikki.training.unimager.demo.model.ExifDetail
 import com.tilikki.training.unimager.demo.model.PhotoDetail
@@ -19,22 +16,20 @@ import com.tilikki.training.unimager.demo.util.ImageLoader
 import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.util.formatAsString
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
-import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import java.util.*
 import javax.inject.Inject
 
-class PhotoDetailActivity : AppCompatActivity() {
+class PhotoDetailActivity : DaggerAppCompatActivity() {
     @Inject
-    lateinit var viewModelFactory: ViewModelFactory
-
-    private val viewModel: PhotoDetailViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(PhotoDetailViewModel::class.java)
-    }
+    lateinit var viewModel: PhotoDetailViewModel
 
     private lateinit var binding: ActivityPhotoDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).getUserComponent().inject(this)
+        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

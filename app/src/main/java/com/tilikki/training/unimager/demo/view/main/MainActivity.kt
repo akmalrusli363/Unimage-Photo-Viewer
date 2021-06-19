@@ -3,27 +3,23 @@ package com.tilikki.training.unimager.demo.view.main
 import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import com.tilikki.training.unimager.demo.core.MyApplication
 import com.tilikki.training.unimager.demo.databinding.ActivityMainBinding
 import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.ViewUtility
-import com.tilikki.training.unimager.demo.view.viewModel.ViewModelFactory
+import com.tilikki.training.unimager.demo.view.photogrid.PhotoGridFragment
+import dagger.android.AndroidInjection
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelFactory
+class MainActivity : DaggerAppCompatActivity() {
 
-    private val viewModel: MainViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-    }
+    @Inject
+    lateinit var viewModel: MainViewModel
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).getUserComponent().inject(this)
+        AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
 
@@ -31,10 +27,6 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         setContentView(binding.root)
-
-        binding.rvPhotosGrid.adapter = PhotoRecyclerViewAdapter()
-        binding.rvPhotosGrid.layoutManager = PhotoRecyclerViewAdapter.getPhotoGridLayoutManager()
-        binding.rvPhotosGrid.setHasFixedSize(true)
 
         binding.svPhotoSearch.apply {
             this.setOnQueryTextListener(searchListener(this))
@@ -51,7 +43,9 @@ class MainActivity : AppCompatActivity() {
         })
 
         viewModel.photos.observe(this, {
-            (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
+            supportFragmentManager.beginTransaction()
+                .replace(binding.fragmentPhotosGrid.id, PhotoGridFragment.newInstance(it))
+                .commit()
         })
 
         viewModel.isFetching.observe(this, {
@@ -60,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun toggleDataState(success: Boolean) {
-        ViewUtility.toggleVisibilityPairs(binding.rvPhotosGrid, binding.llError, success)
+        ViewUtility.toggleVisibilityPairs(binding.fragmentPhotosGrid, binding.llError, success)
     }
 
     private fun searchListener(searchView: SearchView): SearchView.OnQueryTextListener {
