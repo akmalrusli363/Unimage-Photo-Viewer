@@ -21,7 +21,8 @@ object DataMapper {
                 fullSizeUrl = fullSizeUrl,
                 apiUrl = apiUrl,
                 htmlUrl = htmlUrl,
-                user = user
+                user = user,
+                exif = null
             )
         }
     }

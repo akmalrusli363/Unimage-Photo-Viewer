@@ -32,7 +32,8 @@ object NetworkTestDataSet {
             altDescription = "alt description",
             imageUrl = photoLink.first,
             linkUrl = photoLink.second,
-            user = generateSampleUserData()
+            user = generateSampleUserData(),
+            exif = null
         )
     }
 
