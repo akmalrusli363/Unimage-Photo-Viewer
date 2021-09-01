@@ -80,14 +80,33 @@ class MainActivityTest : ViewTest {
         onView(withId(R.id.ll_empty))
             .check(doesNotExist())
         onView(withId(R.id.sv_photo_search))
-            .perform(ViewActions.typeText("${TestDataConstants.DEMO_SEARCH_ERROR}\n"))
+            .perform(ViewActions.typeText("${TestDataConstants.DEMO_SEARCH_EMPTY}\n"))
 
-        Thread.sleep(10000)
+        Thread.sleep(3000)
 
         onView(withId(R.id.rv_photos_grid))
             .check(matches(not(isDisplayed())))
             .check(isGone())
         onView(withId(R.id.ll_empty))
+            .check(matches(isDisplayed()))
+        scenario.close()
+    }
+
+    @Test
+    fun search_abrupt_returnError() {
+        val scenario = ActivityScenario.launch(MainActivity::class.java)
+        onView(withId(R.id.rv_photos_grid))
+            .check(doesNotExist())
+        onView(withId(R.id.ll_empty))
+            .check(doesNotExist())
+        onView(withId(R.id.sv_photo_search))
+            .perform(ViewActions.typeText("${TestDataConstants.DEMO_SEARCH_ERROR}\n"))
+
+        Thread.sleep(3000)
+
+        onView(withId(R.id.rv_photos_grid))
+            .check(doesNotExist())
+        onView(withId(R.id.ll_error))
             .check(matches(isDisplayed()))
         scenario.close()
     }

@@ -10,18 +10,17 @@ import io.reactivex.Observable
 import javax.inject.Inject
 
 open class FakeUnsplashRepository @Inject constructor() : UnsplashRepository {
-    private var shouldReturnError = false
+    private var repositoryStatus = FakeRepositoryStatus.FETCH_SUCCESS
 
-    fun setReturnError(value: Boolean) {
-        shouldReturnError = value
+    fun setRepositoryStatus(status: FakeRepositoryStatus) {
+        repositoryStatus = status
     }
 
     override fun getPhotos(query: String): Observable<List<Photo>> {
-        if (shouldReturnError) {
-            return Observable.just(emptyList())
+        return returnListOrEmptyOrError(NullPointerException()) {
+            val photoList = NetworkTestDataSet.generateSamplePhotoDataList(query)
+            Observable.just(photoList.asDomainEntityPhotos())
         }
-        val photoList = NetworkTestDataSet.generateSamplePhotoDataList(query)
-        return Observable.just(photoList.asDomainEntityPhotos())
     }
 
     override fun getPhotoDetail(photoId: String): Observable<PhotoDetail> {
@@ -29,26 +28,46 @@ open class FakeUnsplashRepository @Inject constructor() : UnsplashRepository {
     }
 
     fun getPhotoDetail(photoId: String, username: String): Observable<PhotoDetail> {
-        if (shouldReturnError) {
-            return Observable.empty()
+        return returnDataOrError {
+            val photo = NetworkTestDataSet.generateSamplePhotoData(photoId, username)
+            Observable.just(photo.toDomainEntityPhotoDetail())
         }
-        val photo = NetworkTestDataSet.generateSamplePhotoData(photoId, username)
-        return Observable.just(photo.toDomainEntityPhotoDetail())
     }
 
     override fun getUserProfile(username: String): Observable<User> {
-        if (shouldReturnError) {
-            return Observable.empty()
+        return returnDataOrError {
+            val userData = NetworkTestDataSet.generateSampleUserData(username)
+            Observable.just(userData.toDomainEntityUser())
         }
-        val userData = NetworkTestDataSet.generateSampleUserData(username)
-        return Observable.just(userData.toDomainEntityUser())
     }
 
     override fun getUserPhotos(username: String): Observable<List<Photo>> {
-        if (shouldReturnError) {
-            return Observable.empty()
+        return returnListOrEmptyOrError {
+            val userPhotos = NetworkTestDataSet.generateSamplePhotoDataList(username)
+            Observable.just(userPhotos.asDomainEntityPhotos())
         }
-        val userPhotos = NetworkTestDataSet.generateSamplePhotoDataList(username)
-        return Observable.just(userPhotos.asDomainEntityPhotos())
+    }
+
+    private fun <T : Any> returnListOrEmptyOrError(
+        error: Exception = Exception(),
+        successData: () -> Observable<List<T>>
+    ): Observable<List<T>> {
+        return when (repositoryStatus) {
+            FakeRepositoryStatus.FETCH_ERROR -> Observable.error(error)
+            FakeRepositoryStatus.FETCH_EMPTY -> Observable.just(emptyList())
+            else -> successData()
+        }
+    }
+
+    private fun <T : Any> returnDataOrError(
+        error: Exception = Exception(),
+        emptyException: Exception = NullPointerException(),
+        successData: () -> Observable<T>
+    ): Observable<T> {
+        return when (repositoryStatus) {
+            FakeRepositoryStatus.FETCH_ERROR -> Observable.error(error)
+            FakeRepositoryStatus.FETCH_EMPTY -> Observable.error(emptyException)
+            else -> successData()
+        }
     }
 }

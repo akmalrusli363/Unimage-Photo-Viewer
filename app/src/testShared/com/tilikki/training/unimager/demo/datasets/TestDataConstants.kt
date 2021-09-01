@@ -20,7 +20,8 @@ object TestDataConstants {
     const val DEMO_EXIF_FOCAL_LENGTH: Float = 10f
     const val DEMO_EXIF_ISO: Int = 100
 
-    const val DEMO_SEARCH_ERROR = "empty-data-search"
+    const val DEMO_SEARCH_EMPTY = "empty-data-search"
+    const val DEMO_SEARCH_ERROR = "search!~02e"
 
     const val MAX_ITEMS_PER_PAGE = 10
 
