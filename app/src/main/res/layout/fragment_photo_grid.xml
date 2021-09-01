@@ -15,5 +15,22 @@
             app:spanCount="2"
             tools:listitem="@layout/recycler_view_photos" />
 
+        <LinearLayout
+            android:id="@+id/ll_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_empty_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/no_photos"
+                app:drawableTopCompat="@drawable/ic_image" />
+        </LinearLayout>
+
     </FrameLayout>
 </layout>

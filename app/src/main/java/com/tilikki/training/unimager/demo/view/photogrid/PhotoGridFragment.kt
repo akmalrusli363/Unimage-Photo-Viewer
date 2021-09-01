@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.tilikki.training.unimager.demo.databinding.FragmentPhotoGridBinding
 import com.tilikki.training.unimager.demo.model.Photo
+import com.tilikki.training.unimager.demo.util.ViewUtility
 import com.tilikki.training.unimager.demo.view.main.PhotoRecyclerViewAdapter
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -37,7 +38,10 @@ class PhotoGridFragment : DaggerFragment() {
         binding.rvPhotosGrid.setHasFixedSize(true)
 
         viewModel.photos.observe(viewLifecycleOwner, {
-            (binding.rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
+            binding.apply {
+                (rvPhotosGrid.adapter as PhotoRecyclerViewAdapter).submitList(it)
+                ViewUtility.toggleVisibilityPairs(llEmpty, rvPhotosGrid, it.isNullOrEmpty())
+            }
         })
         return binding.root
     }
