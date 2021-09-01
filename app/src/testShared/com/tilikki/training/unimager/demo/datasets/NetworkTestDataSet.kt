@@ -9,46 +9,52 @@ import java.util.*
 object NetworkTestDataSet {
     fun generateSamplePhotoDataList(
         photoId: String = TestDataConstants.DEMO_PHOTO_ID,
-        numOfData: Int = 10
+        numOfData: Int = TestDataConstants.MAX_ITEMS_PER_PAGE,
+        username: String = TestDataConstants.DEMO_USERNAME
     ): List<NetworkPhoto> {
         val photoList = mutableListOf<NetworkPhoto>()
         for (i in 1..numOfData) {
-            val singlePhotoId = "$photoId-$i"
-            photoList.add(generateSamplePhotoData(singlePhotoId))
+            val singlePhotoId = generateIndexedPhotoId(photoId, i)
+            photoList.add(generateSamplePhotoData(singlePhotoId, username))
         }
         return photoList
     }
 
-    fun generateSamplePhotoData(photoId: String): NetworkPhoto {
+    fun generateSamplePhotoData(
+        photoId: String,
+        username: String = TestDataConstants.DEMO_USERNAME
+    ): NetworkPhoto {
+        val user = generateSampleUserData(username)
         val photoLink = generatePhotoLink(photoId)
+        val containsExif = photoId.contains("exif", true)
         return NetworkPhoto(
             id = photoId,
             createdAt = Date(),
             width = 400,
             height = 400,
-            color = "red",
-            likes = 100,
-            description = "description",
-            altDescription = "alt description",
+            color = TestDataConstants.DEMO_COLOR,
+            likes = TestDataConstants.DEMO_LIKES,
+            description = TestDataConstants.DEMO_DESCRIPTION,
+            altDescription = generatePhotoAltDescription(photoId),
             imageUrl = photoLink.first,
             linkUrl = photoLink.second,
-            user = generateSampleUserData(),
-            exif = null
+            user = user,
+            exif = if (containsExif) generateExif() else null
         )
     }
 
-    fun generateSampleUserData(): NetworkUser {
+    fun generateSampleUserData(username: String = TestDataConstants.DEMO_USERNAME): NetworkUser {
         return NetworkUser(
             id = TestDataConstants.DEMO_USER_ID,
-            username = TestDataConstants.DEMO_USERNAME,
-            name = TestDataConstants.DEMO_USERNAME,
+            username = username,
+            name = username,
             profileUrl = NetworkUser.ProfileLinks(
-                htmlLink = TestDataConstants.WEB_URL + TestDataConstants.DEMO_USERNAME,
-                apiLink = TestDataConstants.API_URL + TestDataConstants.DEMO_USERNAME,
-                photosLink = TestDataConstants.API_URL + TestDataConstants.DEMO_USERNAME + "/apiPhotos",
+                htmlLink = TestDataConstants.WEB_URL + username,
+                apiLink = TestDataConstants.API_URL + username,
+                photosLink = TestDataConstants.API_URL + username + "/apiPhotos",
             ),
             profileImage = NetworkUser.ProfileImage(
-                imageUrl = TestDataConstants.API_URL + TestDataConstants.DEMO_USERNAME + "/avatar"
+                imageUrl = TestDataConstants.API_URL + username + "/avatar"
             ),
             totalPhotos = 10,
             following = 10,
@@ -57,12 +63,7 @@ object NetworkTestDataSet {
     }
 
     private fun generatePhotoLink(photoId: String): Pair<PhotoUrl, LinkUrl> {
-        val imageUrl = PhotoUrl(
-            thumbnailSize = TestDataConstants.WEB_URL + "thumb/$photoId.jpg",
-            smallSize = TestDataConstants.WEB_URL + "preview/$photoId.jpg",
-            regularSize = TestDataConstants.WEB_URL + "preview/$photoId.jpg",
-            fullSize = TestDataConstants.WEB_URL + "full/$photoId.jpg",
-        )
+        val imageUrl = generateSamplePhotoUrl(photoId)
         val linkUrl = LinkUrl(
             apiLink = TestDataConstants.API_URL + "img/$photoId",
             webLink = TestDataConstants.WEB_URL + "img/$photoId",
@@ -71,4 +72,15 @@ object NetworkTestDataSet {
         )
         return Pair(imageUrl, linkUrl)
     }
+
+    private fun generateSamplePhotoUrl(photoId: String): PhotoUrl {
+        val lipsumPhoto = PicsumPhotoProvider(photoId)
+        return PhotoUrl(
+            thumbnailSize = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.SMALL),
+            smallSize = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.MEDIUM),
+            regularSize = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.MEDIUM),
+            fullSize = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.LARGE),
+        )
+    }
+
 }
