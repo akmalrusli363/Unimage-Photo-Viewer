@@ -1,7 +1,6 @@
 package com.tilikki.training.unimager.demo.injector.component
 
 import android.app.Application
-import android.content.SharedPreferences
 import com.tilikki.training.unimager.demo.core.UnimageApplication
 import com.tilikki.training.unimager.demo.injector.module.*
 import dagger.BindsInstance
@@ -14,7 +13,7 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, NetModule::class, ActivityBuilder::class])
+@Component(modules = [AndroidInjectionModule::class, NetModule::class, ActivityBuilder::class, UnsplashModule::class])
 interface AppComponent : AndroidInjector<DaggerApplication> {
     @Component.Builder
     interface Builder {
@@ -41,6 +40,4 @@ interface AppComponent : AndroidInjector<DaggerApplication> {
 
     @NonCached
     fun okHttpClient(): OkHttpClient
-
-    fun sharedPreferences(): SharedPreferences
 }

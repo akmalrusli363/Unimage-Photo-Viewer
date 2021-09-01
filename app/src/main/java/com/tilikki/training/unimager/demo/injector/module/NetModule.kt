@@ -1,8 +1,6 @@
 package com.tilikki.training.unimager.demo.injector.module
 
 import android.app.Application
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -18,12 +16,6 @@ import javax.inject.Singleton
 
 @Module
 class NetModule {
-    @Provides
-    @Singleton
-    fun providesSharedPreferences(application: Application): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
-    }
-
     @Provides
     @Singleton
     fun provideOkHttpCache(application: Application): Cache {
