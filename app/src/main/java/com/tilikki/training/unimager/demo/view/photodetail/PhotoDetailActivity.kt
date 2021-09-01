@@ -33,15 +33,16 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val photoId = getFromIntent()
-        if (photoId == null) {
-            finish()
-        }
-
         binding = ActivityPhotoDetailBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
 
         setContentView(binding.root)
+
+        val photoId = getFromIntent()
+        if (photoId == null) {
+            finish()
+            return
+        }
 
         viewModel.attachPhoto(photoId)
         viewModel.photo.observe(this, {
