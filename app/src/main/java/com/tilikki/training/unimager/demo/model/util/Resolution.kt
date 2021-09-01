@@ -15,9 +15,15 @@ data class Resolution(
     fun getOrientation(): String {
         val ratio = getRatio()
         return when {
-            ratio > 1.1 -> "Landscape"
-            ratio < 0.9 -> "Portrait"
-            else -> "Square"
+            ratio > 1.1 -> LANDSCAPE
+            ratio < 0.9 -> PORTRAIT
+            else -> SQUARE
         }
+    }
+
+    companion object {
+        const val SQUARE = "Square"
+        const val PORTRAIT = "Portrait"
+        const val LANDSCAPE = "Landscape"
     }
 }
