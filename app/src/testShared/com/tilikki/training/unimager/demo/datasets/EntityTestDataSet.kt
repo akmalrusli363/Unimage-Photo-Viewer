@@ -52,9 +52,26 @@ object EntityTestDataSet {
                 apiUrl = API_URL + username,
                 apiPhotosUrl = API_URL + username + "/apiPhotos",
                 profileImageUrl = API_URL + username + "/avatar",
-                totalPhotos = 10,
-                following = 10,
-                followers = 10
+                totalPhotos = DEMO_USER_TOTAL_PHOTOS,
+                following = DEMO_USER_FOLLOWING,
+                followers = DEMO_USER_FOLLOWERS
+            )
+        }
+    }
+
+    fun generateNewUserData(username: String = DEMO_USERNAME): User {
+        TestDataConstants.run {
+            return User(
+                id = DEMO_USER_ID,
+                username = username,
+                name = username,
+                htmlUrl = WEB_URL + username,
+                apiUrl = API_URL + username,
+                apiPhotosUrl = API_URL + username + "/apiPhotos",
+                profileImageUrl = API_URL + username + "/avatar",
+                totalPhotos = 0,
+                following = 0,
+                followers = 0
             )
         }
     }

@@ -56,9 +56,28 @@ object NetworkTestDataSet {
             profileImage = NetworkUser.ProfileImage(
                 imageUrl = TestDataConstants.API_URL + username + "/avatar"
             ),
-            totalPhotos = 10,
-            following = 10,
-            followers = 10
+            totalPhotos = TestDataConstants.DEMO_USER_TOTAL_PHOTOS,
+            following = TestDataConstants.DEMO_USER_FOLLOWING,
+            followers = TestDataConstants.DEMO_USER_FOLLOWERS
+        )
+    }
+
+    fun generateNewUserData(username: String = TestDataConstants.DEMO_USERNAME): NetworkUser {
+        return NetworkUser(
+            id = TestDataConstants.DEMO_USER_ID,
+            username = username,
+            name = username,
+            profileUrl = NetworkUser.ProfileLinks(
+                htmlLink = TestDataConstants.WEB_URL + username,
+                apiLink = TestDataConstants.API_URL + username,
+                photosLink = TestDataConstants.API_URL + username + "/apiPhotos",
+            ),
+            profileImage = NetworkUser.ProfileImage(
+                imageUrl = TestDataConstants.API_URL + username + "/avatar"
+            ),
+            totalPhotos = 0,
+            following = 0,
+            followers = 0
         )
     }
 

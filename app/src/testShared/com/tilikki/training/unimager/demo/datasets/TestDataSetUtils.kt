@@ -10,6 +10,10 @@ fun generatePhotoAltDescription(photoId: String): String {
     return "alt description for $photoId"
 }
 
+fun generateIndexedPhotoAltDescription(photoId: String, index: Int): String {
+    return "alt description for ${generateIndexedPhotoId(photoId, index)}"
+}
+
 fun generateExif(): Exif {
     return Exif(
         brand = TestDataConstants.DEMO_EXIF_BRAND,
