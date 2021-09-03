@@ -12,7 +12,7 @@ import dagger.android.DaggerApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, FakeUnsplashModule::class, ActivityBuilder::class])
+@Component(modules = [AndroidInjectionModule::class, FakeUnsplashModule::class, ActivityBuilder::class, FragmentBuilder::class])
 interface AppTestComponent : AndroidInjector<DaggerApplication> {
     @Component.Builder
     interface Builder {
