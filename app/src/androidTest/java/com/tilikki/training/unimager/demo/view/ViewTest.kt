@@ -1,3 +1,10 @@
 package com.tilikki.training.unimager.demo.view
 
-interface ViewTest
+import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
+
+interface ViewTest {
+    fun getContext(): Context {
+        return InstrumentationRegistry.getInstrumentation().targetContext
+    }
+}

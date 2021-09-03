@@ -18,7 +18,7 @@ import com.tilikki.training.unimager.demo.datasets.generatePhotoAltDescription
 import com.tilikki.training.unimager.demo.util.RecyclerViewItemCountAssertion
 import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.view.ViewTest
-import org.hamcrest.Matchers.not
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,7 +45,7 @@ class MainActivityTest : ViewTest {
     }
 
     @Test
-    fun search() {
+    fun search_success() {
         val scenario = ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.rv_photos_grid))
             .check(doesNotExist())

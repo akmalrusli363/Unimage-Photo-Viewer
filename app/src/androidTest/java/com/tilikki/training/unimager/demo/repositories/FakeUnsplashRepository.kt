@@ -36,14 +36,24 @@ open class FakeUnsplashRepository @Inject constructor() : UnsplashRepository {
 
     override fun getUserProfile(username: String): Observable<User> {
         return returnDataOrError {
-            val userData = NetworkTestDataSet.generateSampleUserData(username)
+            val userData = if (username == TestDataConstants.DEMO_USERNAME_NO_PHOTO)
+                NetworkTestDataSet.generateNewUserData(username)
+            else NetworkTestDataSet.generateSampleUserData(username)
             Observable.just(userData.toDomainEntityUser())
         }
     }
 
     override fun getUserPhotos(username: String): Observable<List<Photo>> {
+        return getUserPhotos(username, TestDataConstants.DEMO_USER_TOTAL_PHOTOS)
+    }
+
+    fun getUserPhotos(username: String, numOfPhotos: Int): Observable<List<Photo>> {
         return returnListOrEmptyOrError {
-            val userPhotos = NetworkTestDataSet.generateSamplePhotoDataList(username)
+            val userPhotos = NetworkTestDataSet.generateSamplePhotoDataList(
+                photoId = username,
+                numOfData = numOfPhotos,
+                username = username
+            )
             Observable.just(userPhotos.asDomainEntityPhotos())
         }
     }

@@ -1,6 +1,5 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
-import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -17,7 +16,8 @@ import com.tilikki.training.unimager.demo.util.NestedScrollViewScrollAction
 import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.util.isVisible
 import com.tilikki.training.unimager.demo.view.ViewTest
-import org.hamcrest.Matchers.not
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -119,7 +119,6 @@ class PhotoDetailActivityTest : ViewTest {
             .check(isVisible())
             .check(matches(isDisplayed()))
         Espresso.onView(withId(R.id.tv_exif_brand))
-//            .check(matches(isDisplayed()))
             .check(matches(withText(TestDataConstants.DEMO_EXIF_BRAND)))
         Thread.sleep(1000)
         scenario.close()
@@ -131,10 +130,6 @@ class PhotoDetailActivityTest : ViewTest {
         Espresso.onView(withId(R.id.iv_photo_image))
             .check(matches(not(isDisplayed())))
         scenario.close()
-    }
-
-    private fun getContext(): Context {
-        return InstrumentationRegistry.getInstrumentation().targetContext
     }
 
     private fun getDisplayFullName(photoDetail: PhotoDetail): String {
