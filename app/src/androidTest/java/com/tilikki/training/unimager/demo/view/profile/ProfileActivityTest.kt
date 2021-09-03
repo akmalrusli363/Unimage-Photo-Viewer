@@ -9,9 +9,7 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
 import com.tilikki.training.unimager.demo.R
-import com.tilikki.training.unimager.demo.core.UnimageTestApplication
 import com.tilikki.training.unimager.demo.datasets.EntityTestDataSet
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoAltDescription
@@ -21,10 +19,8 @@ import com.tilikki.training.unimager.demo.view.ViewTest
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
 @MediumTest
@@ -34,16 +30,6 @@ class ProfileActivityTest : ViewTest {
     private val sampleUsername = TestDataConstants.DEMO_USERNAME
     private val sampleUsernameNoPhoto = TestDataConstants.DEMO_USERNAME_NO_PHOTO
     private val sampleUsernameError = TestDataConstants.DEMO_USERNAME_ERROR
-
-    @Before
-    fun init() {
-        val app = InstrumentationRegistry
-            .getInstrumentation()
-            .targetContext
-            .applicationContext as UnimageTestApplication
-        app.component.inject(this)
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun hasUsername_fetch_success() {

@@ -3,7 +3,6 @@ package com.tilikki.training.unimager.demo.injector.component
 import android.app.Application
 import com.tilikki.training.unimager.demo.core.UnimageApplication
 import com.tilikki.training.unimager.demo.injector.module.FakeUnsplashModule
-import com.tilikki.training.unimager.demo.view.ViewTest
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -24,7 +23,5 @@ interface AppTestComponent : AndroidInjector<DaggerApplication> {
     override fun inject(instance: DaggerApplication)
 
     fun inject(app: UnimageApplication)
-
-    fun inject(test: ViewTest)
 
 }

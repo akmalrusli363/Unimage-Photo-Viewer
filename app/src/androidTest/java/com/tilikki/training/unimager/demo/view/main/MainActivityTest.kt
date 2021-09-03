@@ -9,9 +9,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
 import com.tilikki.training.unimager.demo.R
-import com.tilikki.training.unimager.demo.core.UnimageTestApplication
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoId
 import com.tilikki.training.unimager.demo.datasets.generatePhotoAltDescription
@@ -19,10 +17,8 @@ import com.tilikki.training.unimager.demo.util.RecyclerViewItemCountAssertion
 import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.view.ViewTest
 import org.hamcrest.CoreMatchers.not
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
@@ -33,16 +29,6 @@ class MainActivityTest : ViewTest {
     private val lastPhotoIndex = TestDataConstants.MAX_ITEMS_PER_PAGE
     private val firstPhotoId = generateIndexedPhotoId(sampleSearchQuery, firstPhotoIndex)
     private val lastPhotoId = generateIndexedPhotoId(sampleSearchQuery, lastPhotoIndex)
-
-    @Before
-    fun init() {
-        val app = InstrumentationRegistry
-            .getInstrumentation()
-            .targetContext
-            .applicationContext as UnimageTestApplication
-        app.component.inject(this)
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun search_success() {

@@ -5,10 +5,9 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import androidx.test.platform.app.InstrumentationRegistry
 import com.tilikki.training.unimager.demo.R
-import com.tilikki.training.unimager.demo.core.UnimageTestApplication
 import com.tilikki.training.unimager.demo.datasets.EntityTestDataSet
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.model.PhotoDetail
@@ -18,14 +17,11 @@ import com.tilikki.training.unimager.demo.util.isVisible
 import com.tilikki.training.unimager.demo.view.ViewTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
 
 @MediumTest
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(AndroidJUnit4::class)
 class PhotoDetailActivityTest : ViewTest {
 
     private val samplePhotoId = "MyPhoto"
@@ -35,16 +31,6 @@ class PhotoDetailActivityTest : ViewTest {
     private val samplePhotoWithExifId = "MyPhoto-EXIF"
     private val samplePhotoWithExifDetail =
         EntityTestDataSet.generateSampleUserPhotoDetail(samplePhotoWithExifId)
-
-    @Before
-    fun setUp() {
-        val app = InstrumentationRegistry
-            .getInstrumentation()
-            .targetContext
-            .applicationContext as UnimageTestApplication
-        app.component.inject(this)
-        MockitoAnnotations.openMocks(this)
-    }
 
     @Test
     fun hasPhotoId_simple_success() {
