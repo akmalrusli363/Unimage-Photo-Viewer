@@ -18,6 +18,7 @@
     <string name="username_format">%1$s (@%2$s)</string>
     <string name="image_size_format">%1$d x %2$d pixels</string>
     <string name="image_size_full_format">%1$d x %2$d pixels (%3$s)</string>
+    <string name="user_avatar_description">Profile image for %1$s</string>
 
     <string name="error_occurred">An error occurred!</string>
     <string name="no_photos">No photos</string>

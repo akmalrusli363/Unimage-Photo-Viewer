@@ -46,7 +46,18 @@ class ProfileActivity : DaggerAppCompatActivity() {
                 .commit()
         })
         viewModel.isFetching.observe(this, {
-            ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
+            ViewUtility.setVisibility(binding.pbLoading, it)
+            if (it) {
+                ViewUtility.setVisibility(binding.nsvPage, false)
+                ViewUtility.setVisibility(binding.llError, false)
+            }
+        })
+        viewModel.successResponse.observe(this, {
+            it.observeResponseStatus({
+                toggleDataState(true)
+            }, {
+                toggleDataState(false)
+            })
         })
     }
 
@@ -70,12 +81,21 @@ class ProfileActivity : DaggerAppCompatActivity() {
                 user.following.value()
             )
             ImageLoader.loadImage(user.profileImageUrl, ivProfileImage)
+            ivProfileImage.contentDescription = getUserAvatarDescription(user)
         }
         this@ProfileActivity.title = "${user.name} Profile"
     }
 
+    private fun getUserAvatarDescription(user: User): String {
+        return getString(R.string.user_avatar_description, user.username)
+    }
+
     private fun getFromIntent(): String? {
         return intent.getStringExtra(INTENT_URL)
+    }
+
+    private fun toggleDataState(success: Boolean) {
+        ViewUtility.toggleVisibilityPairs(binding.nsvPage, binding.llError, success)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
