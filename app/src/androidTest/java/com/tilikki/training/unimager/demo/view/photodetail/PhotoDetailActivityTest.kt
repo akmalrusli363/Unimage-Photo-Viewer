@@ -119,6 +119,29 @@ class PhotoDetailActivityTest : UnsplashRepoViewTest() {
     }
 
     @Test
+    fun hasPhotoId_abrupt_error() {
+        Mockito.doReturn(
+            FakeRepositorySingleton.errorFakeRepository.getPhotoDetail(sampleErrorPhotoId)
+        ).`when`(fakeRepository).getPhotoDetail(sampleErrorPhotoId)
+
+        val intent = Intent(getContext(), PhotoDetailActivity::class.java).apply {
+            putExtra(PhotoDetailActivity.INTENT_URL, sampleErrorPhotoId)
+        }
+        val scenario = ActivityScenario.launch<PhotoDetailActivity>(intent)
+
+        Thread.sleep(2000)
+
+        Espresso.onView(withId(R.id.nsv_page))
+            .check(matches(CoreMatchers.not(isDisplayed())))
+            .check(isGone())
+        Espresso.onView(withId(R.id.ll_error))
+            .check(matches(isDisplayed()))
+
+        scenario.close()
+        Mockito.verify(fakeRepository).getPhotoDetail(sampleErrorPhotoId)
+    }
+
+    @Test
     fun noPhotoId_leave_success() {
         val scenario = ActivityScenario.launch(PhotoDetailActivity::class.java)
         MatcherAssert.assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
