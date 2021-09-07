@@ -49,7 +49,18 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
             bindPhotoDetails(it)
         })
         viewModel.isFetching.observe(this, {
-            ViewUtility.toggleVisibilityPairs(binding.pbLoading, binding.nsvPage, it)
+            ViewUtility.setVisibility(binding.pbLoading, it)
+            if (it) {
+                ViewUtility.setVisibility(binding.nsvPage, false)
+                ViewUtility.setVisibility(binding.llError, false)
+            }
+        })
+        viewModel.successResponse.observe(this, {
+            it.observeResponseStatus({
+                toggleDataState(true)
+            }, {
+                toggleDataState(false)
+            })
         })
     }
 
@@ -83,6 +94,10 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
                 visitLink(this@PhotoDetailActivity, Uri.parse(photo.htmlUrl))
             }
         }
+    }
+
+    private fun toggleDataState(success: Boolean) {
+        ViewUtility.toggleVisibilityPairs(binding.nsvPage, binding.llError, success)
     }
 
     private fun getDisplayFullName(user: User): String {

@@ -203,5 +203,24 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ll_error"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_error_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_large"
+                android:drawablePadding="@dimen/space_medium"
+                android:text="@string/error_occurred"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                app:drawableTopCompat="@drawable/ic_general_error" />
+        </LinearLayout>
     </FrameLayout>
 </layout>
