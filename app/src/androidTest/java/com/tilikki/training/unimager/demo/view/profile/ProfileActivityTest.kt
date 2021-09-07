@@ -16,26 +16,22 @@ import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoAltDescri
 import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.*
-import com.tilikki.training.unimager.demo.view.ViewTest
+import com.tilikki.training.unimager.demo.view.UnsplashRepoViewTest
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
 
 @MediumTest
 @RunWith(MockitoJUnitRunner::class)
-class ProfileActivityTest : ViewTest {
+class ProfileActivityTest : UnsplashRepoViewTest() {
 
     private val sampleUsername = TestDataConstants.DEMO_USERNAME
     private val sampleUsernameNoPhoto = TestDataConstants.DEMO_USERNAME_NO_PHOTO
     private val sampleUsernameError = TestDataConstants.DEMO_USERNAME_ERROR
-
-    @Spy
-    private val fakeRepository = FakeRepositorySingleton.fakeUnsplashRepository
 
     @Test
     fun hasUsername_fetch_success() {
@@ -95,6 +91,8 @@ class ProfileActivityTest : ViewTest {
         ).check(isVisible())
 
         scenario.close()
+        Mockito.verify(fakeRepository).getUserProfile(sampleUsername)
+        Mockito.verify(fakeRepository).getUserPhotos(sampleUsername)
     }
 
     @Test
@@ -146,6 +144,8 @@ class ProfileActivityTest : ViewTest {
             .check(matches(isDisplayed()))
 
         scenario.close()
+        Mockito.verify(fakeRepository).getUserProfile(sampleUsernameNoPhoto)
+        Mockito.verify(fakeRepository).getUserPhotos(sampleUsernameNoPhoto)
     }
 
     @Test
@@ -168,6 +168,8 @@ class ProfileActivityTest : ViewTest {
             .check(matches(isDisplayed()))
 
         scenario.close()
+        Mockito.verify(fakeRepository).getUserProfile(sampleUsernameError)
+        Mockito.verify(fakeRepository).getUserPhotos(sampleUsernameError)
     }
 
     private fun ViewInteraction.checkForCriteria(vararg viewMatchers: Matcher<View>): ViewInteraction {

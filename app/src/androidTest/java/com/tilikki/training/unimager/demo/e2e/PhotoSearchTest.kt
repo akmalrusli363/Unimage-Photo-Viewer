@@ -16,11 +16,10 @@ import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoId
 import com.tilikki.training.unimager.demo.datasets.generatePhotoAltDescription
-import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
 import com.tilikki.training.unimager.demo.util.RecyclerViewItemCountAssertion
 import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.util.typeSearchViewText
-import com.tilikki.training.unimager.demo.view.ViewTest
+import com.tilikki.training.unimager.demo.view.UnsplashRepoViewTest
 import com.tilikki.training.unimager.demo.view.main.MainActivity
 import com.tilikki.training.unimager.demo.view.photodetail.PhotoDetailActivity
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
@@ -31,20 +30,16 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.mockito.Spy
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-class PhotoSearchTest : ViewTest {
+class PhotoSearchTest : UnsplashRepoViewTest() {
 
     private val firstSearchQuery = "flower"
     private val secondSearchQuery = "rainbow"
     private val firstPhotoIndex = 1
     private val firstSearchPhotoId = generateIndexedPhotoId(firstSearchQuery, firstPhotoIndex)
     private val secondSearchPhotoId = generateIndexedPhotoId(secondSearchQuery, firstPhotoIndex)
-
-    @Spy
-    private val fakeRepository = FakeRepositorySingleton.fakeUnsplashRepository
 
     @Before
     fun setUp() {
@@ -67,6 +62,7 @@ class PhotoSearchTest : ViewTest {
             .perform(typeText("$firstSearchQuery\n"))
 
         Thread.sleep(2000)
+        Mockito.verify(fakeRepository).getPhotos(firstSearchQuery)
 
         val firstPhotoAltDescription = generatePhotoAltDescription(firstSearchPhotoId)
         Espresso.onView(withId(R.id.ll_empty))
@@ -86,6 +82,7 @@ class PhotoSearchTest : ViewTest {
                 hasExtra(PhotoDetailActivity.INTENT_URL, firstSearchPhotoId)
             )
         )
+        Mockito.verify(fakeRepository).getPhotoDetail(firstSearchPhotoId)
 
         val username = TestDataConstants.DEMO_USERNAME
         Espresso.onView(withId(R.id.iv_photo_image))
@@ -107,6 +104,7 @@ class PhotoSearchTest : ViewTest {
                 hasExtra(ProfileActivity.INTENT_URL, username)
             )
         )
+        Mockito.verify(fakeRepository).getUserProfile(username)
 
         Espresso.onView(withId(R.id.tv_username))
             .check(matches(isDisplayed()))
@@ -149,6 +147,7 @@ class PhotoSearchTest : ViewTest {
             .perform(typeText("$firstSearchQuery\n"))
 
         Thread.sleep(2000)
+        Mockito.verify(fakeRepository).getPhotos(firstSearchQuery)
 
         val firstPhotoAltDescription = generatePhotoAltDescription(firstSearchPhotoId)
         Espresso.onView(withId(R.id.ll_empty))
@@ -168,6 +167,7 @@ class PhotoSearchTest : ViewTest {
                 hasExtra(PhotoDetailActivity.INTENT_URL, firstSearchPhotoId)
             )
         )
+        Mockito.verify(fakeRepository).getPhotoDetail(firstSearchPhotoId)
 
         Espresso.onView(withId(R.id.iv_photo_image))
             .check(matches(isDisplayed()))
@@ -187,6 +187,7 @@ class PhotoSearchTest : ViewTest {
             .perform(typeSearchViewText(secondSearchQuery))
 
         Thread.sleep(2000)
+        Mockito.verify(fakeRepository).getPhotos(secondSearchQuery)
 
         val secondPhotoAltDescription = generatePhotoAltDescription(secondSearchPhotoId)
         Espresso.onView(withId(R.id.rv_photos_grid))
@@ -203,6 +204,7 @@ class PhotoSearchTest : ViewTest {
                 hasExtra(PhotoDetailActivity.INTENT_URL, secondSearchPhotoId)
             )
         )
+        Mockito.verify(fakeRepository).getPhotoDetail(secondSearchPhotoId)
 
         Espresso.onView(withId(R.id.iv_photo_image))
             .check(matches(isDisplayed()))
@@ -215,12 +217,7 @@ class PhotoSearchTest : ViewTest {
             .check(matches(isDisplayed()))
             .check(
                 matches(
-                    withContentDescription(
-                        getDisplayFullName(
-                            secondUsername,
-                            secondUsername
-                        )
-                    )
+                    withContentDescription(getDisplayFullName(secondUsername, secondUsername))
                 )
             )
 

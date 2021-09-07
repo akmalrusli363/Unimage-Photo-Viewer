@@ -16,25 +16,21 @@ import com.tilikki.training.unimager.demo.datasets.generatePhotoAltDescription
 import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
 import com.tilikki.training.unimager.demo.util.RecyclerViewItemCountAssertion
 import com.tilikki.training.unimager.demo.util.isGone
-import com.tilikki.training.unimager.demo.view.ViewTest
+import com.tilikki.training.unimager.demo.view.UnsplashRepoViewTest
 import org.hamcrest.CoreMatchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import org.mockito.Spy
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest : ViewTest {
+class MainActivityTest : UnsplashRepoViewTest() {
 
     private val sampleSearchQuery = "animals"
     private val firstPhotoIndex = 1
     private val lastPhotoIndex = TestDataConstants.MAX_ITEMS_PER_PAGE
     private val firstPhotoId = generateIndexedPhotoId(sampleSearchQuery, firstPhotoIndex)
     private val lastPhotoId = generateIndexedPhotoId(sampleSearchQuery, lastPhotoIndex)
-
-    @Spy
-    private val fakeRepository = FakeRepositorySingleton.fakeUnsplashRepository
 
     @Test
     fun search_success() {
@@ -62,6 +58,7 @@ class MainActivityTest : ViewTest {
         onView(withContentDescription(generatePhotoAltDescription(lastPhotoId)))
             .check(matches(isDisplayed()))
         scenario.close()
+        Mockito.verify(fakeRepository).getPhotos(sampleSearchQuery)
     }
 
     @Test
@@ -86,6 +83,7 @@ class MainActivityTest : ViewTest {
         onView(withId(R.id.ll_empty))
             .check(matches(isDisplayed()))
         scenario.close()
+        Mockito.verify(fakeRepository).getPhotos(query)
     }
 
     @Test
@@ -109,6 +107,7 @@ class MainActivityTest : ViewTest {
         onView(withId(R.id.ll_error))
             .check(matches(isDisplayed()))
         scenario.close()
+        Mockito.verify(fakeRepository).getPhotos(query)
     }
 
 }

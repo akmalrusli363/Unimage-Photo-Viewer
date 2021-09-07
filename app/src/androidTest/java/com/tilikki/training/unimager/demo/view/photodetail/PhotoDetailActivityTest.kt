@@ -11,19 +11,22 @@ import androidx.test.filters.MediumTest
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.datasets.EntityTestDataSet
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
+import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.util.NestedScrollViewScrollAction
 import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.util.isVisible
-import com.tilikki.training.unimager.demo.view.ViewTest
+import com.tilikki.training.unimager.demo.view.UnsplashRepoViewTest
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-class PhotoDetailActivityTest : ViewTest {
+class PhotoDetailActivityTest : UnsplashRepoViewTest() {
 
     private val samplePhotoId = "MyPhoto"
     private val samplePhotoDetail =
@@ -32,6 +35,8 @@ class PhotoDetailActivityTest : ViewTest {
     private val samplePhotoWithExifId = "MyPhoto-EXIF"
     private val samplePhotoWithExifDetail =
         EntityTestDataSet.generateSampleUserPhotoDetail(samplePhotoWithExifId)
+
+    private val sampleErrorPhotoId = "MyPhoto~!3$"
 
     @Test
     fun hasPhotoId_simple_success() {
@@ -66,8 +71,9 @@ class PhotoDetailActivityTest : ViewTest {
             .check(matches(withText(samplePhotoDetail.altDescription)))
         Espresso.onView(withId(R.id.ll_exif))
             .check(isGone())
-        Thread.sleep(1000)
+
         scenario.close()
+        Mockito.verify(fakeRepository).getPhotoDetail(samplePhotoId)
     }
 
     @Test
@@ -107,8 +113,9 @@ class PhotoDetailActivityTest : ViewTest {
             .check(matches(isDisplayed()))
         Espresso.onView(withId(R.id.tv_exif_brand))
             .check(matches(withText(TestDataConstants.DEMO_EXIF_BRAND)))
-        Thread.sleep(1000)
+
         scenario.close()
+        Mockito.verify(fakeRepository).getPhotoDetail(samplePhotoWithExifId)
     }
 
     @Test
