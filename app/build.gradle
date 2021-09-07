@@ -118,6 +118,7 @@ dependencies {
     def espresso_version = "3.3.0"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
 
     // Dagger for Android Test
     kaptAndroidTest "com.google.dagger:dagger-android-processor:$dagger_version"
