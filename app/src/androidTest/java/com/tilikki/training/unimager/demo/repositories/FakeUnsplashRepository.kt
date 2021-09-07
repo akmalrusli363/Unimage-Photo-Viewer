@@ -17,8 +17,13 @@ open class FakeUnsplashRepository @Inject constructor() : UnsplashRepository {
     }
 
     override fun getPhotos(query: String): Observable<List<Photo>> {
+        return getPhotos(query, TestDataConstants.DEMO_USERNAME)
+    }
+
+    fun getPhotos(query: String, username: String): Observable<List<Photo>> {
         return returnListOrEmptyOrError(NullPointerException()) {
-            val photoList = NetworkTestDataSet.generateSamplePhotoDataList(query)
+            val photoList =
+                NetworkTestDataSet.generateSamplePhotoDataList(query, username = username)
             Observable.just(photoList.asDomainEntityPhotos())
         }
     }

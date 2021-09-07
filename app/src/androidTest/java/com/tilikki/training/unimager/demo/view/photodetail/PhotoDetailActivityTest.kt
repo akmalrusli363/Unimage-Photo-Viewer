@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -16,7 +17,7 @@ import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.util.isVisible
 import com.tilikki.training.unimager.demo.view.ViewTest
 import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.not
+import org.hamcrest.MatcherAssert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -113,8 +114,7 @@ class PhotoDetailActivityTest : ViewTest {
     @Test
     fun noPhotoId_leave_success() {
         val scenario = ActivityScenario.launch(PhotoDetailActivity::class.java)
-        Espresso.onView(withId(R.id.iv_photo_image))
-            .check(matches(not(isDisplayed())))
+        MatcherAssert.assertThat(scenario.state, `is`(Lifecycle.State.DESTROYED))
         scenario.close()
     }
 

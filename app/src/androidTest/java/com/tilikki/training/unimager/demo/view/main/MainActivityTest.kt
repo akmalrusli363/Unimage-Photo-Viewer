@@ -13,12 +13,15 @@ import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoId
 import com.tilikki.training.unimager.demo.datasets.generatePhotoAltDescription
+import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
 import com.tilikki.training.unimager.demo.util.RecyclerViewItemCountAssertion
 import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.view.ViewTest
 import org.hamcrest.CoreMatchers.not
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.Spy
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
@@ -29,6 +32,9 @@ class MainActivityTest : ViewTest {
     private val lastPhotoIndex = TestDataConstants.MAX_ITEMS_PER_PAGE
     private val firstPhotoId = generateIndexedPhotoId(sampleSearchQuery, firstPhotoIndex)
     private val lastPhotoId = generateIndexedPhotoId(sampleSearchQuery, lastPhotoIndex)
+
+    @Spy
+    private val fakeRepository = FakeRepositorySingleton.fakeUnsplashRepository
 
     @Test
     fun search_success() {
@@ -60,13 +66,17 @@ class MainActivityTest : ViewTest {
 
     @Test
     fun search_empty_success() {
+        val query = TestDataConstants.DEMO_SEARCH_EMPTY
+        Mockito.doReturn(FakeRepositorySingleton.emptyFakeRepository.getPhotos(query))
+            .`when`(fakeRepository).getPhotos(query)
+
         val scenario = ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.rv_photos_grid))
             .check(doesNotExist())
         onView(withId(R.id.ll_empty))
             .check(doesNotExist())
         onView(withId(R.id.sv_photo_search))
-            .perform(ViewActions.typeText("${TestDataConstants.DEMO_SEARCH_EMPTY}\n"))
+            .perform(ViewActions.typeText("$query\n"))
 
         Thread.sleep(3000)
 
@@ -80,13 +90,17 @@ class MainActivityTest : ViewTest {
 
     @Test
     fun search_abrupt_returnError() {
+        val query = TestDataConstants.DEMO_SEARCH_ERROR
+        Mockito.doReturn(FakeRepositorySingleton.errorFakeRepository.getPhotos(query))
+            .`when`(fakeRepository).getPhotos(query)
+
         val scenario = ActivityScenario.launch(MainActivity::class.java)
         onView(withId(R.id.rv_photos_grid))
             .check(doesNotExist())
         onView(withId(R.id.ll_empty))
             .check(doesNotExist())
         onView(withId(R.id.sv_photo_search))
-            .perform(ViewActions.typeText("${TestDataConstants.DEMO_SEARCH_ERROR}\n"))
+            .perform(ViewActions.typeText("$query\n"))
 
         Thread.sleep(3000)
 

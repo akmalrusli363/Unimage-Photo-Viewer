@@ -13,6 +13,7 @@ import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.datasets.EntityTestDataSet
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoAltDescription
+import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.util.*
 import com.tilikki.training.unimager.demo.view.ViewTest
@@ -21,6 +22,8 @@ import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.Spy
 import org.mockito.junit.MockitoJUnitRunner
 
 @MediumTest
@@ -31,8 +34,14 @@ class ProfileActivityTest : ViewTest {
     private val sampleUsernameNoPhoto = TestDataConstants.DEMO_USERNAME_NO_PHOTO
     private val sampleUsernameError = TestDataConstants.DEMO_USERNAME_ERROR
 
+    @Spy
+    private val fakeRepository = FakeRepositorySingleton.fakeUnsplashRepository
+
     @Test
     fun hasUsername_fetch_success() {
+        Mockito.doReturn(fakeRepository.getUserPhotos(sampleUsername, 15))
+            .`when`(fakeRepository).getUserPhotos(sampleUsername)
+
         val intent = Intent(getContext(), ProfileActivity::class.java).apply {
             putExtra(ProfileActivity.INTENT_URL, sampleUsername)
         }
@@ -90,6 +99,9 @@ class ProfileActivityTest : ViewTest {
 
     @Test
     fun hasUsername_fetchNoPhotos_success() {
+        Mockito.doReturn(fakeRepository.getUserPhotos(sampleUsernameNoPhoto, 0))
+            .`when`(fakeRepository).getUserPhotos(sampleUsernameNoPhoto)
+
         val intent = Intent(getContext(), ProfileActivity::class.java).apply {
             putExtra(ProfileActivity.INTENT_URL, sampleUsernameNoPhoto)
         }
@@ -98,7 +110,6 @@ class ProfileActivityTest : ViewTest {
 
         Thread.sleep(2000)
 
-        val totalPhotos = TestDataConstants.DEMO_USER_NO_PHOTOS
         sampleUserProfile.run {
             onView(withId(R.id.iv_profile_image))
                 .checkForCriteria(
@@ -111,7 +122,7 @@ class ProfileActivityTest : ViewTest {
             onView(withId(R.id.tv_photos))
                 .checkForCriteria(
                     isDisplayed(),
-                    withText(formatPluralText(R.plurals.total_photos_format, totalPhotos))
+                    withText(formatPluralText(R.plurals.total_photos_format, 0))
                 )
             onView(withId(R.id.tv_followers))
                 .checkForCriteria(
@@ -139,6 +150,10 @@ class ProfileActivityTest : ViewTest {
 
     @Test
     fun hasUsername_abrupt_error() {
+        Mockito.doReturn(
+            FakeRepositorySingleton.errorFakeRepository.getUserPhotos(sampleUsernameError)
+        ).`when`(fakeRepository).getUserPhotos(sampleUsernameError)
+
         val intent = Intent(getContext(), ProfileActivity::class.java).apply {
             putExtra(ProfileActivity.INTENT_URL, sampleUsernameError)
         }

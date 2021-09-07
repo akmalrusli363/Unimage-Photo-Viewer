@@ -27,9 +27,9 @@ object TestDataConstants {
     const val DEMO_USER_FOLLOWERS = 10
     const val DEMO_USER_TOTAL_PHOTOS = 15
 
+    const val DEMO_USERNAME_ALT = "Sean PacMan"
     const val DEMO_USERNAME_NO_PHOTO = "new_user"
     const val DEMO_USERNAME_ERROR = "user-$~#!"
-    const val DEMO_USER_NO_PHOTOS = 0
 
     const val MAX_ITEMS_PER_PAGE = 10
 
