@@ -105,6 +105,7 @@ class PhotoSearchTest : UnsplashRepoViewTest() {
             )
         )
         Mockito.verify(fakeRepository).getUserProfile(username)
+        Mockito.verify(fakeRepository).getUserPhotos(username)
 
         Espresso.onView(withId(R.id.tv_username))
             .check(matches(isDisplayed()))
