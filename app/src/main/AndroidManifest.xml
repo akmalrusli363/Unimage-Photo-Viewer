@@ -15,7 +15,9 @@
         android:theme="@style/Theme.UnimagePhotoViewer">
         <activity android:name=".view.profile.ProfileActivity" />
         <activity android:name=".view.photodetail.PhotoDetailActivity" />
-        <activity android:name=".view.main.MainActivity">
+        <activity
+            android:name=".view.main.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
