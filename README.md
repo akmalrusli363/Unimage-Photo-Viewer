@@ -150,9 +150,11 @@ This project's referred API could be used to customize your own project & featur
 
 Also this project need to be improved as follows:
 
-- [ ] **Android Injector**, as a alternative to complex *Dagger* dependency injection.
-- [ ] **Fragment** for displaying about this project, displays full photo size, pagination, or filter photo results.
-- [ ] **Unit testing**, especially for UI and API fetches, to improve testability and stability of the application.
+- [x] **Android Injector**, as a alternative to complex *Dagger* dependency injection.
+- [x] **Fragment** for displaying about this project, displays full photo size, pagination, or
+  filter photo results.
+- [x] **Unit testing**, especially for UI and API fetches, to improve testability and stability of
+  the application.
 
 Sometimes, the project may able to add more additional/optional features such as:
 
@@ -183,6 +185,20 @@ NOTE: These additional/optional features are based on my suggestion. Feel free t
 - AndroidX Room (`androidx.room`)
   - Room Runtime
   - Room RxJava2 Adapter
+
+### Testing Libraries
+
+- AndroidX Test (`androidx.test`)
+- Android Architecture Test (`androidx.arch.core:core-testing`)
+- Android Fragment Test (`androidx.fragment:fragment-testing`)
+- Espresso (`androidx.test.espresso`)
+  - `espresso-core`
+  - `espresso-contrib`
+  - `espresso-intents`
+- Mockito (`org.mockito`)
+  - Mockito Core
+  - Mockito Kotlin
+  - Mockito Android
 
 ### External Libraries
 
