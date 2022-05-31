@@ -2,7 +2,6 @@ package com.tilikki.training.unimager.demo.testUtility
 
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -60,11 +59,4 @@ class ClassAnnotationCheckerTest {
         )
         Assert.assertTrue(classChecker.hasRunWithAnnotationParameter(JUnit4::class))
     }
-
-    private abstract class MyUnitTest
-
-    @RunWith(JUnit4::class)
-    private class DemoJUnit4UnitTest : MyUnitTest()
-
-    private class DemoNoRunWithUnitTest : MyUnitTest()
 }
