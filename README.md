@@ -14,13 +14,13 @@
 - Search for collections
 - and many more...
 
-To be noted, the Unsplash API uses ***OAuth 2.0 Authentication** (Bearer)* where the user can obtain the **OAuth's access token** by taking the app's **Access Key**, **Secret Key**, and **Redirect URI** from Unsplash Developer App's page. You also need to be registered on Unsplash to create your application first before proceeding OAuth access authentication on your HTTP Client.
+To be noted, the Unsplash API uses _**OAuth 2.0 Authentication** (Bearer)_ where the user can obtain the **OAuth's access token** by taking the app's **Access Key**, **Secret Key**, and **Redirect URI** from Unsplash Developer App's page. You also need to be registered on Unsplash to create your application first before proceeding OAuth access authentication on your HTTP Client.
 
 
 
 ## How to install & use?
 
-To enable developers use this project, you need to clone this project, create a file named `apikey.properties` (on project-root level) where the file content itself includes the **Access Key**, **Secret Key, and *****OAuth access token***.
+To enable developers use this project, you need to clone this project, create a file named `apikey.properties` (on project-root level) where the file content itself includes the **Access Key**, **Secret Key**, and ***OAuth access token***.
 
 > **NOTE**: You need to include `CLIENT_ID`, `CLIENT_SECRET`, and `ACCESS_TOKEN` on `apikey.properties`, but for `CLIENT_ID` and `CLIENT_SECRET` are optional (required for *non-OAuth* authorized access).
 
