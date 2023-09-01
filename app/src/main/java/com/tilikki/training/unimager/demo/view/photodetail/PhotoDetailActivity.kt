@@ -18,7 +18,6 @@ import com.tilikki.training.unimager.demo.util.formatAsString
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
-import java.util.*
 import javax.inject.Inject
 
 class PhotoDetailActivity : DaggerAppCompatActivity() {
@@ -131,7 +130,7 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
         binding.llExif.run {
             ViewUtility.setVisibility(this.root, !(exifDetail == null || exifDetail.isEmpty()))
             exifDetail?.let {
-                ViewUtility.setProperty(tvLabelExifAperture, tvExifAperture, it.aperture)
+                ViewUtility.setProperty(tvLabelExifAperture, tvExifAperture, "f/${it.aperture}")
                 ViewUtility.setProperty(tvLabelExifBrand, tvExifBrand, it.brand)
                 ViewUtility.setProperty(tvLabelExifModel, tvExifModel, it.model)
                 ViewUtility.setProperty(
@@ -140,7 +139,7 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
                     it.exposureTime
                 )
                 ViewUtility.setProperty(tvLabelExifIso, tvExifIso, it.iso)
-                ViewUtility.setProperty(tvLabelExifFocal, tvExifFocal, it.focalLength)
+                ViewUtility.setProperty(tvLabelExifFocal, tvExifFocal, "${it.focalLength}mm")
             }
         }
     }
