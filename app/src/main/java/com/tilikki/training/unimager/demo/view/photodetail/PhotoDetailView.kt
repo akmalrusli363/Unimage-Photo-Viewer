@@ -1,38 +1,77 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
-import androidx.compose.foundation.Image
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.model.ExifDetail
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
+import com.tilikki.training.unimager.demo.ui.theme.AppTheme
+import com.tilikki.training.unimager.demo.ui.theme.Pink
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
+import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
 import com.tilikki.training.unimager.demo.util.formatAsString
 import com.tilikki.training.unimager.demo.view.compose.BigParameterField
+import com.tilikki.training.unimager.demo.view.compose.ComposeHelper
+import com.tilikki.training.unimager.demo.view.compose.ErrorScreen
 import com.tilikki.training.unimager.demo.view.compose.HeadingField
 import com.tilikki.training.unimager.demo.view.compose.ParameterField
 import com.tilikki.training.unimager.demo.view.compose.ParametricHeadingField
+import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
+
+@Composable
+fun PhotoDetailScreen(viewModel: PhotoDetailViewModel) {
+    val photoDetail by viewModel.photo.observeAsState()
+    val fetching by viewModel.isFetching.observeAsState()
+    val success by viewModel.successResponse.observeAsState()
+    if (fetching == true) {
+        CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+    } else {
+        if (success?.success == true && photoDetail != null) {
+            photoDetail?.let {
+                PhotoDetailView(photo = it)
+            }
+        } else {
+            ErrorScreen()
+        }
+    }
+}
 
 @Composable
 fun PhotoDetailView(photo: PhotoDetail) {
@@ -40,27 +79,47 @@ fun PhotoDetailView(photo: PhotoDetail) {
         //TODO: full screen image
         AsyncImage(
             model = photo.fullSizeUrl,
-            placeholder = ColorPainter(Color.Gray),
+            placeholder = painterResource(id = R.drawable.ic_image),
             contentDescription = photo.description,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .defaultMinSize(minHeight = 80.dp)
-                .padding(SizeUnit.SPACE_SMALL),
+                .defaultMinSize(minHeight = 80.dp),
             contentScale = ContentScale.FillWidth
         )
         //TODO: like, download, view in web
+        PhotoDetailActions(photo)
         //TODO: profile
-ProfileInfo(user = User("abz", "@username", "my username is long", "", "", "", "", 0, 0, 0))
-        //TODO: published date
-        BigParameterField(field = "Published Date", value = photo.createdAt.formatAsString())
-        //TODO: description
-        ParametricHeadingField(title = "Description", value = photo.description)
-        //TODO: alt description
-        ParametricHeadingField(title = "Alt Description", value = photo.altDescription)
-        //TODO: image resolution
-        HeadingField(title = "Image Resolution") {
-            Text("${photo.width} x ${photo.height} pixels (${photo.getOrientation()})")
+        ProfileInfo(user = photo.user, modifier = Modifier.padding(SizeUnit.SPACE_SMALL))
+        Column(modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM)) {
+            //TODO: published date
+            BigParameterField(
+                field = stringResource(id = R.string.published_date),
+                value = photo.createdAt.formatAsString(),
+                modifier = Modifier.padding(vertical = SizeUnit.SPACE_MEDIUM)
+            )
+            //TODO: description
+            ParametricHeadingField(
+                title = stringResource(id = R.string.description),
+                value = photo.description,
+                modifier = Modifier.padding(vertical = SizeUnit.SPACE_MEDIUM)
+            )
+            //TODO: alt description
+            ParametricHeadingField(
+                title = stringResource(id = R.string.alt_description),
+                value = photo.altDescription,
+                modifier = Modifier.padding(vertical = SizeUnit.SPACE_MEDIUM)
+            )
+            //TODO: image resolution
+            HeadingField(title = stringResource(id = R.string.image_resolution)) {
+                Text(
+                    stringResource(
+                        id = R.string.image_size_full_format,
+                        photo.width,
+                        photo.height,
+                        photo.getOrientation()
+                    )
+                )
+            }
         }
         //TODO: EXIF info
         if (!(photo.exif == null || photo.exif.isEmpty())) {
@@ -69,54 +128,152 @@ ProfileInfo(user = User("abz", "@username", "my username is long", "", "", "", "
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun ExifInfo(exif: ExifDetail) {
-    HeadingField(title = "EXIF Info", modifier = Modifier.padding(SizeUnit.SPACE_SMALL)) {
-        ParameterField(field = "Brand", value = exif.brand)
-        ParameterField(field = "Model", value = exif.model)
-        ParameterField(field = "Exposure Time", value = exif.exposureTime)
-        ParameterField(field = "Aperture", value = "f/${exif.aperture}")
-        ParameterField(field = "Focal Length", value = "${exif.focalLength} mm")
-        ParameterField(field = "ISO", value = exif.iso.toString())
+private fun PreviewPhotoDetailView() {
+    AppTheme {
+        PhotoDetailView(
+            photo = SampleComposePreviewData.createPhotoDetail(
+                photo = SampleComposePreviewData.generateSamplePhotoData("photoId"),
+                user = SampleComposePreviewData.generateSampleUserData()
+            )
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun PreviewExifInfo() {
-    ExifInfo(ExifDetail("SONI", "Soni A48", "1/10000", 1.1f, 69.0f, 100))
+private fun PreviewPhotoDetailViewWithExif() {
+    PhotoDetailView(
+        photo = SampleComposePreviewData.createPhotoDetail(
+            photo = SampleComposePreviewData.generateSamplePhotoData("photoId"),
+            user = SampleComposePreviewData.generateSampleUserData(),
+            exif = ExifDetail("SONI", "Soni A48", "1/10000", 1.1f, 69.0f, 100)
+        )
+    )
 }
 
 @Composable
-fun ProfileInfo(user: User) {
+fun PhotoDetailActions(photo: PhotoDetail, context: Context = LocalContext.current) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(SizeUnit.SPACE_MEDIUM),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(SizeUnit.SPACE_MEDIUM)
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_person),
-            contentDescription = "${user.name} (${user.username})",
-            modifier = Modifier
-                .width(64.dp)
-                .aspectRatio(1f)
-                .background(Color.DarkGray)
+        Icon(
+            painter = painterResource(id = R.drawable.ic_favorite),
+            tint = Pink,
+            contentDescription = null,
+            modifier = Modifier.padding(SizeUnit.SPACE_SMALL)
         )
-        Column(Modifier.padding(start = SizeUnit.SPACE_LARGE)) {
-            Text(
-                user.name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(bottom = SizeUnit.SPACE_SMALL)
+        Text(
+            photo.likes.toString(),
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(SizeUnit.SPACE_SMALL)
+        )
+        Spacer(Modifier.weight(1f))
+        Button(
+            onClick = { ComposeHelper.visitLink(context, Uri.parse(photo.fullSizeUrl)) },
+            modifier = Modifier
+                .padding(SizeUnit.SPACE_SMALL)
+                .size(40.dp),
+            contentPadding = PaddingValues(horizontal = 0.dp, vertical = SizeUnit.SPACE_SMALL),
+            colors = ButtonDefaults.outlinedButtonColors()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_download),
+                contentDescription = stringResource(id = R.string.download)
             )
-            Text(user.username)
+        }
+        Button(
+            onClick = { ComposeHelper.visitLink(context, Uri.parse(photo.htmlUrl)) },
+            modifier = Modifier
+                .padding(SizeUnit.SPACE_SMALL)
+                .height(40.dp)
+        ) {
+            Text(stringResource(id = R.string.view_in_web).uppercase())
+        }
+    }
+}
+
+@Preview(widthDp = 360)
+@Composable
+private fun PreviewPhotoDetailActions() {
+    PhotoDetailActions(
+        photo = SampleComposePreviewData.createPhotoDetail(
+            photo = SampleComposePreviewData.generateSamplePhotoData("photoId"),
+            user = SampleComposePreviewData.generateSampleUserData()
+        )
+    )
+}
+
+@Composable
+fun ExifInfo(exif: ExifDetail) {
+    HeadingField(title = stringResource(id = R.string.exif), modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM)) {
+        Column {
+            ParameterField(fieldRes = R.string.exif_brand, value = exif.brand)
+            ParameterField(fieldRes = R.string.exif_model, value = exif.model)
+            ParameterField(fieldRes = R.string.exif_exposure_time, value = exif.exposureTime)
+            ParameterField(fieldRes = R.string.exif_aperture, value = exif.aperture?.let { "f/$it" })
+            ParameterField(fieldRes = R.string.exif_focal_length, value = exif.focalLength?.let { "$it mm" })
+            ParameterField(fieldRes = R.string.exif_iso, value = exif.iso)
         }
     }
 }
 
 @Preview
 @Composable
-fun PreviewProfileInfo() {
+private fun PreviewExifInfo() {
+    ExifInfo(ExifDetail("SONI", "Soni A48", "1/10000", 1.1f, 69.0f, 100))
+}
+
+@Composable
+fun ProfileInfo(
+    user: User,
+    modifier: Modifier = Modifier,
+    context: Context = LocalContext.current
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(SizeUnit.SPACE_MEDIUM)
+            .clickable {
+                val intent = Intent(context, ProfileActivity::class.java)
+                intent.putExtra(ProfileActivity.INTENT_URL, user.username)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                context.startActivity(intent)
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AsyncImage(
+            model = user.profileImageUrl,
+            placeholder = painterResource(id = R.drawable.ic_person),
+            contentDescription = stringResource(
+                R.string.username_format, user.name, user.username
+            ),
+            modifier = Modifier
+                .width(64.dp)
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.Gray)
+        )
+        Column(Modifier.padding(start = SizeUnit.SPACE_LARGE)) {
+            Text(
+                user.name,
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(bottom = SizeUnit.SPACE_SMALL)
+            )
+            Text(
+                user.username,
+                style = MaterialTheme.typography.subtitle1
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewProfileInfo() {
     ProfileInfo(User("abz", "@username", "my username is long", "", "", "", "", 0, 0, 0))
 }

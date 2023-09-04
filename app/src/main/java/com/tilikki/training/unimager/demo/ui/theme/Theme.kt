@@ -21,16 +21,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 private val DarkColorPalette = darkColors(
-    primary = Yellow400,
-    primaryVariant = Orange700,
-    secondary = PurpleA400,
+    primary = PrimaryDark,
+    primaryVariant = PrimaryVariant,
+    secondary = Secondary,
+    secondaryVariant = SecondaryVariant,
     background = DarkBlack
 )
 
 private val LightColorPalette = lightColors(
-    primary = Orange600,
-    primaryVariant = Orange700,
-    secondary = PurpleA400
+    primary = Primary,
+    primaryVariant = PrimaryVariant,
+    onPrimary = WhiteAlt,
+    secondary = Secondary,
+    secondaryVariant = SecondaryVariant,
 
     /* Other default colors to override
     background = Color.White,
@@ -43,7 +46,7 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun MoviPediaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun AppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
@@ -72,7 +75,7 @@ private fun PreviewLightModeTheme() {
 
 @Composable
 private fun PreviewElement(darkMode: Boolean) {
-    MoviPediaTheme(darkTheme = darkMode) {
+    AppTheme(darkTheme = darkMode) {
         Scaffold(
             topBar = {
                 TopAppBar(

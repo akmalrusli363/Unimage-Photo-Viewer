@@ -1,5 +1,6 @@
 package com.tilikki.training.unimager.demo.view.compose
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,12 +27,10 @@ fun HeadingField(
     Column(modifier.fillMaxWidth()) {
         Text(
             text = title,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
             modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
             style = MaterialTheme.typography.h6
         )
-        Box(modifier = innerModifier) {
+        Box(modifier = innerModifier.padding(SizeUnit.SPACE_SMALL)) {
             contents()
         }
     }
@@ -51,12 +51,11 @@ fun ParametricHeadingField(
 }
 
 @Composable
-fun BigParameterField(field: String, value: String?) {
-    Row {
+fun BigParameterField(field: String, value: String?, modifier: Modifier = Modifier) {
+    Row(modifier) {
         Text(
             text = field,
-            fontWeight = FontWeight.Bold,
-            fontSize = 16.sp,
+            fontSize = 18.sp,
             modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
             style = MaterialTheme.typography.h6
         )
@@ -71,20 +70,28 @@ fun BigParameterField(field: String, value: String?) {
 }
 
 @Composable
-fun ParameterField(field: String, value: String?) {
-    Row {
-        Text(
-            text = field,
-            modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
-            style = MaterialTheme.typography.body1
-        )
-        Text(
-            text = value.orEmpty(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SizeUnit.SPACE_SMALL),
-            textAlign = TextAlign.End,
-        )
+fun ParameterField(@StringRes fieldRes: Int, value: Any?) {
+    ParameterField(field = stringResource(id = fieldRes), value = value)
+}
+
+@Composable
+fun ParameterField(field: String, value: Any?) {
+    if (value != null && value.toString().isNotBlank()) {
+        Row {
+            Text(
+                text = field,
+                modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
+                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.body1
+            )
+            Text(
+                text = value.toString(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SizeUnit.SPACE_SMALL),
+                textAlign = TextAlign.End,
+            )
+        }
     }
 }
 
