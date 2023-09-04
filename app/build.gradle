@@ -64,6 +64,9 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    testImplementation(project(":sharedTest"))
+    androidTestImplementation(project(":sharedTest"))
+
     // Android UI
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "com.google.android.material:material:1.9.0"

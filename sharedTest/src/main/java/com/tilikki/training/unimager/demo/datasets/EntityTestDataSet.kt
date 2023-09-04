@@ -5,7 +5,7 @@ import com.tilikki.training.unimager.demo.mocks.DataMapper
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
-import java.util.*
+import java.util.Date
 
 object EntityTestDataSet {
     fun generateSamplePhotoDataList(

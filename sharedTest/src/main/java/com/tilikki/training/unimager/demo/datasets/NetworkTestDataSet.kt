@@ -4,7 +4,7 @@ import com.tilikki.training.unimager.demo.network.model.LinkUrl
 import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.network.model.PhotoUrl
-import java.util.*
+import java.util.Date
 
 object NetworkTestDataSet {
     fun generateSamplePhotoDataList(

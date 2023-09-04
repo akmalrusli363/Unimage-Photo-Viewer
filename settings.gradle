@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 include ':app'
 rootProject.name = "Unimage Photo Viewer"
+include ':sharedTest'
