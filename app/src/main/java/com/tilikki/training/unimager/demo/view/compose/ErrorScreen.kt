@@ -40,3 +40,12 @@ fun PreviewErrorScreen() {
         stringResource(id = R.string.error_occurred)
     )
 }
+
+@Preview
+@Composable
+fun PreviewEmptyScreen() {
+    ErrorScreen(
+        painterResource(id = R.drawable.ic_image),
+        stringResource(id = R.string.no_photos)
+    )
+}

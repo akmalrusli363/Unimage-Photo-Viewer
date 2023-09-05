@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,7 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -54,6 +52,7 @@ import com.tilikki.training.unimager.demo.view.compose.BigParameterField
 import com.tilikki.training.unimager.demo.view.compose.ComposeHelper
 import com.tilikki.training.unimager.demo.view.compose.ErrorScreen
 import com.tilikki.training.unimager.demo.view.compose.HeadingField
+import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import com.tilikki.training.unimager.demo.view.compose.ParameterField
 import com.tilikki.training.unimager.demo.view.compose.ParametricHeadingField
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
@@ -64,7 +63,7 @@ fun PhotoDetailScreen(viewModel: PhotoDetailViewModel) {
     val fetching by viewModel.isFetching.observeAsState()
     val success by viewModel.successResponse.observeAsState()
     if (fetching == true) {
-        CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+        LoadingIndicator()
     } else {
         if (success?.success == true && photoDetail != null) {
             photoDetail?.let {
@@ -84,7 +83,7 @@ fun PhotoDetailView(photo: PhotoDetail) {
         //TODO: full screen image
         AsyncImage(
             model = photo.fullSizeUrl,
-            placeholder = painterResource(id = R.drawable.ic_image),
+            placeholder = painterResource(id = R.drawable.ic_loading),
             contentDescription = photo.description,
             modifier = Modifier
                 .fillMaxWidth()
@@ -242,13 +241,13 @@ fun ProfileInfo(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(SizeUnit.SPACE_MEDIUM)
             .clickable {
                 val intent = Intent(context, ProfileActivity::class.java)
                 intent.putExtra(ProfileActivity.INTENT_URL, user.username)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 context.startActivity(intent)
-            },
+            }
+            .padding(SizeUnit.SPACE_MEDIUM),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(

@@ -1,7 +1,6 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.compose.setContent
 import com.tilikki.training.unimager.demo.ui.theme.AppTheme
 import dagger.android.AndroidInjection
@@ -36,11 +35,8 @@ class PhotoDetailActivity : DaggerAppCompatActivity() {
         return intent.getStringExtra(INTENT_URL)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> onBackPressed()
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
         return true
     }
 

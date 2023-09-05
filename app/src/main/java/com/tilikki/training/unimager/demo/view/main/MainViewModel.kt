@@ -10,12 +10,14 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val unsplashRepository: UnsplashRepository) :
     BaseViewModel() {
     var searchQuery: String = ""
+    var isSearching: MutableLiveData<Boolean> = MutableLiveData(false)
 
     private var _photos: MutableLiveData<List<Photo>> = MutableLiveData()
     val photos: LiveData<List<Photo>?>
         get() = _photos
 
     fun fetchPhotos(query: String) {
+        isSearching.postValue(true)
         fetchData(unsplashRepository.getPhotos(query),
             {
                 _photos.postValue(it)
