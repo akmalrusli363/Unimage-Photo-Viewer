@@ -2,16 +2,9 @@ package com.tilikki.training.unimager.demo.view.photogrid
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
@@ -28,29 +21,6 @@ import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
 import com.tilikki.training.unimager.demo.view.photodetail.PhotoDetailActivity
-
-@Composable
-fun PhotoGrid(photos: List<Photo>, modifier: Modifier = Modifier) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.animateContentSize().fillMaxSize(),
-        contentPadding = PaddingValues(SizeUnit.SPACE_LARGE)
-    ) {
-        items(photos.size) { photoId ->
-            PhotoCard(
-                photo = photos[photoId],
-                modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewPhotoGrid() {
-    PhotoGrid(photos = (0..10).map { SampleComposePreviewData.generateSamplePhotoData("photo$it") })
-}
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
