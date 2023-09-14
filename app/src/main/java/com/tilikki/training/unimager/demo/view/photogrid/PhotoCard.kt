@@ -12,14 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
+import com.tilikki.training.unimager.demo.view.compose.ComposeHelper
 import com.tilikki.training.unimager.demo.view.photodetail.PhotoDetailActivity
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -41,7 +40,7 @@ fun PhotoCard(
         Box {
             AsyncImage(
                 model = photo.thumbnailUrl,
-                placeholder = painterResource(id = R.drawable.ic_loading),
+                placeholder = ComposeHelper.getCircularProgressBar(),
                 contentDescription = photo.description,
                 modifier = Modifier
                     .fillMaxWidth()

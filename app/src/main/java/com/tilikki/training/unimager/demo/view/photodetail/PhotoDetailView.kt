@@ -83,7 +83,7 @@ fun PhotoDetailView(photo: PhotoDetail) {
         //TODO: full screen image
         AsyncImage(
             model = photo.fullSizeUrl,
-            placeholder = painterResource(id = R.drawable.ic_loading),
+            placeholder = ComposeHelper.getCircularProgressBar(),
             contentDescription = photo.description,
             modifier = Modifier
                 .fillMaxWidth()
@@ -252,7 +252,7 @@ fun ProfileInfo(
     ) {
         AsyncImage(
             model = user.profileImageUrl,
-            placeholder = painterResource(id = R.drawable.ic_person),
+            placeholder = ComposeHelper.getCircularProgressBar(),
             contentDescription = stringResource(
                 R.string.username_format, user.name, user.username
             ),
