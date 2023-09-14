@@ -13,12 +13,15 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     query: String,
@@ -27,6 +30,7 @@ fun SearchBar(
     onSearch: () -> Unit,
     hint: String = "Search...",
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     TextField(
         value = query,
         onValueChange = { newQuery ->
@@ -45,6 +49,7 @@ fun SearchBar(
         keyboardActions = KeyboardActions(
             onSearch = {
                 onSearch()
+                keyboardController?.hide()
             }
         ),
         leadingIcon = {
