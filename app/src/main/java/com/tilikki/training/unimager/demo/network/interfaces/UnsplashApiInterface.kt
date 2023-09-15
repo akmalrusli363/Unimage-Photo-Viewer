@@ -4,6 +4,7 @@ import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
 import com.tilikki.training.unimager.demo.repositories.response.PhotoList
 import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,11 +19,25 @@ interface UnsplashApiInterface {
         @Query("per_page") per_page: Int = 50
     ): Observable<Response<PhotoList>>
 
+    @GET("/search/photos")
+    fun getPagingPhotos(
+        @Query("query") query: String,
+        @Query("page") page: Int = 1,
+        @Query("per_page") per_page: Int = 50
+    ): Single<PhotoList>
+
     @GET("/users/{userName}")
     fun getUserProfile(@Path("userName") userName: String): Observable<NetworkUser>
 
     @GET("/users/{userName}/photos")
     fun getUserPhotos(@Path("userName") userName: String): Observable<List<NetworkPhoto>>
+
+    @GET("/users/{userName}/photos")
+    fun getUserPhotos(
+        @Path("userName") userName: String,
+        @Query("page") page: Int = 1,
+        @Query("per_page") per_page: Int = 50
+    ): Single<List<NetworkPhoto>>
 
     @GET("/photos/{photoId}")
     fun getPhotoDetail(@Path("photoId") photoId: String): Observable<NetworkPhoto>
