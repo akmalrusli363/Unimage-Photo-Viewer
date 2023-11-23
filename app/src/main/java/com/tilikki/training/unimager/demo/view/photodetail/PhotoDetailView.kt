@@ -157,6 +157,22 @@ private fun PreviewPhotoDetailViewWithExif() {
     )
 }
 
+@Preview(showBackground = true)
+@Composable
+private fun PreviewPhotoDetailViewWithExifDarkTheme() {
+    AppTheme(true) {
+        SimpleScaffold {
+            PhotoDetailView(
+                photo = SampleComposePreviewData.createPhotoDetail(
+                    photo = SampleComposePreviewData.generateSamplePhotoData("photoId"),
+                    user = SampleComposePreviewData.generateSampleUserData(),
+                    exif = ExifDetail("SONI", "Soni A48", "1/10000", 1.1f, 69.0f, 100)
+                )
+            )
+        }
+    }
+}
+
 @Composable
 fun PhotoDetailActions(photo: PhotoDetail, context: Context = LocalContext.current) {
     Row(

@@ -13,6 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.model.Photo
+import com.tilikki.training.unimager.demo.ui.theme.AppTheme
+import com.tilikki.training.unimager.demo.ui.theme.SimpleScaffold
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
 import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
@@ -93,10 +95,22 @@ fun PhotoSearchView(photos: List<Photo>, onSearch: (String) -> Unit) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewPhotoSearchView() {
     val photoList =
         (0..10).map { SampleComposePreviewData.generateSamplePhotoData("photo$it") }
     PhotoSearchView(photos = photoList, onSearch = {})
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewPhotoSearchViewDarkTheme() {
+    val photoList =
+        (0..10).map { SampleComposePreviewData.generateSamplePhotoData("photo$it") }
+    AppTheme(true) {
+        SimpleScaffold {
+            PhotoSearchView(photos = photoList, onSearch = {})
+        }
+    }
 }

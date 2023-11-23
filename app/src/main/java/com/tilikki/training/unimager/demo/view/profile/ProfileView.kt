@@ -32,6 +32,8 @@ import coil.compose.AsyncImage
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.User
+import com.tilikki.training.unimager.demo.ui.theme.AppTheme
+import com.tilikki.training.unimager.demo.ui.theme.SimpleScaffold
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
 import com.tilikki.training.unimager.demo.util.value
@@ -52,12 +54,24 @@ fun ProfileView(user: User, photos: List<Photo>?) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun PreviewProfileView() {
     val user = SampleComposePreviewData.generateSampleUserData("username")
     val photos = (0..10).map { SampleComposePreviewData.generateSamplePhotoData("photo$it") }
     ProfileView(user = user, photos = photos)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewProfileViewDarkTheme() {
+    val user = SampleComposePreviewData.generateSampleUserData("username")
+    val photos = (0..10).map { SampleComposePreviewData.generateSamplePhotoData("photo$it") }
+    AppTheme(true) {
+        SimpleScaffold {
+            ProfileView(user = user, photos = photos)
+        }
+    }
 }
 
 @Composable

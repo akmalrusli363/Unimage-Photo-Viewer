@@ -3,6 +3,7 @@ package com.tilikki.training.unimager.demo.view.main
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.tilikki.training.unimager.demo.ui.theme.AppTheme
+import com.tilikki.training.unimager.demo.ui.theme.SimpleScaffold
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -18,7 +19,9 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
-                PhotoSearchScreen(viewModel = viewModel)
+                SimpleScaffold {
+                    PhotoSearchScreen(viewModel = viewModel)
+                }
             }
         }
     }

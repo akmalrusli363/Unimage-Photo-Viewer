@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -59,6 +60,15 @@ fun AppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable ()
         shapes = Shapes,
         content = content
     )
+}
+
+@Composable
+fun SimpleScaffold(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Scaffold(modifier) {
+        Box(modifier = modifier.padding(it)) {
+            content()
+        }
+    }
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL)

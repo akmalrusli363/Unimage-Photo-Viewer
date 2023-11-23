@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import com.tilikki.training.unimager.demo.ui.theme.AppTheme
+import com.tilikki.training.unimager.demo.ui.theme.SimpleScaffold
 import com.tilikki.training.unimager.demo.view.compose.ErrorScreen
 import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import dagger.android.AndroidInjection
@@ -33,13 +35,17 @@ class ProfileActivity : DaggerAppCompatActivity() {
             val user by viewModel.userProfile.observeAsState()
             val fetching by viewModel.isFetching.observeAsState()
             val success by viewModel.successResponse.observeAsState()
-            if (fetching == true) {
-                LoadingIndicator()
-            } else {
-                if (success?.success == true && user != null) {
-                    ProfileView(user = user!!, photos = photos)
-                } else {
-                    ErrorScreen()
+            AppTheme {
+                SimpleScaffold {
+                    if (fetching == true) {
+                        LoadingIndicator()
+                    } else {
+                        if (success?.success == true && user != null) {
+                            ProfileView(user = user!!, photos = photos)
+                        } else {
+                            ErrorScreen()
+                        }
+                    }
                 }
             }
 
