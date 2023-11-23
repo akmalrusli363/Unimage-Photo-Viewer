@@ -19,6 +19,7 @@ import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
 import com.tilikki.training.unimager.demo.view.compose.ErrorScreen
 import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import com.tilikki.training.unimager.demo.view.compose.PreviewEmptyScreen
+import com.tilikki.training.unimager.demo.view.compose.PreviewInitialStateScreen
 import com.tilikki.training.unimager.demo.view.compose.SearchBar
 import com.tilikki.training.unimager.demo.view.photogrid.PhotoGrid
 
@@ -65,6 +66,8 @@ fun PhotoSearchState(viewModel: MainViewModel) {
             }
         } else if (isSearching == true) {
             ErrorScreen()
+        } else {
+            PreviewInitialStateScreen()
         }
     }
 

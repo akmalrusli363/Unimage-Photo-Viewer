@@ -1,10 +1,12 @@
 package com.tilikki.training.unimager.demo.view.compose
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -60,7 +62,7 @@ fun SearchBar(
             )
         },
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.White
+            backgroundColor = MaterialTheme.colors.background
         )
     )
 }
@@ -68,6 +70,21 @@ fun SearchBar(
 @Preview
 @Composable
 fun SearchBarPreview() {
+    val query = remember { mutableStateOf("") }
+    SearchBar(
+        query = query.value,
+        onQueryChange = { newQuery ->
+            query.value = newQuery
+        },
+        onSearch = {
+            // Handle search action here
+        }
+    )
+}
+
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun SearchBarPreviewDarkTheme() {
     val query = remember { mutableStateOf("") }
     SearchBar(
         query = query.value,

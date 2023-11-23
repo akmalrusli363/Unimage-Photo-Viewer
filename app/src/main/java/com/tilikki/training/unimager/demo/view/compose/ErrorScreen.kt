@@ -49,3 +49,12 @@ fun PreviewEmptyScreen() {
         stringResource(id = R.string.no_photos)
     )
 }
+
+@Preview
+@Composable
+fun PreviewInitialStateScreen() {
+    ErrorScreen(
+        painterResource(id = R.drawable.ic_launcher_foreground),
+        "Search photos"
+    )
+}
