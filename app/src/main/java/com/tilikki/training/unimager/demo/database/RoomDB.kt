@@ -7,8 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [EntityPhoto::class, EntityUser::class, SearchQuery::class],
-    version = 1,
-    exportSchema = false
+    version = 2,
 )
 abstract class RoomDB : RoomDatabase() {
     abstract val photosDao: PhotosDao
@@ -21,10 +20,11 @@ abstract class RoomDB : RoomDatabase() {
             synchronized(RoomDB::class.java) {
                 if (!this::INSTANCE.isInitialized) {
                     INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        RoomDB::class.java,
-                        "unimager-db"
-                    ).build()
+                        context = context.applicationContext,
+                        klass = RoomDB::class.java,
+                        name = "unimager-db"
+                    ).fallbackToDestructiveMigration()
+                        .build()
                 }
             }
             return INSTANCE

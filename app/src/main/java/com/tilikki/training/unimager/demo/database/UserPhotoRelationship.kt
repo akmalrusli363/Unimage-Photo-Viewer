@@ -22,6 +22,8 @@ data class UserPhotoRelationship(
             height = photo.height,
             color = photo.color,
             likes = photo.likes,
+            views = null,
+            downloads = null,
             description = photo.description,
             altDescription = photo.altDescription,
             thumbnailUrl = photo.thumbnailUrl,
@@ -29,6 +31,7 @@ data class UserPhotoRelationship(
             fullSizeUrl = photo.fullSizeUrl,
             apiUrl = photo.detailUrl,
             htmlUrl = photo.webLinkUrl,
+            downloadUrl = photo.downloadUrl,
             user = user.toDomainEntityUser(),
             exif = null,
         )

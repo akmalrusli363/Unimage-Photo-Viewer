@@ -14,6 +14,8 @@ object DataMapper {
                 height = height,
                 color = color,
                 likes = likes,
+                views = null,
+                downloads = null,
                 description = description,
                 altDescription = altDescription,
                 thumbnailUrl = thumbnailUrl,
@@ -21,8 +23,9 @@ object DataMapper {
                 fullSizeUrl = fullSizeUrl,
                 apiUrl = apiUrl,
                 htmlUrl = htmlUrl,
+                downloadUrl = downloadUrl,
                 user = user,
-                exif = null
+                exif = null,
             )
         }
     }

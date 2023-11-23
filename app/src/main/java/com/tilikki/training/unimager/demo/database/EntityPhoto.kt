@@ -39,6 +39,8 @@ data class EntityPhoto constructor(
     val webLinkUrl: String,
     @ColumnInfo(name = "owner_id")
     val owner: String,
+    @ColumnInfo(name = "download_url")
+    val downloadUrl: String,
 ) {
     fun toDomainEntityPhoto(): Photo {
         return Photo(
@@ -55,6 +57,7 @@ data class EntityPhoto constructor(
             fullSizeUrl = fullSizeUrl,
             apiUrl = detailUrl,
             htmlUrl = webLinkUrl,
+            downloadUrl = downloadUrl,
             owner = owner,
         )
     }

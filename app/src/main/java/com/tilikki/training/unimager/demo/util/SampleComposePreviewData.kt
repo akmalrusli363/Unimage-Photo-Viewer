@@ -16,6 +16,8 @@ object SampleComposePreviewData {
                 height = height,
                 color = color,
                 likes = likes,
+                views = DEMO_VIEWS,
+                downloads = DEMO_DOWNLOADS,
                 description = description,
                 altDescription = altDescription,
                 thumbnailUrl = thumbnailUrl,
@@ -23,6 +25,7 @@ object SampleComposePreviewData {
                 fullSizeUrl = fullSizeUrl,
                 apiUrl = apiUrl,
                 htmlUrl = htmlUrl,
+                downloadUrl = downloadUrl,
                 user = user,
                 exif = exif
             )
@@ -44,6 +47,7 @@ object SampleComposePreviewData {
             fullSizeUrl = "",
             apiUrl = API_URL + "img/$photoId",
             htmlUrl = WEB_URL + "img/$photoId",
+            downloadUrl = API_URL + "img/$photoId/download",
             owner = DEMO_USER_ID,
         )
     }
@@ -74,6 +78,8 @@ object SampleComposePreviewData {
     const val DEMO_DESCRIPTION = "description"
     const val DEMO_COLOR = "red"
     const val DEMO_LIKES = 100
+    const val DEMO_VIEWS = 2100
+    const val DEMO_DOWNLOADS = 200
 
     const val DEMO_EXIF_BRAND = "BRAND"
     const val DEMO_EXIF_MODEL = "MODEL"

@@ -34,6 +34,8 @@ object NetworkTestDataSet {
             height = 400,
             color = TestDataConstants.DEMO_COLOR,
             likes = TestDataConstants.DEMO_LIKES,
+            views = TestDataConstants.DEMO_VIEWS,
+            downloads = TestDataConstants.DEMO_DOWNLOADS,
             description = TestDataConstants.DEMO_DESCRIPTION,
             altDescription = generatePhotoAltDescription(photoId),
             imageUrl = photoLink.first,

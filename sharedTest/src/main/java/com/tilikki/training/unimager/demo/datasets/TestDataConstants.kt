@@ -12,6 +12,8 @@ object TestDataConstants {
     const val DEMO_DESCRIPTION = "description"
     const val DEMO_COLOR = "red"
     const val DEMO_LIKES = 100
+    const val DEMO_VIEWS = 2100
+    const val DEMO_DOWNLOADS = 200
 
     const val DEMO_EXIF_BRAND = "BRAND"
     const val DEMO_EXIF_MODEL = "MODEL"

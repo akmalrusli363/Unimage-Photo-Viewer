@@ -4,7 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.tilikki.training.unimager.demo.database.EntityPhoto
 import com.tilikki.training.unimager.demo.model.util.Resolution
-import java.util.*
+import java.util.Date
 
 data class Photo(
     val id: String,
@@ -20,6 +20,7 @@ data class Photo(
     val fullSizeUrl: String,
     val apiUrl: String,
     val htmlUrl: String,
+    val downloadUrl: String,
     val owner: String,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -36,6 +37,7 @@ data class Photo(
         fullSizeUrl = parcel.readString().toString(),
         apiUrl = parcel.readString().toString(),
         htmlUrl = parcel.readString().toString(),
+        downloadUrl = parcel.readString().toString(),
         owner = parcel.readString().toString()
     )
 
@@ -59,6 +61,7 @@ data class Photo(
             detailUrl = apiUrl,
             webLinkUrl = htmlUrl,
             owner = owner,
+            downloadUrl = downloadUrl,
         )
     }
 
@@ -76,6 +79,7 @@ data class Photo(
         parcel.writeString(fullSizeUrl)
         parcel.writeString(apiUrl)
         parcel.writeString(htmlUrl)
+        parcel.writeString(downloadUrl)
         parcel.writeString(owner)
     }
 

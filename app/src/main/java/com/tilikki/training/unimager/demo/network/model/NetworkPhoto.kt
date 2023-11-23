@@ -20,6 +20,10 @@ data class NetworkPhoto(
     val color: String,
     @SerializedName("likes")
     val likes: Int?,
+    @SerializedName("views")
+    val views: Int?,
+    @SerializedName("downloads")
+    val downloads: Int?,
     @SerializedName("description")
     val description: String?,
     @SerializedName("alt_description")
@@ -53,6 +57,7 @@ data class NetworkPhoto(
             detailUrl = linkUrl.apiLink,
             webLinkUrl = linkUrl.webLink,
             owner = user.id,
+            downloadUrl = linkUrl.apiDownloadLink,
         )
     }
 
@@ -71,6 +76,7 @@ data class NetworkPhoto(
             fullSizeUrl = imageUrl.fullSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink,
+            downloadUrl = linkUrl.apiDownloadLink,
             owner = user.id,
         )
     }
@@ -83,6 +89,8 @@ data class NetworkPhoto(
             height = height,
             color = color,
             likes = likes,
+            views = views,
+            downloads = downloads,
             description = description,
             altDescription = altDescription,
             thumbnailUrl = imageUrl.thumbnailSize,
@@ -90,6 +98,7 @@ data class NetworkPhoto(
             fullSizeUrl = imageUrl.fullSize,
             apiUrl = linkUrl.apiLink,
             htmlUrl = linkUrl.webLink,
+            downloadUrl = linkUrl.apiDownloadLink,
             user = user.toDomainEntityUser(),
             exif = exif?.asDomainEntityExif(),
         )

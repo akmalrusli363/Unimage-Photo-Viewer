@@ -37,6 +37,7 @@ object EntityTestDataSet {
                 fullSizeUrl = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.LARGE),
                 apiUrl = API_URL + "img/$photoId",
                 htmlUrl = WEB_URL + "img/$photoId",
+                downloadUrl = API_URL + "img/$photoId/download",
                 owner = DEMO_USER_ID,
             )
         }
