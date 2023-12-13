@@ -5,6 +5,6 @@ import com.tilikki.training.unimager.demo.model.Photo
 import io.reactivex.Flowable
 
 interface UnsplashPagingRepository {
-    fun getPhotos(query: String, page: Int = 1): Flowable<PagingData<Photo>>
+    fun getPhotos(query: String): Flowable<PagingData<Photo>>
 }
 

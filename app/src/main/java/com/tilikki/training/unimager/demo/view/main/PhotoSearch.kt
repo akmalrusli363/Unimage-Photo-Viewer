@@ -1,16 +1,19 @@
 package com.tilikki.training.unimager.demo.view.main
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.ui.theme.AppTheme
@@ -18,31 +21,29 @@ import com.tilikki.training.unimager.demo.ui.theme.SimpleScaffold
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
 import com.tilikki.training.unimager.demo.util.LogUtility
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
+import com.tilikki.training.unimager.demo.util.getErrors
 import com.tilikki.training.unimager.demo.view.compose.ErrorScreen
 import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import com.tilikki.training.unimager.demo.view.compose.PreviewEmptyScreen
 import com.tilikki.training.unimager.demo.view.compose.PreviewInitialStateScreen
 import com.tilikki.training.unimager.demo.view.compose.SearchBar
+import com.tilikki.training.unimager.demo.view.photogrid.PagingPhotoGrid
 import com.tilikki.training.unimager.demo.view.photogrid.PhotoGrid
 
 @Composable
 fun PhotoSearchScreen(viewModel: MainViewModel) {
-    val query = remember { mutableStateOf("") }
+    val query = viewModel.searchQuery.collectAsState()
     Column {
         SearchBar(
             query = query.value,
             hint = stringResource(id = R.string.explore_photo),
-            onQueryChange = { newQuery ->
-                query.value = newQuery
-            },
             modifier = Modifier.padding(
                 horizontal = SizeUnit.SPACE_LARGE,
                 vertical = SizeUnit.SPACE_SMALL
             ),
             onSearch = {
-                viewModel.searchQuery = query.value
-                Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... ${viewModel.searchQuery}")
-                viewModel.fetchPhotos(query.value)
+                viewModel.triggerSearch(it)
+                Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... $it")
             }
         )
         PhotoSearchState(viewModel = viewModel)
@@ -51,25 +52,28 @@ fun PhotoSearchScreen(viewModel: MainViewModel) {
 
 @Composable
 fun PhotoSearchState(viewModel: MainViewModel) {
-    val photos by viewModel.photos.observeAsState()
-    val fetching by viewModel.isFetching.observeAsState()
-    val success by viewModel.successResponse.observeAsState()
-    val isSearching by viewModel.isSearching.observeAsState()
-    if (fetching == true) {
+    val photoListFlow = remember { viewModel.photoListFlow }
+    val photos = photoListFlow.collectAsLazyPagingItems()
+    val loadState = photos.loadState
+    val isLoading = loadState.refresh is LoadState.Loading
+    val errorState = loadState.getErrors()
+
+    if (!viewModel.isSearching) {
+        PreviewInitialStateScreen()
+    } else if (isLoading) {
         LoadingIndicator()
     } else {
-        if (success?.success == true && photos != null) {
-            photos?.let {
-                if (it.isNotEmpty()) {
-                    PhotoGrid(photos = it)
-                } else {
-                    PreviewEmptyScreen()
-                }
-            }
-        } else if (isSearching == true) {
-            ErrorScreen()
+        if (errorState != null) {
+            Toast.makeText(
+                LocalContext.current,
+                "An error occurred! ${errorState.error.message}",
+                Toast.LENGTH_SHORT
+            ).show()
+            ErrorScreen(errorMessage = errorState.error.localizedMessage ?: "An error occurred!")
+        } else if (photos.itemCount != 0) {
+            PagingPhotoGrid(photos)
         } else {
-            PreviewInitialStateScreen()
+            PreviewEmptyScreen()
         }
     }
 
@@ -89,7 +93,7 @@ fun PhotoSearchView(photos: List<Photo>, onSearch: (String) -> Unit) {
                 horizontal = SizeUnit.SPACE_MEDIUM,
                 vertical = SizeUnit.SPACE_SMALL
             ),
-            onSearch = { onSearch(query.value) }
+            onSearch = { query -> onSearch(query) }
         )
         PhotoGrid(photos = photos)
     }

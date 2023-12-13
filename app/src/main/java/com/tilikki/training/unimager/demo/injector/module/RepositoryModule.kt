@@ -1,5 +1,7 @@
 package com.tilikki.training.unimager.demo.injector.module
 
+import com.tilikki.training.unimager.demo.repositories.UnsplashPagingRepository
+import com.tilikki.training.unimager.demo.repositories.UnsplashPagingRepositoryImpl
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepositoryImpl
 import dagger.Binds
@@ -11,4 +13,9 @@ abstract class RepositoryModule {
     abstract fun provideUnsplashRepositoryImpl(
         unsplashRepositoryImpl: UnsplashRepositoryImpl
     ): UnsplashRepository
+
+    @Binds
+    abstract fun provideUnsplashPagingRepositoryImpl(
+        unsplashPagingRepositoryImpl: UnsplashPagingRepositoryImpl
+    ): UnsplashPagingRepository
 }
