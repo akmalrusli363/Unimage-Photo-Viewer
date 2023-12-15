@@ -33,11 +33,10 @@ class ProfileViewModel @Inject constructor(private val unsplashRepository: Unspl
         unsplashRepository.run {
             return Observable.zip(
                 getUserProfile(username),
-                getUserPhotos(username),
-                { profile, photo ->
-                    Pair(profile, photo)
-                }
-            )
+                getUserPhotos(username)
+            ) { profile, photo ->
+                Pair(profile, photo)
+            }
         }
     }
 }

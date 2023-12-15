@@ -8,8 +8,13 @@ import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.network.interfaces.UnsplashApiInterface
+import com.tilikki.training.unimager.demo.network.model.BasicUrlResponse
 import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
-import com.tilikki.training.unimager.demo.util.*
+import com.tilikki.training.unimager.demo.util.LogUtility
+import com.tilikki.training.unimager.demo.util.asDatabaseEntityPhotos
+import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
+import com.tilikki.training.unimager.demo.util.getPhotos
+import com.tilikki.training.unimager.demo.util.mapToSearchResults
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -89,6 +94,16 @@ class UnsplashRepositoryImpl @Inject constructor(
             Log.d(LogUtility.LOGGER_DATABASE_TAG, res.toString())
             res.asDomainEntityPhotos()
         }
+    }
+
+    override fun getRandomPhotosByTopic(topicId: String): Observable<List<Pair<Photo, User>>> {
+        return unsplashApiInterface.getRandomPhotosByTopic(topicId).map { list ->
+            list.map { Pair(it.toDomainEntityPhoto(), it.user.toDomainEntityUser()) }
+        }
+    }
+
+    override fun downloadPhoto(url: String): Observable<BasicUrlResponse> {
+        return unsplashApiInterface.downloadPhoto(url)
     }
 
     private fun getUserPhotosFromDB(username: String): List<EntityPhoto> {

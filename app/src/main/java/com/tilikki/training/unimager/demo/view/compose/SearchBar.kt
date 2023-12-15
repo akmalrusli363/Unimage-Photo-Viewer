@@ -13,8 +13,10 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,14 +30,16 @@ import androidx.compose.ui.unit.dp
 fun SearchBar(
     query: String,
     modifier: Modifier = Modifier,
-    onQueryChange: (String) -> Unit,
-    onSearch: () -> Unit,
+    onQueryChange: (String) -> Unit = {},
+    onSearch: (String) -> Unit,
     hint: String = "Search...",
 ) {
+    var value by remember { mutableStateOf(query) }
     val keyboardController = LocalSoftwareKeyboardController.current
     TextField(
-        value = query,
+        value = value,
         onValueChange = { newQuery ->
+            value = newQuery
             onQueryChange(newQuery)
         },
         placeholder = {
@@ -50,7 +54,7 @@ fun SearchBar(
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
-                onSearch()
+                onSearch(value)
                 keyboardController?.hide()
             }
         ),

@@ -2,7 +2,10 @@ package com.tilikki.training.unimager.demo.view.compose
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
@@ -14,6 +17,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.core.content.ContextCompat
 import com.tilikki.training.unimager.demo.R
 
 object ComposeHelper {
@@ -34,5 +38,24 @@ object ComposeHelper {
             }
         }
         return rememberAnimatedVectorPainter(image, atEnd)
+    }
+
+    @Composable
+    fun Context.requestPermission(permissionType: String, onAccept: () -> Unit, onDenied: () -> Unit = {}): () -> Unit {
+        val launcher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                onAccept()
+            } else {
+                onDenied()
+            }
+        }
+        return {
+            when (PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(this, permissionType) -> onAccept()
+                else -> launcher.launch(permissionType)
+            }
+        }
     }
 }

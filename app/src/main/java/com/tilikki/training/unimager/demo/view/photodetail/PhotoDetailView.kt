@@ -1,11 +1,12 @@
 package com.tilikki.training.unimager.demo.view.photodetail
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -45,30 +46,41 @@ import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.ui.theme.AppTheme
 import com.tilikki.training.unimager.demo.ui.theme.Pink
+import com.tilikki.training.unimager.demo.ui.theme.SimpleScaffold
 import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
+import com.tilikki.training.unimager.demo.util.DigitHelper
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
 import com.tilikki.training.unimager.demo.util.formatAsString
 import com.tilikki.training.unimager.demo.view.compose.BigParameterField
 import com.tilikki.training.unimager.demo.view.compose.ComposeHelper
+import com.tilikki.training.unimager.demo.view.compose.ComposeHelper.requestPermission
 import com.tilikki.training.unimager.demo.view.compose.ErrorScreen
 import com.tilikki.training.unimager.demo.view.compose.HeadingField
 import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import com.tilikki.training.unimager.demo.view.compose.ParameterField
 import com.tilikki.training.unimager.demo.view.compose.ParametricHeadingField
+import com.tilikki.training.unimager.demo.view.photogrid.PhotoGrid
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 
 @Composable
 fun PhotoDetailScreen(viewModel: PhotoDetailViewModel) {
     val photoDetail by viewModel.photo.observeAsState()
+    val otherPhotos by viewModel.featuredPhotos.observeAsState()
     val fetching by viewModel.isFetching.observeAsState()
     val success by viewModel.successResponse.observeAsState()
+    val actions = PhotoDetailActions(downloadFile = {
+        viewModel.downloadPhoto(it)
+    })
     if (fetching == true) {
         LoadingIndicator()
     } else {
         if (success?.success == true && photoDetail != null) {
             photoDetail?.let {
-                Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    PhotoDetailView(photo = it)
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    PhotoDetailView(photo = it, actions = actions)
+                    otherPhotos?.let {
+                        PhotoGrid(photos = it)
+                    }
                 }
             }
         } else {
@@ -78,7 +90,7 @@ fun PhotoDetailScreen(viewModel: PhotoDetailViewModel) {
 }
 
 @Composable
-fun PhotoDetailView(photo: PhotoDetail) {
+fun PhotoDetailView(photo: PhotoDetail, actions: PhotoDetailActions = PhotoDetailActions()) {
     Column {
         //TODO: full screen image
         AsyncImage(
@@ -91,7 +103,7 @@ fun PhotoDetailView(photo: PhotoDetail) {
             contentScale = ContentScale.FillWidth
         )
         //TODO: like, download, view in web
-        PhotoDetailActions(photo)
+        PhotoDetailActionView(photo, actions)
         //TODO: profile
         ProfileInfo(user = photo.user, modifier = Modifier.padding(SizeUnit.SPACE_SMALL))
         Column(modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM)) {
@@ -174,7 +186,14 @@ private fun PreviewPhotoDetailViewWithExifDarkTheme() {
 }
 
 @Composable
-fun PhotoDetailActions(photo: PhotoDetail, context: Context = LocalContext.current) {
+fun PhotoDetailActionView(
+    photo: PhotoDetail,
+    actions: PhotoDetailActions,
+    context: Context = LocalContext.current,
+) {
+    val requestPermission = context.requestPermission(
+        permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        onAccept = { actions.downloadFile(context) })
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -202,9 +221,29 @@ fun PhotoDetailActions(photo: PhotoDetail, context: Context = LocalContext.curre
             colors = ButtonDefaults.outlinedButtonColors()
         ) {
             Icon(
+                painter = painterResource(id = R.drawable.ic_photo_size_full),
+                contentDescription = stringResource(id = R.string.download)
+            )
+        }
+        Button(
+            onClick = {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    actions.downloadFile(context)
+                } else {
+                    requestPermission()
+                }
+            },
+            modifier = Modifier
+                .padding(SizeUnit.SPACE_SMALL)
+                .height(40.dp),
+            contentPadding = PaddingValues(horizontal = 0.dp, vertical = SizeUnit.SPACE_SMALL),
+            colors = ButtonDefaults.outlinedButtonColors()
+        ) {
+            Icon(
                 painter = painterResource(id = R.drawable.ic_download),
                 contentDescription = stringResource(id = R.string.download)
             )
+            Text(DigitHelper.format(photo.downloads ?: 0))
         }
         Button(
             onClick = { ComposeHelper.visitLink(context, Uri.parse(photo.htmlUrl)) },
@@ -220,17 +259,21 @@ fun PhotoDetailActions(photo: PhotoDetail, context: Context = LocalContext.curre
 @Preview(widthDp = 360)
 @Composable
 private fun PreviewPhotoDetailActions() {
-    PhotoDetailActions(
+    PhotoDetailActionView(
         photo = SampleComposePreviewData.createPhotoDetail(
             photo = SampleComposePreviewData.generateSamplePhotoData("photoId"),
             user = SampleComposePreviewData.generateSampleUserData()
-        )
+        ),
+        actions = PhotoDetailActions()
     )
 }
 
 @Composable
 fun ExifInfo(exif: ExifDetail) {
-    HeadingField(title = stringResource(id = R.string.exif), modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM)) {
+    HeadingField(
+        title = stringResource(id = R.string.exif),
+        modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM)
+    ) {
         Column {
             ParameterField(fieldRes = R.string.exif_brand, value = exif.brand)
             ParameterField(fieldRes = R.string.exif_model, value = exif.model)
