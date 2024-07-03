@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -37,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -59,7 +61,7 @@ import com.tilikki.training.unimager.demo.view.compose.HeadingField
 import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import com.tilikki.training.unimager.demo.view.compose.ParameterField
 import com.tilikki.training.unimager.demo.view.compose.ParametricHeadingField
-import com.tilikki.training.unimager.demo.view.photogrid.PhotoGrid
+import com.tilikki.training.unimager.demo.view.photogrid.PhotoGridWithProfile
 import com.tilikki.training.unimager.demo.view.profile.ProfileActivity
 
 @Composable
@@ -75,11 +77,34 @@ fun PhotoDetailScreen(viewModel: PhotoDetailViewModel) {
         LoadingIndicator()
     } else {
         if (success?.success == true && photoDetail != null) {
-            photoDetail?.let {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    PhotoDetailView(photo = it, actions = actions)
-                    otherPhotos?.let {
-                        PhotoGrid(photos = it)
+            if (otherPhotos != null) {
+                otherPhotos?.let { photos ->
+                    photoDetail?.let { photo ->
+                        PhotoGridWithProfile(
+                            photos = photos,
+                            padding = PaddingValues(
+                                horizontal = SizeUnit.SPACE_MEDIUM,
+                                vertical = SizeUnit.SPACE_MEDIUM
+                            )
+                        ) {
+                            PhotoDetailView(photo = photo, actions = actions)
+                            Divider(
+                                modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
+                                color = Color.Gray
+                            )
+                            Text(
+                                "See also...",
+                                style = MaterialTheme.typography.h6,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM),
+                            )
+                        }
+                    }
+                }
+            } else {
+                photoDetail?.let {
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        PhotoDetailView(photo = it, actions = actions)
                     }
                 }
             }
@@ -204,11 +229,13 @@ fun PhotoDetailActionView(
             painter = painterResource(id = R.drawable.ic_favorite),
             tint = Pink,
             contentDescription = null,
-            modifier = Modifier.padding(SizeUnit.SPACE_SMALL)
+            modifier = Modifier
+                .padding(SizeUnit.SPACE_SMALL)
+                .size(32.dp)
         )
         Text(
             photo.likes.toString(),
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.h6,
             modifier = Modifier.padding(SizeUnit.SPACE_SMALL)
         )
         Spacer(Modifier.weight(1f))
@@ -222,7 +249,8 @@ fun PhotoDetailActionView(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_photo_size_full),
-                contentDescription = stringResource(id = R.string.download)
+                contentDescription = stringResource(id = R.string.download),
+                modifier = Modifier,
             )
         }
         Button(
@@ -236,12 +264,13 @@ fun PhotoDetailActionView(
             modifier = Modifier
                 .padding(SizeUnit.SPACE_SMALL)
                 .height(40.dp),
-            contentPadding = PaddingValues(horizontal = 0.dp, vertical = SizeUnit.SPACE_SMALL),
+            contentPadding = PaddingValues(horizontal = 4.dp, vertical = SizeUnit.SPACE_SMALL),
             colors = ButtonDefaults.outlinedButtonColors()
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_download),
-                contentDescription = stringResource(id = R.string.download)
+                contentDescription = stringResource(id = R.string.download),
+                modifier = Modifier.size(28.dp)
             )
             Text(DigitHelper.format(photo.downloads ?: 0))
         }

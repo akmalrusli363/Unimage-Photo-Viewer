@@ -7,9 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
+import com.tilikki.training.unimager.demo.network.model.PhotoTopicData
 import com.tilikki.training.unimager.demo.repositories.UnsplashRepository
 import com.tilikki.training.unimager.demo.util.downloadFile
 import com.tilikki.training.unimager.demo.view.base.BaseViewModel
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 class PhotoDetailViewModel @Inject constructor(private val unsplashRepository: UnsplashRepository) :
@@ -34,14 +36,19 @@ class PhotoDetailViewModel @Inject constructor(private val unsplashRepository: U
         fetchData(unsplashRepository.getPhotoDetail(_photoId.value!!),
             {
                 _photo.postValue(it)
+                fetchFeaturedPhotos(it.topics.randomOrNull())
             }
         )
     }
 
-    fun fetchFeaturedPhotos() {
+    fun fetchFeaturedPhotos(topic: PhotoTopicData? = null) {
         // TODO to be filled by topics
-        fetchData(unsplashRepository.getRandomPhotosByTopic(""), {
+        fetchData(unsplashRepository.getRandomPhotosByTopic(topic?.id.orEmpty()), {
             _featuredPhotos.postValue(it)
+        }, { ex ->
+            if (ex is SocketTimeoutException) {
+                _featuredPhotos.postValue(listOf())
+            }
         })
     }
 

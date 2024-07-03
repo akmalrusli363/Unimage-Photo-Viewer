@@ -29,6 +29,12 @@ interface UnsplashApiInterface {
         @Query("per_page") per_page: Int = 50
     ): Single<PhotoList>
 
+    @GET("/photos/random")
+    fun getRandomPhotosByTopic(
+        @Query("topics") topicId: String,
+        @Query("count") count: Int = 10
+    ): Observable<List<NetworkPhoto>>
+
     @GET("/users/{userName}")
     fun getUserProfile(@Path("userName") userName: String): Observable<NetworkUser>
 
@@ -46,7 +52,10 @@ interface UnsplashApiInterface {
     fun getPhotoDetail(@Path("photoId") photoId: String): Observable<NetworkPhoto>
 
     @GET("/photos/{photoId}/download")
-    fun downloadPhoto(@Path("photoId") photoId: String, @Query("ixid") ixid: String): Observable<BasicUrlResponse>
+    fun downloadPhoto(
+        @Path("photoId") photoId: String,
+        @Query("ixid") ixid: String
+    ): Observable<BasicUrlResponse>
 
     @GET
     fun downloadPhoto(@Url url: String): Observable<BasicUrlResponse> {

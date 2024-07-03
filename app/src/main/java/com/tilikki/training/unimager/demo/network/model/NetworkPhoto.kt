@@ -5,7 +5,7 @@ import com.tilikki.training.unimager.demo.database.EntityPhoto
 import com.tilikki.training.unimager.demo.database.SearchQuery
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
-import java.util.*
+import java.util.Date
 
 data class NetworkPhoto(
     @SerializedName("id")
@@ -36,6 +36,8 @@ data class NetworkPhoto(
     val user: NetworkUser,
     @SerializedName("exif")
     val exif: Exif?,
+    @SerializedName("topics")
+    val topics: List<PhotoTopicData>,
 ) {
     fun bindSearchQuery(searchQuery: String): SearchQuery {
         return SearchQuery(photoId = id, searchQuery = searchQuery)
@@ -101,6 +103,7 @@ data class NetworkPhoto(
             downloadUrl = linkUrl.apiDownloadLink,
             user = user.toDomainEntityUser(),
             exif = exif?.asDomainEntityExif(),
+            topics = topics,
         )
     }
 }
