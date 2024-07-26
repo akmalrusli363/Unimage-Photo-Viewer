@@ -8,6 +8,7 @@ object TestDataConstants {
     const val DEMO_PHOTO_EXIF_ID = "photo-demo-exif-id"
     const val DEMO_USER_ID = "owner"
     const val DEMO_USERNAME = "username"
+    const val DEMO_TOPIC = "lorem ipsum"
 
     const val DEMO_DESCRIPTION = "description"
     const val DEMO_COLOR = "red"

@@ -1,5 +1,7 @@
 package com.tilikki.training.unimager.demo.datasets
 
+import com.tilikki.training.unimager.demo.model.Photo
+import com.tilikki.training.unimager.demo.model.User
 import com.tilikki.training.unimager.demo.network.model.LinkUrl
 import com.tilikki.training.unimager.demo.network.model.NetworkPhoto
 import com.tilikki.training.unimager.demo.network.model.NetworkUser
@@ -20,6 +22,17 @@ object NetworkTestDataSet {
         return photoList
     }
 
+    fun generateSampleRandomPhotoDataList(
+        topic: String = TestDataConstants.DEMO_TOPIC,
+        numOfData: Int = TestDataConstants.MAX_ITEMS_PER_PAGE,
+        username: String = TestDataConstants.DEMO_USERNAME
+    ): List<Pair<Photo, User>> {
+        val photoList = generateSamplePhotoDataList(topic, numOfData, username)
+        return photoList.map {
+            Pair(it.toDomainEntityPhoto(), it.user.toDomainEntityUser())
+        }
+    }
+
     fun generateSamplePhotoData(
         photoId: String,
         username: String = TestDataConstants.DEMO_USERNAME
@@ -36,7 +49,7 @@ object NetworkTestDataSet {
             likes = TestDataConstants.DEMO_LIKES,
             views = TestDataConstants.DEMO_VIEWS,
             downloads = TestDataConstants.DEMO_DOWNLOADS,
-            description = TestDataConstants.DEMO_DESCRIPTION,
+            description = generatePhotoDescription(photoId),
             altDescription = generatePhotoAltDescription(photoId),
             imageUrl = photoLink.first,
             linkUrl = photoLink.second,

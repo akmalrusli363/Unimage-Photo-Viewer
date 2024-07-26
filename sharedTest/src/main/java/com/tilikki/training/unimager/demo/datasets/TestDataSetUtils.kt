@@ -6,12 +6,20 @@ fun generateIndexedPhotoId(photoId: String, index: Int): String {
     return "$photoId-$index"
 }
 
+fun generatePhotoDescription(photoId: String): String {
+    return "photo description of $photoId"
+}
+
 fun generatePhotoAltDescription(photoId: String): String {
     return "alt description for $photoId"
 }
 
+fun generateIndexedPhotoDescription(photoId: String, index: Int): String {
+    return generatePhotoDescription(generateIndexedPhotoId(photoId, index))
+}
+
 fun generateIndexedPhotoAltDescription(photoId: String, index: Int): String {
-    return "alt description for ${generateIndexedPhotoId(photoId, index)}"
+    return generatePhotoAltDescription(generateIndexedPhotoId(photoId, index))
 }
 
 fun generateExif(): Exif {

@@ -1,6 +1,7 @@
 package com.tilikki.training.unimager.demo.datasets
 
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants.DEMO_USERNAME
+import com.tilikki.training.unimager.demo.datasets.TestDataConstants.DEMO_USER_TOTAL_PHOTOS
 import com.tilikki.training.unimager.demo.mocks.DataMapper
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
@@ -30,7 +31,7 @@ object EntityTestDataSet {
                 height = 400,
                 color = DEMO_COLOR,
                 likes = DEMO_LIKES,
-                description = DEMO_DESCRIPTION,
+                description = generatePhotoDescription(photoId),
                 altDescription = generatePhotoAltDescription(photoId),
                 thumbnailUrl = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.SMALL),
                 previewUrl = lipsumPhoto.generatePicsumPhotoUrl(PhotoSize.MEDIUM),
@@ -43,7 +44,10 @@ object EntityTestDataSet {
         }
     }
 
-    fun generateSampleUserData(username: String = DEMO_USERNAME): User {
+    fun generateSampleUserData(
+        username: String = DEMO_USERNAME,
+        totalPhoto: Int = DEMO_USER_TOTAL_PHOTOS
+    ): User {
         TestDataConstants.run {
             return User(
                 id = DEMO_USER_ID,
@@ -53,7 +57,7 @@ object EntityTestDataSet {
                 apiUrl = API_URL + username,
                 apiPhotosUrl = API_URL + username + "/apiPhotos",
                 profileImageUrl = API_URL + username + "/avatar",
-                totalPhotos = DEMO_USER_TOTAL_PHOTOS,
+                totalPhotos = totalPhoto,
                 following = DEMO_USER_FOLLOWING,
                 followers = DEMO_USER_FOLLOWERS
             )
