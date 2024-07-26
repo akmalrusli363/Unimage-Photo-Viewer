@@ -1,29 +1,32 @@
 package com.tilikki.training.unimager.demo.view.main
 
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import android.util.Log
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.printToLog
 import androidx.test.filters.MediumTest
-import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
+import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoDescription
 import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoId
-import com.tilikki.training.unimager.demo.datasets.generatePhotoAltDescription
 import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
-import com.tilikki.training.unimager.demo.util.RecyclerViewItemCountAssertion
-import com.tilikki.training.unimager.demo.util.isGone
 import com.tilikki.training.unimager.demo.view.UnsplashRepoViewTest
-import org.hamcrest.CoreMatchers.not
+import com.tilikki.training.unimager.demo.view.photogrid.ComposeComponentNames
+import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
 
 @MediumTest
-@RunWith(AndroidJUnit4::class)
 class MainActivityTest : UnsplashRepoViewTest() {
 
     private val sampleSearchQuery = "animals"
@@ -34,80 +37,145 @@ class MainActivityTest : UnsplashRepoViewTest() {
 
     @Test
     fun search_success() {
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-        onView(withId(R.id.rv_photos_grid))
-            .check(doesNotExist())
-        onView(withId(R.id.ll_empty))
-            .check(doesNotExist())
-        onView(withId(R.id.sv_photo_search))
-            .perform(ViewActions.typeText("$sampleSearchQuery\n"))
+        val fakeRepository = FakeRepositorySingleton.fakeUnsplashPagingRepository
+        val requiredValue = 5
+        val viewModel = MainViewModel(fakeRepository)
+        val assertedDescription = generateIndexedPhotoDescription(sampleSearchQuery, 1)
+        Mockito.doReturn(
+            FakeRepositorySingleton.fakeUnsplashPagingRepository.getPhotos(
+                sampleSearchQuery,
+                requiredValue
+            )
+        ).`when`(fakeRepository).getPhotos(sampleSearchQuery)
 
-        Thread.sleep(2000)
+        composeTestRule.setContent {
+            PhotoSearchScreen(viewModel = viewModel)
+        }
 
-        val recyclerView = onView(withId(R.id.rv_photos_grid))
-        onView(withId(R.id.ll_empty))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        recyclerView.check(matches(isDisplayed()))
-            .check(RecyclerViewItemCountAssertion(TestDataConstants.MAX_ITEMS_PER_PAGE))
-        onView(withContentDescription(generatePhotoAltDescription(firstPhotoId)))
-            .check(matches(isDisplayed()))
-        recyclerView.perform(
-            RecyclerViewActions.scrollToPosition<PhotoRecyclerViewHolder>(lastPhotoIndex - 1)
-        )
-        onView(withContentDescription(generatePhotoAltDescription(lastPhotoId)))
-            .check(matches(isDisplayed()))
-        scenario.close()
+        composeTestRule.run {
+            onRoot(useUnmergedTree = true)
+            onNodeWithText("Search photos")
+                .assertIsDisplayed()
+
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performTextInput(sampleSearchQuery)
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).assert(hasText(sampleSearchQuery))
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performImeAction()
+            waitForIdle()
+
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).assertIsDisplayed()
+            onAllNodes(hasParent(hasTestTag(ComposeComponentNames.PAGING_PHOTO_GRID)))
+                .assertCountEquals(requiredValue)
+
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).printToLog("mainActivityTest")
+            Log.d(
+                "mainActivityTest",
+                "Asserting photo card with content description of '$assertedDescription'"
+            )
+            onNodeWithContentDescription(label = assertedDescription)
+                .assertIsDisplayed()
+        }
         Mockito.verify(fakeRepository).getPhotos(sampleSearchQuery)
+    }
+
+    @Test
+    fun search_success_lotOfPages() {
+        val fakeRepository = FakeRepositorySingleton.fakeUnsplashPagingRepository
+        val requiredSize = 50
+        Mockito.doReturn(fakeRepository.getPhotos(sampleSearchQuery, requiredSize))
+            .`when`(fakeRepository).getPhotos(sampleSearchQuery)
+
+        val viewModel = MainViewModel(fakeRepository)
+        val firstDescription = generateIndexedPhotoDescription(sampleSearchQuery, 1)
+        val lastDescription = generateIndexedPhotoDescription(sampleSearchQuery, requiredSize)
+        val outRangeDescription =
+            generateIndexedPhotoDescription(sampleSearchQuery, requiredSize + 1)
+
+        composeTestRule.setContent {
+            PhotoSearchScreen(viewModel = viewModel)
+        }
+
+        composeTestRule.run {
+            onRoot(useUnmergedTree = true)
+            onNodeWithText("Search photos")
+                .assertIsDisplayed()
+
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performTextInput(sampleSearchQuery)
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).assert(hasText(sampleSearchQuery))
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performImeAction()
+            waitForIdle()
+
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).assertIsDisplayed()
+
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).printToLog("mainActivityTest")
+            Log.d(
+                "mainActivityTest",
+                "Asserting photo card with content description of '$firstDescription'"
+            )
+            onNodeWithContentDescription(label = firstDescription)
+                .assertIsDisplayed()
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).performScrollToIndex(requiredSize)
+            onNodeWithContentDescription(label = lastDescription)
+                .assertIsDisplayed()
+            Assert.assertThrows(IllegalArgumentException::class.java) {
+                onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).performScrollToIndex(
+                    requiredSize + 1
+                )
+            }
+            onNodeWithContentDescription(label = outRangeDescription)
+                .assertDoesNotExist()
+        }
+        Mockito.verify(fakeRepository, Mockito.atLeastOnce()).getPhotos(sampleSearchQuery)
     }
 
     @Test
     fun search_empty_success() {
         val query = TestDataConstants.DEMO_SEARCH_EMPTY
-        Mockito.doReturn(FakeRepositorySingleton.emptyFakeRepository.getPhotos(query))
-            .`when`(fakeRepository).getPhotos(query)
+        val fakeRepository = FakeRepositorySingleton.emptyFakePagingRepository
+        val viewModel = MainViewModel(fakeRepository)
 
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-        onView(withId(R.id.rv_photos_grid))
-            .check(doesNotExist())
-        onView(withId(R.id.ll_empty))
-            .check(doesNotExist())
-        onView(withId(R.id.sv_photo_search))
-            .perform(ViewActions.typeText("$query\n"))
+        composeTestRule.setContent {
+            PhotoSearchScreen(viewModel = viewModel)
+        }
 
-        Thread.sleep(3000)
+        composeTestRule.run {
+            onRoot(useUnmergedTree = true)
+            onNodeWithText("Search photos")
+                .assertIsDisplayed()
 
-        onView(withId(R.id.rv_photos_grid))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        onView(withId(R.id.ll_empty))
-            .check(matches(isDisplayed()))
-        scenario.close()
-        Mockito.verify(fakeRepository).getPhotos(query)
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performTextInput(query)
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).assert(hasText(query))
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performImeAction()
+            waitForIdle()
+
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).assertDoesNotExist()
+            onNodeWithTag(ComposeComponentNames.EMPTY_PHOTOS_SCREEN)
+                .assertIsDisplayed()
+        }
     }
 
     @Test
     fun search_abrupt_returnError() {
         val query = TestDataConstants.DEMO_SEARCH_ERROR
-        Mockito.doReturn(FakeRepositorySingleton.errorFakeRepository.getPhotos(query))
-            .`when`(fakeRepository).getPhotos(query)
+        val fakeRepository = FakeRepositorySingleton.errorFakePagingRepository
+        val viewModel = MainViewModel(fakeRepository)
 
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
-        onView(withId(R.id.rv_photos_grid))
-            .check(doesNotExist())
-        onView(withId(R.id.ll_empty))
-            .check(doesNotExist())
-        onView(withId(R.id.sv_photo_search))
-            .perform(ViewActions.typeText("$query\n"))
+        composeTestRule.setContent {
+            PhotoSearchScreen(viewModel = viewModel)
+        }
 
-        Thread.sleep(3000)
+        composeTestRule.run {
+            onRoot(useUnmergedTree = true)
+            onNodeWithText("Search photos")
+                .assertIsDisplayed()
 
-        onView(withId(R.id.rv_photos_grid))
-            .check(doesNotExist())
-        onView(withId(R.id.ll_error))
-            .check(matches(isDisplayed()))
-        scenario.close()
-        Mockito.verify(fakeRepository).getPhotos(query)
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performTextInput(query)
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).assert(hasText(query))
+            onNodeWithTag(ComposeComponentNames.PHOTO_SEARCH).performImeAction()
+            waitForIdle()
+
+            onNodeWithTag(ComposeComponentNames.PAGING_PHOTO_GRID).assertDoesNotExist()
+            onNodeWithTag(ComposeComponentNames.ERROR_STATE_SCREEN)
+                .assertIsDisplayed()
+        }
     }
-
 }

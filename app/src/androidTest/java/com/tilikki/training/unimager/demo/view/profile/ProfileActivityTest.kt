@@ -1,32 +1,27 @@
 package com.tilikki.training.unimager.demo.view.profile
 
-import android.content.Intent
-import android.view.View
+import android.content.Context
 import androidx.annotation.PluralsRes
-import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.filters.MediumTest
 import com.tilikki.training.unimager.demo.R
 import com.tilikki.training.unimager.demo.datasets.EntityTestDataSet
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
-import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoAltDescription
-import com.tilikki.training.unimager.demo.injector.singleton.FakeRepositorySingleton
+import com.tilikki.training.unimager.demo.datasets.generateIndexedPhotoDescription
 import com.tilikki.training.unimager.demo.model.User
-import com.tilikki.training.unimager.demo.util.*
+import com.tilikki.training.unimager.demo.util.ViewUtility
+import com.tilikki.training.unimager.demo.util.value
 import com.tilikki.training.unimager.demo.view.UnsplashRepoViewTest
-import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.CoreMatchers.not
-import org.hamcrest.Matcher
+import com.tilikki.training.unimager.demo.view.photogrid.ComposeComponentNames
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnitRunner
 
 @MediumTest
-@RunWith(MockitoJUnitRunner::class)
 class ProfileActivityTest : UnsplashRepoViewTest() {
 
     private val sampleUsername = TestDataConstants.DEMO_USERNAME
@@ -35,152 +30,105 @@ class ProfileActivityTest : UnsplashRepoViewTest() {
 
     @Test
     fun hasUsername_fetch_success() {
-        Mockito.doReturn(fakeRepository.getUserPhotos(sampleUsername, 15))
-            .`when`(fakeRepository).getUserPhotos(sampleUsername)
-
-        val intent = Intent(getContext(), ProfileActivity::class.java).apply {
-            putExtra(ProfileActivity.INTENT_URL, sampleUsername)
-        }
-        val scenario = ActivityScenario.launch<ProfileActivity>(intent)
-        val sampleUserProfile = EntityTestDataSet.generateSampleUserData(sampleUsername)
-
-        Thread.sleep(2000)
-
-        sampleUserProfile.run {
-            onView(withId(R.id.iv_profile_image))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withContentDescription(getUserAvatarDescription(this))
-                )
-            onView(withId(R.id.tv_username))
-                .checkForCriteria(isDisplayed(), withText(username))
-            onView(withId(R.id.tv_full_name))
-                .checkForCriteria(isDisplayed(), withText(name))
-            onView(withId(R.id.tv_photos))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withText(formatPluralText(R.plurals.total_photos_format, totalPhotos))
-                )
-            onView(withId(R.id.tv_followers))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withText(formatPluralText(R.plurals.followers_format, followers.value()))
-                )
-            onView(withId(R.id.tv_following))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withText(formatPluralText(R.plurals.following_format, following.value()))
-                )
+        val numOfPhotos = 30
+        val sampleUserProfile =
+            EntityTestDataSet.generateSampleUserData(sampleUsername, numOfPhotos)
+        val sampleUserPhotos =
+            EntityTestDataSet.generateSamplePhotoDataList(sampleUsername, numOfPhotos)
+        var context = getContext()
+        composeTestRule.setContent {
+            context = LocalContext.current
+            ProfileView(sampleUserProfile, sampleUserPhotos)
         }
 
-        val recyclerView = onView(withId(R.id.rv_photos_grid))
-        val totalPhotos = TestDataConstants.DEMO_USER_TOTAL_PHOTOS
-        onView(withId(R.id.ll_empty))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        onView(withId(R.id.ll_error))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        recyclerView.check(matches(isDisplayed()))
-            .check(RecyclerViewItemCountAssertion(totalPhotos))
-        onView(
-            withContentDescription(generateIndexedPhotoAltDescription(sampleUsername, 1))
-        ).check(matches(isDisplayed()))
-        onView(
-            withContentDescription(generateIndexedPhotoAltDescription(sampleUsername, totalPhotos))
-        ).check(isVisible())
+        composeTestRule.run {
+            waitForIdle()
+            onNodeWithContentDescription(context.getUserAvatarDescription(sampleUserProfile))
+                .assertExists()
+            onNodeWithContentDescription(context.getString(R.string.account_username))
+                .assertIsDisplayed()
+                .assertTextEquals(sampleUserProfile.username)
+            onNodeWithContentDescription(context.getString(R.string.account_full_name))
+                .assertIsDisplayed()
+                .assertTextEquals(sampleUserProfile.name)
+            onNodeWithText(context.formatPluralText(R.plurals.total_photos_format, numOfPhotos))
+                .assertIsDisplayed()
+            onNodeWithText(
+                context.formatPluralText(
+                    R.plurals.followers_format,
+                    sampleUserProfile.followers.value()
+                )
+            ).assertIsDisplayed()
+            onNodeWithText(
+                context.formatPluralText(
+                    R.plurals.following_format,
+                    sampleUserProfile.following.value()
+                )
+            ).assertIsDisplayed()
 
-        scenario.close()
-        Mockito.verify(fakeRepository).getUserProfile(sampleUsername)
-        Mockito.verify(fakeRepository).getUserPhotos(sampleUsername)
+            onNodeWithTag(ComposeComponentNames.EMPTY_PHOTOS_SCREEN)
+                .assertDoesNotExist()
+            onNodeWithContentDescription(
+                generateIndexedPhotoDescription(sampleUsername, 1)
+            ).assertExists()
+            onNodeWithTag(ComposeComponentNames.PROFILE_PHOTO_GRID).performScrollToIndex(numOfPhotos)
+            onNodeWithContentDescription(
+                generateIndexedPhotoDescription(sampleUsername, numOfPhotos)
+            ).assertExists()
+        }
     }
 
     @Test
     fun hasUsername_fetchNoPhotos_success() {
-        Mockito.doReturn(fakeRepository.getUserPhotos(sampleUsernameNoPhoto, 0))
-            .`when`(fakeRepository).getUserPhotos(sampleUsernameNoPhoto)
-
-        val intent = Intent(getContext(), ProfileActivity::class.java).apply {
-            putExtra(ProfileActivity.INTENT_URL, sampleUsernameNoPhoto)
-        }
-        val scenario = ActivityScenario.launch<ProfileActivity>(intent)
-        val sampleUserProfile = EntityTestDataSet.generateNewUserData(sampleUsernameNoPhoto)
-
-        Thread.sleep(2000)
-
-        sampleUserProfile.run {
-            onView(withId(R.id.iv_profile_image))
-                .checkForCriteria(
-                    isDisplayed(),
-                ).check(matches(withContentDescription(getUserAvatarDescription(this))))
-            onView(withId(R.id.tv_username))
-                .checkForCriteria(isDisplayed(), withText(username))
-            onView(withId(R.id.tv_full_name))
-                .checkForCriteria(isDisplayed(), withText(name))
-            onView(withId(R.id.tv_photos))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withText(formatPluralText(R.plurals.total_photos_format, 0))
-                )
-            onView(withId(R.id.tv_followers))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withText(formatPluralText(R.plurals.followers_format, followers.value()))
-                )
-            onView(withId(R.id.tv_following))
-                .checkForCriteria(
-                    isDisplayed(),
-                    withText(formatPluralText(R.plurals.following_format, following.value()))
-                )
+        val numOfPhotos = 0
+        val sampleUserProfile =
+            EntityTestDataSet.generateSampleUserData(sampleUsernameNoPhoto, numOfPhotos)
+        val sampleUserPhotos =
+            EntityTestDataSet.generateSamplePhotoDataList(sampleUsernameNoPhoto, numOfPhotos)
+        var context = getContext()
+        composeTestRule.setContent {
+            context = LocalContext.current
+            ProfileView(sampleUserProfile, sampleUserPhotos)
         }
 
-        onView(withId(R.id.rv_photos_grid))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        onView(withId(R.id.ll_error))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        onView(withId(R.id.ll_empty))
-            .check(matches(isDisplayed()))
+        composeTestRule.run {
+            waitForIdle()
+            onNodeWithContentDescription(context.getUserAvatarDescription(sampleUserProfile))
+                .assertExists()
+            onNodeWithContentDescription(context.getString(R.string.account_username))
+                .assertIsDisplayed()
+                .assertTextEquals(sampleUserProfile.username)
+            onNodeWithContentDescription(context.getString(R.string.account_full_name))
+                .assertIsDisplayed()
+                .assertTextEquals(sampleUserProfile.name)
+            onNodeWithText(context.formatPluralText(R.plurals.total_photos_format, numOfPhotos))
+                .assertIsDisplayed()
+            onNodeWithText(
+                context.formatPluralText(
+                    R.plurals.followers_format,
+                    sampleUserProfile.followers.value()
+                )
+            ).assertIsDisplayed()
+            onNodeWithText(
+                context.formatPluralText(
+                    R.plurals.following_format,
+                    sampleUserProfile.following.value()
+                )
+            ).assertIsDisplayed()
 
-        scenario.close()
-        Mockito.verify(fakeRepository).getUserProfile(sampleUsernameNoPhoto)
-        Mockito.verify(fakeRepository).getUserPhotos(sampleUsernameNoPhoto)
-    }
-
-    @Test
-    fun hasUsername_abrupt_error() {
-        Mockito.doReturn(
-            FakeRepositorySingleton.errorFakeRepository.getUserPhotos(sampleUsernameError)
-        ).`when`(fakeRepository).getUserPhotos(sampleUsernameError)
-
-        val intent = Intent(getContext(), ProfileActivity::class.java).apply {
-            putExtra(ProfileActivity.INTENT_URL, sampleUsernameError)
+            onNodeWithContentDescription(
+                generateIndexedPhotoDescription(sampleUsername, 1)
+            ).assertDoesNotExist()
+            onNodeWithTag(ComposeComponentNames.EMPTY_PHOTOS_SCREEN)
+                .assertIsDisplayed()
         }
-        val scenario = ActivityScenario.launch<ProfileActivity>(intent)
-
-        Thread.sleep(3000)
-
-        onView(withId(R.id.nsv_page))
-            .check(matches(not(isDisplayed())))
-            .check(isGone())
-        onView(withId(R.id.ll_error))
-            .check(matches(isDisplayed()))
-
-        scenario.close()
-        Mockito.verify(fakeRepository).getUserProfile(sampleUsernameError)
-        Mockito.verify(fakeRepository).getUserPhotos(sampleUsernameError)
     }
 
-    private fun ViewInteraction.checkForCriteria(vararg viewMatchers: Matcher<View>): ViewInteraction {
-        return this.check(matches(allOf(listOf(*viewMatchers))))
+    private fun Context.getUserAvatarDescription(user: User): String {
+        return this.resources.getString(R.string.username_avatar_format, user.name, user.username)
     }
 
-    private fun getUserAvatarDescription(user: User): String {
-        return getContext().resources.getString(R.string.user_avatar_description, user.name)
-    }
-
-    private fun formatPluralText(@PluralsRes plurals: Int, numValue: Int): String {
-        return ViewUtility.displayPluralText(getContext().resources, plurals, numValue)
+    private fun Context.formatPluralText(@PluralsRes plurals: Int, numValue: Int): String {
+        return ViewUtility.displayPluralText(this.resources, plurals, numValue)
     }
 }
