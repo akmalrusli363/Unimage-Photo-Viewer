@@ -15,7 +15,11 @@
     <string name="profile_image">Profile image</string>
     <string name="photo">Photo</string>
 
+    <string name="account_full_name">Full name</string>
+    <string name="account_username">Username</string>
+
     <string name="username_format">%1$s (@%2$s)</string>
+    <string name="username_avatar_format">%1$s (@%2$s)\'s avatar</string>
     <string name="image_size_format">%1$d x %2$d pixels</string>
     <string name="image_size_full_format">%1$d x %2$d pixels (%3$s)</string>
     <string name="user_avatar_description">Profile image for %1$s</string>

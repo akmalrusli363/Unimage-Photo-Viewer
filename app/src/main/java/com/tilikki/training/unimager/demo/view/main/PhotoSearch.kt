@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.paging.LoadState
@@ -27,6 +28,7 @@ import com.tilikki.training.unimager.demo.view.compose.LoadingIndicator
 import com.tilikki.training.unimager.demo.view.compose.PreviewEmptyScreen
 import com.tilikki.training.unimager.demo.view.compose.PreviewInitialStateScreen
 import com.tilikki.training.unimager.demo.view.compose.SearchBar
+import com.tilikki.training.unimager.demo.view.photogrid.ComposeComponentNames
 import com.tilikki.training.unimager.demo.view.photogrid.PagingPhotoGrid
 import com.tilikki.training.unimager.demo.view.photogrid.PhotoGrid
 
@@ -37,10 +39,12 @@ fun PhotoSearchScreen(viewModel: MainViewModel) {
         SearchBar(
             query = query.value,
             hint = stringResource(id = R.string.explore_photo),
-            modifier = Modifier.padding(
-                horizontal = SizeUnit.SPACE_LARGE,
-                vertical = SizeUnit.SPACE_SMALL
-            ),
+            modifier = Modifier
+                .padding(
+                    horizontal = SizeUnit.SPACE_LARGE,
+                    vertical = SizeUnit.SPACE_SMALL
+                )
+                .testTag(ComposeComponentNames.PHOTO_SEARCH),
             onSearch = {
                 viewModel.triggerSearch(it)
                 Log.d(LogUtility.LOGGER_FETCH_TAG, "Searching... $it")

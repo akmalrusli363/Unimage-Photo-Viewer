@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
@@ -35,7 +36,8 @@ fun PagingPhotoGrid(
         horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = modifier
             .animateContentSize()
-            .fillMaxSize(),
+            .fillMaxSize()
+            .testTag(ComposeComponentNames.PAGING_PHOTO_GRID),
         contentPadding = PaddingValues(
             horizontal = SizeUnit.SPACE_LARGE,
             vertical = SizeUnit.SPACE_MEDIUM

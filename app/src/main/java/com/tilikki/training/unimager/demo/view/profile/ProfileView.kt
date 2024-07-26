@@ -24,9 +24,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,13 +43,14 @@ import com.tilikki.training.unimager.demo.ui.theme.SizeUnit
 import com.tilikki.training.unimager.demo.util.SampleComposePreviewData
 import com.tilikki.training.unimager.demo.util.value
 import com.tilikki.training.unimager.demo.view.compose.PreviewEmptyScreen
+import com.tilikki.training.unimager.demo.view.photogrid.ComposeComponentNames
 import com.tilikki.training.unimager.demo.view.photogrid.PhotoGrid
 
 @Composable
 fun ProfileView(user: User, photos: List<Photo>?) {
     Box(modifier = Modifier.fillMaxSize()) {
         if (!photos.isNullOrEmpty()) {
-            PhotoGrid(photos) {
+            PhotoGrid(photos, Modifier.testTag(ComposeComponentNames.PROFILE_PHOTO_GRID)) {
                 UserOverview(user = user)
                 Divider(modifier = Modifier.padding(SizeUnit.SPACE_SMALL), color = Color.Gray)
                 Spacer(
@@ -57,6 +61,8 @@ fun ProfileView(user: User, photos: List<Photo>?) {
                 )
             }
         } else {
+            UserOverview(user = user)
+            Divider(modifier = Modifier.padding(SizeUnit.SPACE_SMALL), color = Color.Gray)
             PreviewEmptyScreen()
         }
     }
@@ -90,11 +96,13 @@ fun UserOverview(user: User) {
             .padding(SizeUnit.SPACE_MEDIUM)
             .fillMaxWidth()
     ) {
+        val fullNameField = stringResource(id = R.string.account_full_name)
+        val usernameField = stringResource(id = R.string.account_username)
         AsyncImage(
             model = user.profileImageUrl,
             placeholder = painterResource(id = R.drawable.ic_person),
             contentDescription = stringResource(
-                R.string.username_format, user.name, user.username
+                R.string.username_avatar_format, user.name, user.username
             ),
             modifier = Modifier
                 .padding(SizeUnit.SPACE_SMALL)
@@ -105,11 +113,13 @@ fun UserOverview(user: User) {
         )
         Text(
             user.name,
+            modifier = Modifier.semantics { contentDescription = fullNameField },
             style = MaterialTheme.typography.h6,
             fontWeight = FontWeight.Bold,
         )
         Text(
             user.username,
+            modifier = Modifier.semantics { contentDescription = usernameField },
             style = MaterialTheme.typography.subtitle1
         )
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {

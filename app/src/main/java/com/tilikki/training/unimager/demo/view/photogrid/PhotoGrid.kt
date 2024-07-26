@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.User
@@ -44,7 +45,9 @@ fun PhotoGridWithProfile(
             PhotoCardWithUserProfile(
                 photo = photos[photoId].first,
                 user = photos[photoId].second,
-                modifier = Modifier.padding(SizeUnit.SPACE_MEDIUM),
+                modifier = Modifier
+                    .padding(SizeUnit.SPACE_MEDIUM)
+                    .testTag(ComposeComponentNames.PHOTO_GRID_WITH_AVATAR),
             )
         }
     }

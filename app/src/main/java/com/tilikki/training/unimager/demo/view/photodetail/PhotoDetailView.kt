@@ -38,6 +38,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -225,19 +227,23 @@ fun PhotoDetailActionView(
             .fillMaxWidth()
             .padding(SizeUnit.SPACE_MEDIUM)
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_favorite),
-            tint = Pink,
-            contentDescription = null,
-            modifier = Modifier
-                .padding(SizeUnit.SPACE_SMALL)
-                .size(32.dp)
-        )
-        Text(
-            photo.likes.toString(),
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(SizeUnit.SPACE_SMALL)
-        )
+        Row(Modifier.semantics(mergeDescendants = true) {
+            contentDescription = "${photo.likes} likes"
+        }) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_favorite),
+                tint = Pink,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(SizeUnit.SPACE_SMALL)
+                    .size(32.dp)
+            )
+            Text(
+                photo.likes.toString(),
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(SizeUnit.SPACE_SMALL)
+            )
+        }
         Spacer(Modifier.weight(1f))
         Button(
             onClick = { ComposeHelper.visitLink(context, Uri.parse(photo.fullSizeUrl)) },
@@ -307,8 +313,12 @@ fun ExifInfo(exif: ExifDetail) {
             ParameterField(fieldRes = R.string.exif_brand, value = exif.brand)
             ParameterField(fieldRes = R.string.exif_model, value = exif.model)
             ParameterField(fieldRes = R.string.exif_exposure_time, value = exif.exposureTime)
-            ParameterField(fieldRes = R.string.exif_aperture, value = exif.aperture?.let { "f/$it" })
-            ParameterField(fieldRes = R.string.exif_focal_length, value = exif.focalLength?.let { "$it mm" })
+            ParameterField(
+                fieldRes = R.string.exif_aperture,
+                value = exif.aperture?.let { "f/$it" })
+            ParameterField(
+                fieldRes = R.string.exif_focal_length,
+                value = exif.focalLength?.let { "$it mm" })
             ParameterField(fieldRes = R.string.exif_iso, value = exif.iso)
         }
     }
@@ -335,6 +345,9 @@ fun ProfileInfo(
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 context.startActivity(intent)
             }
+            .semantics(mergeDescendants = true) {
+                contentDescription = "${user.name} (@${user.username})"
+            }
             .padding(SizeUnit.SPACE_MEDIUM),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -342,7 +355,7 @@ fun ProfileInfo(
             model = user.profileImageUrl,
             placeholder = ComposeHelper.getCircularProgressBar(),
             contentDescription = stringResource(
-                R.string.username_format, user.name, user.username
+                R.string.username_avatar_format, user.name, user.username
             ),
             modifier = Modifier
                 .width(64.dp)

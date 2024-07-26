@@ -17,6 +17,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +39,11 @@ fun HeadingField(
     innerModifier: Modifier = Modifier,
     contents: @Composable () -> Unit
 ) {
-    Column(modifier.fillMaxWidth()) {
+    Column(
+        modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) { contentDescription = title }
+    ) {
         Text(
             text = title,
             modifier = Modifier.padding(SizeUnit.SPACE_SMALL),
@@ -65,7 +71,7 @@ fun ParametricHeadingField(
 
 @Composable
 fun BigParameterField(field: String, value: String?, modifier: Modifier = Modifier) {
-    Row(modifier) {
+    Row(modifier.semantics(mergeDescendants = true) { contentDescription = field }) {
         Text(
             text = field,
             fontSize = 18.sp,
@@ -90,7 +96,7 @@ fun ParameterField(@StringRes fieldRes: Int, value: Any?) {
 @Composable
 fun ParameterField(field: String, value: Any?) {
     if (value != null && value.toString().isNotBlank()) {
-        Row {
+        Row(Modifier.semantics(mergeDescendants = true) { contentDescription = field }) {
             Text(
                 text = field,
                 modifier = Modifier.padding(SizeUnit.SPACE_SMALL),

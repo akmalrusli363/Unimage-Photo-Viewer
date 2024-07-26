@@ -82,9 +82,6 @@ fun PhotoCardWithUserProfile(
             context.startActivity(intent)
         }) {
         Box {
-            user?.let { userData ->
-                SimpleUsernameCardWithAvatar(user = userData)
-            }
             AsyncImage(
                 model = photo.thumbnailUrl,
                 placeholder = ComposeHelper.getCircularProgressBar(),
@@ -94,6 +91,9 @@ fun PhotoCardWithUserProfile(
                     .defaultMinSize(minHeight = 80.dp),
                 contentScale = ContentScale.FillWidth
             )
+            user?.let { userData ->
+                SimpleUsernameCardWithAvatar(user = userData)
+            }
         }
     }
 }
