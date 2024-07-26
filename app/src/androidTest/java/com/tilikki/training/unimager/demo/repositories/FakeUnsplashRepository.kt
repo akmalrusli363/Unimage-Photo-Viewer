@@ -5,6 +5,7 @@ import com.tilikki.training.unimager.demo.datasets.TestDataConstants
 import com.tilikki.training.unimager.demo.model.Photo
 import com.tilikki.training.unimager.demo.model.PhotoDetail
 import com.tilikki.training.unimager.demo.model.User
+import com.tilikki.training.unimager.demo.network.model.BasicUrlResponse
 import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -50,6 +51,19 @@ open class FakeUnsplashRepository @Inject constructor() : UnsplashRepository {
 
     override fun getUserPhotos(username: String): Observable<List<Photo>> {
         return getUserPhotos(username, TestDataConstants.DEMO_USER_TOTAL_PHOTOS)
+    }
+
+    override fun getRandomPhotosByTopic(topicId: String): Observable<List<Pair<Photo, User>>> {
+        return returnListOrEmptyOrError {
+            val userPhotos = NetworkTestDataSet.generateSampleRandomPhotoDataList(
+                topic = topicId,
+            )
+            Observable.just(userPhotos)
+        }
+    }
+
+    override fun downloadPhoto(url: String): Observable<BasicUrlResponse> {
+        return Observable.just(BasicUrlResponse(url))
     }
 
     fun getUserPhotos(username: String, numOfPhotos: Int): Observable<List<Photo>> {

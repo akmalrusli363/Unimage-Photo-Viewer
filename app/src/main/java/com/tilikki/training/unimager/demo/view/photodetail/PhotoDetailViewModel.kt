@@ -32,13 +32,13 @@ class PhotoDetailViewModel @Inject constructor(private val unsplashRepository: U
     fun attachPhoto(photoId: String?) {
         if (photoId != null) {
             setPhotoId(photoId)
+            fetchData(unsplashRepository.getPhotoDetail(this.photoId.value ?: photoId),
+                {
+                    _photo.postValue(it)
+                    fetchFeaturedPhotos(it.topics.randomOrNull())
+                }
+            )
         }
-        fetchData(unsplashRepository.getPhotoDetail(_photoId.value!!),
-            {
-                _photo.postValue(it)
-                fetchFeaturedPhotos(it.topics.randomOrNull())
-            }
-        )
     }
 
     fun fetchFeaturedPhotos(topic: PhotoTopicData? = null) {
@@ -53,7 +53,7 @@ class PhotoDetailViewModel @Inject constructor(private val unsplashRepository: U
     }
 
     private fun setPhotoId(photoId: String) {
-        _photoId.value = photoId
+        _photoId.postValue(photoId)
     }
 
     fun downloadPhoto(context: Context) {

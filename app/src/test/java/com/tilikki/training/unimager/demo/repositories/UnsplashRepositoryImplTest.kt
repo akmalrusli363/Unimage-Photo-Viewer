@@ -1,6 +1,11 @@
 package com.tilikki.training.unimager.demo.repositories
 
-import com.tilikki.training.unimager.demo.database.*
+import com.tilikki.training.unimager.demo.database.PhotoSearches
+import com.tilikki.training.unimager.demo.database.PhotosDao
+import com.tilikki.training.unimager.demo.database.RoomDB
+import com.tilikki.training.unimager.demo.database.SearchQuery
+import com.tilikki.training.unimager.demo.database.UserDao
+import com.tilikki.training.unimager.demo.database.UserPhotoRelationship
 import com.tilikki.training.unimager.demo.datasets.EntityTestDataSet
 import com.tilikki.training.unimager.demo.datasets.NetworkTestDataSet
 import com.tilikki.training.unimager.demo.datasets.TestDataConstants
@@ -14,8 +19,8 @@ import com.tilikki.training.unimager.demo.util.asDatabaseEntityPhotos
 import com.tilikki.training.unimager.demo.util.asDomainEntityPhotos
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
-import okhttp3.MediaType
-import okhttp3.ResponseBody
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -90,7 +95,7 @@ class UnsplashRepositoryImplTest {
             PhotoSearches(it.toDatabaseEntityPhoto(), SearchQuery(it.id, searchQuery))
         }
 
-        val errorBody = ResponseBody.create(MediaType.parse("text/plain"), "Internal Server Error")
+        val errorBody = "Internal Server Error".toResponseBody("text/plain".toMediaType())
         val response = Observable.just(Response.error<PhotoList>(403, errorBody))
         Mockito.`when`(unsplashApiInterface.getPhotos(searchQuery))
             .thenReturn(response)

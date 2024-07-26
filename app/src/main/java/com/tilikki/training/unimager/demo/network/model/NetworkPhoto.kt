@@ -37,7 +37,7 @@ data class NetworkPhoto(
     @SerializedName("exif")
     val exif: Exif?,
     @SerializedName("topics")
-    val topics: List<PhotoTopicData>,
+    val topics: List<PhotoTopicData>? = null,
 ) {
     fun bindSearchQuery(searchQuery: String): SearchQuery {
         return SearchQuery(photoId = id, searchQuery = searchQuery)
@@ -103,7 +103,7 @@ data class NetworkPhoto(
             downloadUrl = linkUrl.apiDownloadLink,
             user = user.toDomainEntityUser(),
             exif = exif?.asDomainEntityExif(),
-            topics = topics,
+            topics = topics ?: listOf(),
         )
     }
 }
