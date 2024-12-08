@@ -22,7 +22,8 @@ To be noted, the Unsplash API uses _**OAuth 2.0 Authentication** (Bearer)_ where
 
 To enable developers use this project, you need to clone this project, create a file named `apikey.properties` (on project-root level) where the file content itself includes the **Access Key**, **Secret Key**, and ***OAuth access token***.
 
-> **NOTE**: You need to include `CLIENT_ID`, `CLIENT_SECRET`, and `ACCESS_TOKEN` on `apikey.properties`, but for `CLIENT_ID` and `CLIENT_SECRET` are optional (required for *non-OAuth* authorized access).
+> [!NOTE]
+> You need to include `CLIENT_ID`, `CLIENT_SECRET`, and `ACCESS_TOKEN` on `apikey.properties`, but for `CLIENT_ID` and `CLIENT_SECRET` are optional (required for *non-OAuth* authorized access).
 
 To obtain OAuth access token, you need to create your application on <https://unsplash.com/oauth/applications>, which lists your application name and description. Don't forget to copy it's **Access Key**, **Secret Key**, and **Redirect URI** to your HTTP Client (e.g. Postman) for obtaining ***OAuth access token*** (by enlist your username and password at authentication page).
 
@@ -38,9 +39,49 @@ CLIENT_SECRET="*[SECRET_KEY]*"
 ACCESS_TOKEN="*[OAUTH_BEARER_TOKEN]*"
 ```
 
-> **IMPORTANT:** For safety, **don't let the `apikey.properties` to be added or even committed** with other changes!
+> [!IMPORTANT]
+> To protect API key fields from unauthorized use, **don't let the `apikey.properties` to be added or even committed** with other changes!
 
 Then, you're able to compile the project with your bundled **OAuth access token** as your application's API access.
+
+
+
+### How do I able to add & access API key fields from `apikey.properties`?
+
+> [!TIP]
+> You can create template file named `apikey.properties` and commit that file into remote repository. But don't forget to put these file in root-level `.gitignore` as well to prevent these file being commited & pushed into remote repository!
+
+1. Create file named `apikey.properties` on root-level directory & put following API key field variables below:
+    ```
+    CLIENT_ID="*[ACCESS_KEY]*"
+    CLIENT_SECRET="*[SECRET_KEY]*"
+    ACCESS_TOKEN="*[OAUTH_BEARER_TOKEN]*"
+    ```
+2. Define these attributes in app-level `build.gradle`, in between of `plugins` and `android` top-level fields:
+    ```groovy
+    plugins {
+        // plugins
+    }
+    
+    def apikeyPropertiesFile = rootProject.file("apikey.properties")
+    def apikeyProperties = new Properties()
+    apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
+    android {
+        // android project build config
+    }
+    ```
+3. Place API key fields within `buildConfigField` on `defaultConfig` parameter:
+    ```groovy
+    android {
+        defaultConfig {
+            buildConfigField("String", "CLIENT_ID", apikeyProperties['CLIENT_ID'])
+            buildConfigField("String", "CLIENT_SECRET", apikeyProperties['CLIENT_SECRET'])
+            buildConfigField("String", "ACCESS_TOKEN", apikeyProperties['ACCESS_TOKEN'])
+        }
+    }
+    ```
+4. To protect API key fields from unauthorized use (especially `CLIENT_ID`, `CLIENT_SECRET`, and `ACCESS_TOKEN`), do not add or commit file `apikey.properties` into remote repository!
 
 
 
